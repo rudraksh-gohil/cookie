@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | Employee Overview</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Employee-Pages.css">
+
+    <style>
+        body.is-loading .app-shell {
+            visibility: hidden;
+        }
+
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: var(--bg, #191E1B);
+        }
+
+        .loader-card {
+            width: 100%;
+            max-width: 360px;
+            padding: 35px 25px;
+            text-align: center;
+            background: var(--panel, #252D28);
+            border: 1px solid var(--border, #39423B);
+            border-radius: 14px;
+        }
+
+        .loader-spinner {
+            width: 35px;
+            height: 35px;
+            margin: 0 auto 22px;
+            border: 3px solid var(--border, #39423B);
+            border-top-color: var(--orange, #E58B45);
+            border-radius: 50%;
+            animation: cookie-spin .8s linear infinite;
+        }
+
+        .loader-card h2 {
+            color: var(--ivory, #F2EBDD);
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .loader-card p {
+            color: var(--secondary, #B7B9AD);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #retryLoadButton {
+            margin-top: 20px;
+            padding: 10px 18px;
+            color: var(--bg, #191E1B);
+            background: var(--orange, #E58B45);
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #retryLoadButton:hover {
+            background: var(--orange-hover, #F09A54);
+        }
+
+        @keyframes cookie-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .recent-empty {
+            padding: 30px 15px;
+            text-align: center;
+            color: var(--secondary, #B7B9AD);
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body class="is-loading" data-required-role="R002">
+
+    <!-- LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner" id="loaderSpinner"></div>
+            <h2 id="loaderTitle">Loading your workspace</h2>
+            <p id="loaderMessage">Fetching your employee information and assigned tickets...</p>
+            <button id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">co.</div>
+                <div class="brand-details">
+                    <strong>COOKIE</strong>
+                    <span>HOUSE OF RUDRAKSH</span>
+                </div>
+            </div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                Employee Workspace
+            </div>
+
+            <nav class="main-nav">
+
+                <span class="nav-label">WORKSPACE</span>
+
+                <a href="employee-home.html" class="nav-link active">
+                    <span class="nav-icon">⌂</span>
+                    Overview
+                </a>
+
+                <a href="employee-tickets.html" class="nav-link">
+                    <span class="nav-icon">
+                        <i class="bi bi-ticket"></i>
+                    </span>
+                    My Assigned Tickets
+                    <span class="nav-count" id="sidebarTicketCount">00</span>
+                </a>
+
+                <a href="employee-profile.html" class="nav-link">
+                    <span class="nav-icon">♙</span>
+                    My Account
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">co.</div>
+                    <div>
+                        <strong>Cookie Support</strong>
+                        <span>Employee Portal</span>
+                    </div>
+                </div>
+
+                <a href="#" class="signout-link" id="logoutButton">
+                    <span>↪</span>
+                    Sign out
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN AREA -->
+        <main class="main-area">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <span>EMPLOYEE WORKSPACE</span>
+                    <strong>Overview</strong>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Active Session
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="date" id="currentDate">--</div>
+
+                    <div class="profile-avatar" id="profileAvatar">--</div>
+
+                </div>
+
+            </header>
+
+
+            <!-- SCROLLABLE CONTENT -->
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <!-- PAGE HEADING -->
+                    <section class="page-heading">
+
+                        <div>
+                            <div class="eyebrow">YOUR WORKSPACE</div>
+                            <h1>Good morning, <span id="employeeName">Employee</span>.</h1>
+                            <p>Here's what's happening with your assigned support tickets today.</p>
+                        </div>
+
+                        <a href="employee-tickets.html" class="primary-button">
+                            View My Tickets <span>→</span>
+                        </a>
+
+                    </section>
+
+
+                    <!-- EMPLOYEE PROFILE STRIP -->
+                    <section class="employee-strip">
+
+                        <div class="employee-identity">
+
+                            <div class="employee-avatar" id="employeeAvatar">--</div>
+
+                            <div>
+                                <span class="strip-eyebrow">SIGNED IN AS</span>
+                                <h3 id="employeeFullName">Employee</h3>
+                                <p id="employeeDesignation">Loading employee details...</p>
+                            </div>
+
+                        </div>
+
+                        <div class="employee-meta">
+
+                            <div>
+                                <span>EMPLOYEE ID</span>
+                                <strong id="employeeId">--</strong>
+                            </div>
+
+                            <div>
+                                <span>DEPARTMENT</span>
+                                <strong id="employeeDepartment">--</strong>
+                            </div>
+
+                            <div>
+                                <span>ACCOUNT STATUS</span>
+                                <strong class="active-text" id="employeeStatus">
+                                    <span class="status-dot"></span>
+                                    Active
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- STATISTICS -->
+                    <section class="section-block">
+
+                        <div class="section-heading">
+                            <div>
+                                <span class="eyebrow">WORK SUMMARY</span>
+                                <h2>Your ticket activity</h2>
+                            </div>
+                            <span class="section-note">Current workload</span>
+                        </div>
+
+                        <div class="stats-grid">
+
+                            <article class="stat-card">
+                                <div class="stat-top">
+                                    <span class="stat-label">ASSIGNED TICKETS</span>
+                                    <div class="stat-icon orange-icon"><i class="bi bi-ticket"></i></div>
+                                </div>
+                                <strong class="stat-value" id="assignedCount">00</strong>
+                                <span class="stat-caption">Tickets assigned to you</span>
+                            </article>
+
+                            <article class="stat-card">
+                                <div class="stat-top">
+                                    <span class="stat-label">PENDING</span>
+                                    <div class="stat-icon yellow-icon">◷</div>
+                                </div>
+                                <strong class="stat-value" id="pendingCount">00</strong>
+                                <span class="stat-caption">Awaiting your attention</span>
+                            </article>
+
+                            <article class="stat-card">
+                                <div class="stat-top">
+                                    <span class="stat-label">IN PROGRESS</span>
+                                    <div class="stat-icon blue-icon">↻</div>
+                                </div>
+                                <strong class="stat-value" id="progressCount">00</strong>
+                                <span class="stat-caption">Currently being handled</span>
+                            </article>
+
+                            <article class="stat-card">
+                                <div class="stat-top">
+                                    <span class="stat-label">RESOLVED</span>
+                                    <div class="stat-icon green-icon">✓</div>
+                                </div>
+                                <strong class="stat-value" id="resolvedCount">00</strong>
+                                <span class="stat-caption">Successfully resolved</span>
+                            </article>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- MAIN GRID -->
+                    <div class="dashboard-grid">
+
+                        <!-- RECENT TICKETS -->
+                        <section class="panel tickets-panel">
+
+                            <div class="panel-header">
+
+                                <div>
+                                    <span class="eyebrow">YOUR QUEUE</span>
+                                    <h2>Recent assigned tickets</h2>
+                                    <p>Tickets that require your attention.</p>
+                                </div>
+
+                                <a href="employee-tickets.html" class="text-link">
+                                    View all →
+                                </a>
+
+                            </div>
+
+                            <div class="ticket-list" id="recentTickets"></div>
+
+                            <div class="panel-footer">
+                                <a href="employee-tickets.html">Open assigned ticket queue →</a>
+                            </div>
+
+                        </section>
+
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="right-column">
+
+                            <!-- PRIORITY SUMMARY -->
+                            <section class="panel priority-panel">
+
+                                <div class="panel-header">
+                                    <div>
+                                        <span class="eyebrow">ATTENTION REQUIRED</span>
+                                        <h2>Priority breakdown</h2>
+                                    </div>
+                                </div>
+
+                                <div class="priority-list">
+
+                                    <div class="priority-item">
+                                        <div class="priority-info">
+                                            <span class="priority-dot high"></span>
+                                            <span>High priority</span>
+                                        </div>
+                                        <strong id="highPriorityCount">00</strong>
+                                    </div>
+
+                                    <div class="priority-item">
+                                        <div class="priority-info">
+                                            <span class="priority-dot medium"></span>
+                                            <span>Medium priority</span>
+                                        </div>
+                                        <strong id="mediumPriorityCount">00</strong>
+                                    </div>
+
+                                    <div class="priority-item">
+                                        <div class="priority-info">
+                                            <span class="priority-dot low"></span>
+                                            <span>Low priority</span>
+                                        </div>
+                                        <strong id="lowPriorityCount">00</strong>
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- QUICK ACTIONS -->
+                            <section class="panel quick-actions-panel">
+
+                                <div class="panel-header">
+                                    <div>
+                                        <span class="eyebrow">SHORTCUTS</span>
+                                        <h2>Quick actions</h2>
+                                    </div>
+                                </div>
+
+                                <div class="quick-actions">
+
+                                    <a href="employee-tickets.html" class="quick-action">
+                                        <div class="quick-icon"><i class="bi bi-ticket"></i></div>
+                                        <div>
+                                            <strong>My assigned tickets</strong>
+                                            <span>Review your ticket queue</span>
+                                        </div>
+                                        <span class="action-arrow">→</span>
+                                    </a>
+
+                                    <a href="employee-profile.html" class="quick-action">
+                                        <div class="quick-icon">♙</div>
+                                        <div>
+                                            <strong>My account</strong>
+                                            <span>View employee information</span>
+                                        </div>
+                                        <span class="action-arrow">→</span>
+                                    </a>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- REMINDER -->
+                            <section class="reminder-card">
+
+                                <div class="reminder-icon">✦</div>
+
+                                <div>
+                                    <strong>Resolution reminder</strong>
+                                    <p>Remember to attach resolution proof whenever you mark a ticket as resolved.</p>
+                                </div>
+
+                            </section>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FOOTER -->
+                    <footer class="page-footer">
+                        <span>COOKIE · HOUSE OF RUDRAKSH</span>
+                        <span>Employee Workspace</span>
+                    </footer>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- PROJECT SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+
+        let currentUser = null;
+        let employee = null;
+        let tickets = [];
+
+        const $ = id => document.getElementById(id);
+
+
+        // =========================================
+        // LOADER
+        // =========================================
+
+        function showLoader(title, message, failed = false) {
+
+            $("pageLoader").style.display = "flex";
+            $("loaderTitle").textContent = title;
+            $("loaderMessage").textContent = message;
+            $("loaderSpinner").style.display = failed ? "none" : "block";
+            $("retryLoadButton").hidden = !failed;
+
+            document.body.classList.add("is-loading");
+        }
+
+        function hideLoader() {
+            $("pageLoader").style.display = "none";
+            document.body.classList.remove("is-loading");
+        }
+
+
+        // =========================================
+        // UTILITIES
+        // =========================================
+
+        function getInitials(name) {
+
+            return String(name || "Employee")
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(part => part.charAt(0).toUpperCase())
+                .join("");
+        }
+
+        function escapeHTML(value) {
+
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
+        }
+
+        function formatDate(value) {
+
+            if (!value) return "";
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return String(value);
+            }
+
+            return date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+        }
+
+        function getStatus(status) {
+
+            const value = String(status || "").trim().toLowerCase();
+
+            if (value === "open" || value === "pending") {
+                return {
+                    label: "Pending",
+                    className: "pending"
+                };
+            }
+
+            if (value === "in progress" || value === "in-progress") {
+                return {
+                    label: "In Progress",
+                    className: "in-progress"
+                };
+            }
+
+            if (value === "resolved" || value === "closed") {
+                return {
+                    label: "Resolved",
+                    className: "resolved"
+                };
+            }
+
+            return {
+                label: status || "Unknown",
+                className: value.replace(/\s+/g, "-")
+            };
+        }
+
+        function getPriority(priority) {
+
+            const value = String(priority || "").trim().toLowerCase();
+
+            if (value === "high") return "High";
+            if (value === "medium") return "Medium";
+            if (value === "low") return "Low";
+
+            return priority || "Normal";
+        }
+
+
+        // =========================================
+        // DATE
+        // =========================================
+
+        function setCurrentDate() {
+
+            $("currentDate").textContent =
+                new Date().toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+        }
+
+
+        // =========================================
+        // EMPLOYEE DETAILS
+        // =========================================
+
+        function renderEmployeeDetails() {
+
+            const fullName = currentUser.full_name || "Employee";
+            const initials = getInitials(fullName);
+
+            $("employeeName").textContent =
+                fullName.trim().split(/\s+/)[0];
+
+            $("employeeFullName").textContent = fullName;
+
+            $("profileAvatar").textContent = initials;
+            $("employeeAvatar").textContent = initials;
+
+            $("employeeId").textContent =
+                employee.employee_id || "--";
+
+            $("employeeDepartment").textContent =
+                employee.department || "--";
+
+            $("employeeDesignation").textContent = [
+                employee.designation,
+                employee.department
+            ].filter(Boolean).join(" · ") || "Employee";
+
+            const status = employee.status || "Active";
+
+            $("employeeStatus").innerHTML = `
+                <span class="status-dot"></span>
+                ${escapeHTML(status)}
+            `;
+        }
+
+
+        // =========================================
+        // LOAD EMPLOYEE TICKETS
+        // =========================================
+
+        async function loadEmployeeTickets() {
+
+            const response = await sendToCookieBackend(
+                "getEmployeeTickets"
+            );
+
+            if (!response || !response.success) {
+                throw new Error(
+                    response?.message || "Unable to load assigned tickets."
+                );
+            }
+
+            employee = response.employee || null;
+            tickets = Array.isArray(response.tickets)
+                ? response.tickets
+                : [];
+
+            if (!employee) {
+                throw new Error("Employee profile was not returned by the backend.");
+            }
+        }
+
+
+        // =========================================
+        // NORMALIZE TICKET DATA
+        // =========================================
+
+        function normalizeTicket(ticket) {
+
+            return {
+                id: ticket.ticket_id || "",
+                subject: ticket.subject || "Untitled ticket",
+                customer: ticket.customer_name || ticket.user_id || "Customer",
+                category: ticket.category || "General",
+                priority: getPriority(ticket.priority),
+                status: getStatus(ticket.status),
+                updated: ticket.updated_at || ticket.created_at || ""
+            };
+        }
+
+
+        // =========================================
+        // RENDER RECENT TICKETS
+        // =========================================
+
+        function renderRecentTickets() {
+
+            const container = $("recentTickets");
+
+            container.innerHTML = "";
+
+            const recentTickets = [...tickets]
+                .sort((a, b) => {
+                    const dateA = new Date(a.updated_at || a.created_at || 0).getTime();
+                    const dateB = new Date(b.updated_at || b.created_at || 0).getTime();
+
+                    return dateB - dateA;
+                })
+                .slice(0, 5);
+
+            if (!recentTickets.length) {
+
+                container.innerHTML = `
+                    <div class="recent-empty">
+                        <i class="bi bi-inbox" style="font-size:25px;"></i>
+                        <p>No tickets have been assigned to you yet.</p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            recentTickets.forEach(rawTicket => {
+
+                const ticket = normalizeTicket(rawTicket);
+
+                const item = document.createElement("a");
+
+                item.className = "ticket-item";
+
+                item.href =
+                    `employee-tickets.html?ticket=${encodeURIComponent(ticket.id)}`;
+
+                item.innerHTML = `
+                    <div class="ticket-main">
+                        <div class="ticket-id">${escapeHTML(ticket.id)}</div>
+                        <strong>${escapeHTML(ticket.subject)}</strong>
+                        <span>
+                            ${escapeHTML(ticket.customer)}
+                            · ${escapeHTML(ticket.category)}
+                        </span>
+                    </div>
+
+                    <div class="ticket-side">
+                        <span class="priority-badge ${ticket.priority.toLowerCase()}">
+                            ${escapeHTML(ticket.priority)}
+                        </span>
+
+                        <span class="status-badge ${ticket.status.className}">
+                            ${escapeHTML(ticket.status.label)}
+                        </span>
+                    </div>
+                `;
+
+                container.appendChild(item);
+            });
+        }
+
+
+        // =========================================
+        // UPDATE STATISTICS
+        // =========================================
+
+        function updateStats() {
+
+            const normalized = tickets.map(normalizeTicket);
+
+            const assigned = normalized.length;
+
+            const pending = normalized.filter(t =>
+                t.status.label === "Pending"
+            ).length;
+
+            const progress = normalized.filter(t =>
+                t.status.label === "In Progress"
+            ).length;
+
+            const resolved = normalized.filter(t =>
+                t.status.label === "Resolved"
+            ).length;
+
+            const high = normalized.filter(t =>
+                t.priority === "High"
+            ).length;
+
+            const medium = normalized.filter(t =>
+                t.priority === "Medium"
+            ).length;
+
+            const low = normalized.filter(t =>
+                t.priority === "Low"
+            ).length;
+
+            $("assignedCount").textContent =
+                String(assigned).padStart(2, "0");
+
+            $("pendingCount").textContent =
+                String(pending).padStart(2, "0");
+
+            $("progressCount").textContent =
+                String(progress).padStart(2, "0");
+
+            $("resolvedCount").textContent =
+                String(resolved).padStart(2, "0");
+
+            $("highPriorityCount").textContent =
+                String(high).padStart(2, "0");
+
+            $("mediumPriorityCount").textContent =
+                String(medium).padStart(2, "0");
+
+            $("lowPriorityCount").textContent =
+                String(low).padStart(2, "0");
+
+            $("sidebarTicketCount").textContent =
+                String(assigned).padStart(2, "0");
+        }
+
+
+        // =========================================
+        // INITIALIZE PAGE
+        // =========================================
+
+        async function initializePage() {
+
+            showLoader(
+                "Loading your workspace",
+                "Fetching your employee information and assigned tickets..."
+            );
+
+            try {
+
+                if (
+                    typeof requireRole !== "function" ||
+                    !requireRole("R002")
+                ) {
+                    return;
+                }
+
+                currentUser = getCookieUser();
+
+                if (!currentUser || !currentUser.user_id) {
+                    throw new Error("Your login session could not be found. Please sign in again.");
+                }
+
+                await loadEmployeeTickets();
+
+                renderEmployeeDetails();
+                updateStats();
+                renderRecentTickets();
+                setCurrentDate();
+
+                hideLoader();
+
+            } catch (error) {
+
+                console.error("Employee overview error:", error);
+
+                showLoader(
+                    "Unable to load your workspace",
+                    error.message || "Something went wrong while loading your employee information.",
+                    true
+                );
+            }
+        }
+
+
+        // =========================================
+        // PAGE EVENTS
+        // =========================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            initializePage();
+
+            $("retryLoadButton").addEventListener("click", () => {
+                initializePage();
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | Supplier Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="Supplier.css">
+</head>
+
+<body data-required-role="R001" class="is-loading">
+
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner"></div>
+            <h2 id="loaderTitle">Loading Supplier Management</h2>
+            <p id="loaderMessage">Verifying your access and preparing supplier records...</p>
+            <button type="button" id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+        <aside class="sidebar">
+
+            <a class="brand" href="home1.html">
+                <span class="brand-icon">co.</span>
+                <span class="brand-details">
+                    <strong>cookie</strong>
+                    <small>HOUSE OF RUDRAKSH</small>
+                </span>
+            </a>
+
+            <div class="nav-label">WORKSPACE</div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                <span>Shared workspace</span>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+
+                <a class="nav-link" href="home1.html" aria-current="page">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+                        </svg>
+                    </span>
+                    <span>Overview</span>
+                </a>
+
+                <a class="nav-link" href="Customer.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <span>Customers</span>
+                </a>
+
+                <a class="nav-link active" href="Supplier.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 7h14l-4-4" />
+                            <path d="M21 7 17 11" />
+                            <path d="M17 17H3l4 4" />
+                            <path d="m3 17 4-4" />
+                        </svg>
+                    </span>
+                    <span>Suppliers</span>
+                </a>
+
+                <a class="nav-link" href="Renewal.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                    </span>
+                    <span>Renewals</span>
+                </a>
+
+                <a class="nav-link" href="Ticketing.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m12 3 9 5-9 5-9-5z" />
+                            <path d="M3 8v9l9 5 9-5V8" />
+                            <path d="M12 13v9" />
+                        </svg>
+                    </span>
+                    <span>Ticketing</span>
+                </a>
+
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">H</div>
+                    <div>
+                        <strong>House of Rudraksh</strong>
+                        <small>Management workspace</small>
+                    </div>
+                </div>
+
+                <a class="signout-link" href="#" id="logoutButton">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 17l5-5-5-5" />
+                        <path d="M15 12H3" />
+                        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+                    </svg>
+                    <span>Sign out</span>
+                </a>
+
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-heading">
+                    <h2>Supplier Management</h2>
+                    <p>Manage supplier contacts and areas of specialisation.</p>
+                </div>
+                <div class="topbar-right">
+                    <div class="workspace-status"><span class="status-dot"></span>Shared workspace</div>
+                    <div class="topbar-divider"></div>
+                    <span class="date" id="currentDate"></span>
+                    <div class="profile-avatar">A</div>
+                </div>
+            </header>
+
+            <section class="main-content">
+                <div class="content-wrapper">
+                    <section class="page-heading">
+                        <div class="heading-copy">
+                            <span class="eyebrow">SUPPLIER DIRECTORY</span>
+                            <h1>Suppliers</h1>
+                            <p>Keep supplier information and areas of specialisation organised and up to date.</p>
+                        </div>
+                        <div class="heading-actions">
+                            <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" hidden>
+                            <button class="button button-secondary" id="importButton" type="button">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 16V4" />
+                                    <path d="m7 9 5-5 5 5" />
+                                    <path d="M4 16v4h16v-4" />
+                                </svg>
+                                Import file
+                            </button>
+                            <button class="button button-primary" id="addButton" type="button">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 5v14M5 12h14" />
+                                </svg>
+                                Add supplier
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="stats-grid">
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">TOTAL SUPPLIERS</span>
+                                <div class="stat-icon orange-icon"><svg viewBox="0 0 24 24">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    </svg></div>
+                            </div>
+                            <strong class="stat-number" id="totalCount">0</strong>
+                            <span class="stat-caption">Registered supplier records</span>
+                        </article>
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">DATA SOURCE</span>
+                                <div class="stat-icon green-icon"><svg viewBox="0 0 24 24">
+                                        <path d="M4 5h16v14H4z" />
+                                        <path d="M4 9h16M8 5v4" />
+                                    </svg></div>
+                            </div>
+                            <strong class="stat-number source-number">Shared</strong>
+                            <span class="stat-caption">Connected Google Sheets database</span>
+                        </article>
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">CURRENT VIEW</span>
+                                <div class="stat-icon blue-icon"><svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m20 20-4-4" />
+                                    </svg></div>
+                            </div>
+                            <strong class="stat-number" id="visibleCount">0</strong>
+                            <span class="stat-caption">Records matching your search</span>
+                        </article>
+                    </section>
+
+                    <section class="directory-panel">
+                        <div class="directory-header">
+                            <div class="directory-title">
+                                <div class="directory-title-icon"><svg viewBox="0 0 24 24">
+                                        <path d="M7 7h14l-4-4" />
+                                        <path d="M21 7 17 11" />
+                                        <path d="M17 17H3l4 4" />
+                                        <path d="m3 17 4-4" />
+                                    </svg></div>
+                                <div>
+                                    <h2>Supplier directory</h2>
+                                    <p>View, search and manage registered suppliers.</p>
+                                </div>
+                            </div>
+                            <div class="directory-tools">
+                                <label class="search-wrap">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m20 20-4-4" />
+                                    </svg>
+                                    <input id="searchInput" type="search"
+                                        placeholder="Search phone or specialisation..."
+                                        aria-label="Search suppliers by phone number or specialisation">
+                                </label>
+                            </div>
+                        </div>
+
+                        <form class="entry-form" id="entryForm" hidden>
+                            <div class="form-heading">
+                                <div><span class="form-eyebrow" id="formEyebrow">NEW RECORD</span>
+                                    <h3 id="formTitle">Add a supplier</h3>
+                                    <p>Enter the supplier's contact and specialisation details.</p>
+                                </div>
+                                <button type="button" class="close-form" id="closeForm" aria-label="Close form"><svg
+                                        viewBox="0 0 24 24">
+                                        <path d="m18 6-12 12M6 6l12 12" />
+                                    </svg></button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="field"><label for="supplierName">Supplier name <span>*</span></label><input
+                                        id="supplierName" name="name" type="text" placeholder="Enter supplier name"
+                                        required></div>
+                                <div class="field"><label for="supplierNumber">Phone number <span>*</span></label><input
+                                        id="supplierNumber" name="number" type="tel" placeholder="Enter contact number"
+                                        required></div>
+                                <div class="field"><label for="supplierSpecialization">Specialisation
+                                        <span>*</span></label><input id="supplierSpecialization" name="specialization"
+                                        type="text" placeholder="e.g. Electrical, HVAC, Plumbing" required></div>
+                                <div class="field field-wide"><label for="supplierAddress">Address
+                                        <span>*</span></label><textarea id="supplierAddress" name="address" rows="2"
+                                        placeholder="Enter complete address" required></textarea></div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="button button-secondary" id="cancelForm">Cancel</button>
+                                <button type="submit" class="button button-primary" id="saveSupplierButton"><svg
+                                        viewBox="0 0 24 24">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>Save supplier</button>
+                            </div>
+                        </form>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>SUPPLIER</th>
+                                        <th>PHONE NUMBER</th>
+                                        <th>SPECIALISATION</th>
+                                        <th>ADDRESS</th>
+                                        <th class="action-col">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="supplierRows">
+                                    <tr class="empty-row">
+                                        <td colspan="6">
+                                            <div class="empty-state">
+                                                <div class="empty-state-icon">⇄</div><strong>No supplier records
+                                                    yet</strong><small>Add your first supplier to get
+                                                    started.</small><button type="button" class="empty-add-button"
+                                                    id="emptyAddButton">＋ Add supplier</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-footer">
+                            <span id="recordSummary">Showing 0 records</span>
+                            <div class="pagination" id="pagination">
+                                <button type="button" id="previousPage" disabled>Previous</button>
+                                <span id="pageIndicator">Page 1 of 1</span>
+                                <button type="button" id="nextPage" disabled>Next</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="import-status" id="importStatus">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 11v5M12 8h.01" />
+                        </svg>
+                        <span>Supplier records are stored in Google Sheets. Changes are synchronised with the shared
+                            database.</span>
+                    </div>
+
+                    <footer class="dashboard-footer">
+                        <span>COOKIE <span class="footer-separator">/</span> HOUSE OF RUDRAKSH</span>
+                        <span>Supplier Management</span>
+                    </footer>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+
+        (() => {
+            // Admin-only access. Backend also independently validates the role.
+            if (typeof requireRole !== "function" || !requireRole("R001")) return;
+
+            const $ = id => document.getElementById(id);
+            const form = $("entryForm");
+            const rows = $("supplierRows");
+            const search = $("searchInput");
+            const status = $("importStatus");
+            const loader = $("pageLoader");
+            const retry = $("retryLoadButton");
+
+            const PAGE_SIZE = 8;
+
+            let records = [];
+            let editingSupplierIndex = null;
+            let currentPage = 1;
+            let busy = false;
+
+            $("currentDate").textContent = new Intl.DateTimeFormat("en-IN", {
+                weekday: "short",
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }).format(new Date());
+
+            // -----------------------------
+            // API
+            // -----------------------------
+
+            async function api(action, data = {}) {
+                if (typeof sendToCookieBackend !== "function") {
+                    throw new Error("Authentication service is unavailable. Please reload the page.");
+                }
+
+                const result = await sendToCookieBackend(action, data);
+
+                if (!result || result.success !== true) {
+                    throw new Error(result?.message || "The request could not be completed.");
+                }
+
+                return result;
+            }
+
+            function setStatus(message) {
+                status.querySelector("span").textContent = message;
+            }
+
+            function setBusy(value) {
+                busy = value;
+
+                $("addButton").disabled = value;
+                $("importButton").disabled = value;
+                $("saveSupplierButton").disabled = value;
+                $("previousPage").disabled = value || currentPage === 1;
+                $("nextPage").disabled = value;
+            }
+
+            function showLoader(title, message, showRetry = false) {
+                document.body.classList.add("is-loading");
+                loader.hidden = false;
+
+                $("loaderTitle").textContent = title;
+                $("loaderMessage").textContent = message;
+                retry.hidden = !showRetry;
+            }
+
+            function hideLoader() {
+                loader.hidden = true;
+                document.body.classList.remove("is-loading");
+            }
+
+            // -----------------------------
+            // LOAD SUPPLIERS
+            // -----------------------------
+
+            async function loadSuppliers() {
+                const result = await api("getSuppliers");
+
+                records = (result.suppliers || []).map(supplier => ({
+                    supplier_id: supplier.supplier_id,
+                    name: supplier.supplier_name || "",
+                    number: String(supplier.phone || ""),
+                    specialization: supplier.specialization || "",
+                    address: supplier.address || ""
+                }));
+
+                currentPage = 1;
+                render();
+
+                $("totalCount").textContent = records.length;
+                $("visibleCount").textContent = records.length;
+
+                setStatus("Supplier records are synchronised with Google Sheets.");
+            }
+
+            async function initializeSupplierPage() {
+                showLoader(
+                    "Loading Supplier Management",
+                    "Verifying your access and retrieving supplier records..."
+                );
+
+                try {
+                    await loadSuppliers();
+                    hideLoader();
+                } catch (error) {
+                    console.error("Supplier loading error:", error);
+
+                    showLoader(
+                        "Unable to load suppliers",
+                        error.message || "Please check your connection and try again.",
+                        true
+                    );
+                }
+            }
+
+            retry.addEventListener("click", initializeSupplierPage);
+
+            // -----------------------------
+            // FORM
+            // -----------------------------
+
+            function openForm(record = null) {
+                if (busy) return;
+
+                form.reset();
+
+                editingSupplierIndex = record ? records.indexOf(record) : null;
+
+                $("formEyebrow").textContent = record ? "UPDATE RECORD" : "NEW RECORD";
+                $("formTitle").textContent = record ? "Edit supplier" : "Add a supplier";
+
+                $("saveSupplierButton").innerHTML = record
+                    ? '<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Update supplier'
+                    : '<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Save supplier';
+
+                if (record) {
+                    $("supplierName").value = record.name;
+                    $("supplierNumber").value = record.number;
+                    $("supplierSpecialization").value = record.specialization;
+                    $("supplierAddress").value = record.address;
+                }
+
+                form.hidden = false;
+                $("supplierName").focus();
+                form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+
+            function closeForm() {
+                form.reset();
+                form.hidden = true;
+                editingSupplierIndex = null;
+
+                $("formEyebrow").textContent = "NEW RECORD";
+                $("formTitle").textContent = "Add a supplier";
+
+                $("saveSupplierButton").innerHTML =
+                    '<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Save supplier';
+            }
+
+            $("addButton").addEventListener("click", () => openForm());
+            $("closeForm").addEventListener("click", closeForm);
+            $("cancelForm").addEventListener("click", closeForm);
+
+            // -----------------------------
+            // ADD / UPDATE
+            // -----------------------------
+
+            form.addEventListener("submit", async event => {
+                event.preventDefault();
+
+                if (busy) return;
+
+                const supplier = {
+                    supplier_name: $("supplierName").value.trim(),
+                    phone: $("supplierNumber").value.trim(),
+                    specialization: $("supplierSpecialization").value.trim(),
+                    address: $("supplierAddress").value.trim()
+                };
+
+                if (
+                    !supplier.supplier_name ||
+                    !supplier.phone ||
+                    !supplier.specialization ||
+                    !supplier.address
+                ) {
+                    alert("Please complete all supplier fields.");
+                    return;
+                }
+
+                const isEditing = editingSupplierIndex !== null;
+                const existingRecord = isEditing ? records[editingSupplierIndex] : null;
+
+                setBusy(true);
+
+                try {
+                    if (isEditing) {
+                        await api("updateSupplier", {
+                            supplier_id: existingRecord.supplier_id,
+                            ...supplier
+                        });
+
+                        setStatus(`Supplier "${supplier.supplier_name}" updated successfully.`);
+                    } else {
+                        await api("addSupplier", supplier);
+
+                        setStatus(`Supplier "${supplier.supplier_name}" added successfully.`);
+                    }
+
+                    closeForm();
+                    await loadSuppliers();
+
+                } catch (error) {
+                    console.error("Supplier save error:", error);
+                    alert(error.message || "Unable to save supplier.");
+                } finally {
+                    setBusy(false);
+                    render();
+                }
+            });
+
+            // -----------------------------
+            // DELETE
+            // -----------------------------
+
+            async function deleteSupplier(record) {
+                if (busy) return;
+
+                if (!confirm(`Remove ${record.name} from the supplier directory?`)) {
+                    return;
+                }
+
+                setBusy(true);
+
+                try {
+                    await api("deleteSupplier", {
+                        supplier_id: record.supplier_id
+                    });
+
+                    setStatus(`Supplier "${record.name}" removed successfully.`);
+
+                    await loadSuppliers();
+
+                } catch (error) {
+                    console.error("Supplier deletion error:", error);
+                    alert(error.message || "Unable to remove supplier.");
+                } finally {
+                    setBusy(false);
+                    render();
+                }
+            }
+
+            // -----------------------------
+            // SEARCH
+            // -----------------------------
+
+            function getFilteredRecords() {
+                const query = search.value.trim().toLowerCase();
+
+                return records.filter(record =>
+                    record.number.toLowerCase().includes(query) ||
+                    record.specialization.toLowerCase().includes(query)
+                );
+            }
+
+            search.addEventListener("input", () => {
+                currentPage = 1;
+                render();
+            });
+
+            // -----------------------------
+            // TABLE RENDERING
+            // -----------------------------
+
+            function createCell(value, className = "") {
+                const cell = document.createElement("td");
+
+                if (className) cell.className = className;
+
+                cell.textContent = value;
+
+                return cell;
+            }
+
+            function renderEmptyState(hasRecords) {
+                const tr = document.createElement("tr");
+                tr.className = "empty-row";
+
+                const td = document.createElement("td");
+                td.colSpan = 6;
+
+                const state = document.createElement("div");
+                state.className = "empty-state";
+
+                const icon = document.createElement("div");
+                icon.className = "empty-state-icon";
+                icon.textContent = "⇄";
+
+                const title = document.createElement("strong");
+                title.textContent = hasRecords
+                    ? "No matching suppliers"
+                    : "No supplier records yet";
+
+                const message = document.createElement("small");
+                message.textContent = hasRecords
+                    ? "Try searching with another phone number."
+                    : "Add your first supplier to get started.";
+
+                state.append(icon, title, message);
+
+                if (!hasRecords) {
+                    const add = document.createElement("button");
+
+                    add.type = "button";
+                    add.className = "empty-add-button";
+                    add.textContent = "＋ Add supplier";
+
+                    add.addEventListener("click", () => openForm());
+
+                    state.append(add);
+                }
+
+                td.append(state);
+                tr.append(td);
+                rows.append(tr);
+            }
+
+            function render() {
+                const filtered = getFilteredRecords();
+
+                const totalPages = Math.max(
+                    1,
+                    Math.ceil(filtered.length / PAGE_SIZE)
+                );
+
+                currentPage = Math.min(currentPage, totalPages);
+
+                const startIndex = (currentPage - 1) * PAGE_SIZE;
+
+                const pageRecords = filtered.slice(
+                    startIndex,
+                    startIndex + PAGE_SIZE
+                );
+
+                rows.replaceChildren();
+
+                if (!filtered.length) {
+                    renderEmptyState(records.length > 0);
+                } else {
+                    pageRecords.forEach((record, index) => {
+                        const tr = document.createElement("tr");
+
+                        tr.append(
+                            createCell(
+                                String(startIndex + index + 1),
+                                "number-cell"
+                            )
+                        );
+
+                        const nameCell = document.createElement("td");
+                        nameCell.className = "supplier-name-cell";
+
+                        const avatar = document.createElement("span");
+                        avatar.className = "supplier-avatar";
+                        avatar.textContent = record.name.charAt(0).toUpperCase();
+
+                        const name = document.createElement("strong");
+                        name.textContent = record.name;
+
+                        nameCell.append(avatar, name);
+                        tr.append(nameCell);
+
+                        tr.append(createCell(record.number, "phone-cell"));
+                        tr.append(createCell(record.specialization, "specialization-cell"));
+                        tr.append(createCell(record.address, "address-cell"));
+
+                        const actionCell = document.createElement("td");
+                        actionCell.className = "row-action";
+
+                        const edit = document.createElement("button");
+                        edit.type = "button";
+                        edit.className = "edit-button";
+                        edit.textContent = "Edit";
+                        edit.disabled = busy;
+                        edit.addEventListener("click", () => openForm(record));
+
+                        const remove = document.createElement("button");
+                        remove.type = "button";
+                        remove.className = "delete-button";
+                        remove.textContent = "Remove";
+                        remove.disabled = busy;
+                        remove.addEventListener("click", () => deleteSupplier(record));
+
+                        actionCell.append(edit, remove);
+                        tr.append(actionCell);
+
+                        rows.append(tr);
+                    });
+                }
+
+                $("totalCount").textContent = records.length;
+                $("visibleCount").textContent = filtered.length;
+
+                const from = filtered.length ? startIndex + 1 : 0;
+                const to = Math.min(startIndex + PAGE_SIZE, filtered.length);
+
+                $("recordSummary").textContent =
+                    `Showing ${from}-${to} of ${filtered.length} records`;
+
+                $("pageIndicator").textContent =
+                    `Page ${currentPage} of ${totalPages}`;
+
+                $("previousPage").disabled = busy || currentPage === 1;
+                $("nextPage").disabled = busy || currentPage >= totalPages;
+
+                $("pagination").hidden = totalPages <= 1;
+            }
+
+            // -----------------------------
+            // PAGINATION
+            // -----------------------------
+
+            $("previousPage").addEventListener("click", () => {
+                if (busy || currentPage <= 1) return;
+
+                currentPage--;
+                render();
+            });
+
+            $("nextPage").addEventListener("click", () => {
+                if (busy) return;
+
+                const totalPages = Math.ceil(
+                    getFilteredRecords().length / PAGE_SIZE
+                );
+
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    render();
+                }
+            });
+
+            // -----------------------------
+            // EXCEL / CSV IMPORT
+            // -----------------------------
+
+            $("importButton").addEventListener("click", () => {
+                if (!busy) $("excelFile").click();
+            });
+
+            function normalizeHeader(value) {
+                return String(value || "")
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]/g, "");
+            }
+
+            function getImportValue(row, possibleNames) {
+                for (const key of Object.keys(row)) {
+                    if (possibleNames.includes(normalizeHeader(key))) {
+                        return String(row[key] ?? "").trim();
+                    }
+                }
+
+                return "";
+            }
+
+            $("excelFile").addEventListener("change", async event => {
+                const file = event.target.files[0];
+
+                if (!file) return;
+
+                if (typeof XLSX === "undefined") {
+                    alert("Excel processing library could not be loaded.");
+                    event.target.value = "";
+                    return;
+                }
+
+                setBusy(true);
+
+                try {
+                    const buffer = await file.arrayBuffer();
+
+                    const workbook = XLSX.read(buffer, {
+                        type: "array"
+                    });
+
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+                    const sheetRows = XLSX.utils.sheet_to_json(firstSheet, {
+                        defval: "",
+                        raw: false
+                    });
+
+                    if (!sheetRows.length) {
+                        throw new Error("The selected file contains no supplier records.");
+                    }
+
+                    const importedRecords = sheetRows.map(row => ({
+                        supplier_name: getImportValue(row, [
+                            "suppliername",
+                            "name"
+                        ]),
+                        phone: getImportValue(row, [
+                            "phone",
+                            "phonenumber",
+                            "number",
+                            "contact",
+                            "contactnumber",
+                            "mobilenumber"
+                        ]),
+                        specialization: getImportValue(row, [
+                            "specialization",
+                            "specialisation",
+                            "speciality"
+                        ]),
+                        address: getImportValue(row, [
+                            "address",
+                            "supplieraddress"
+                        ])
+                    }));
+
+                    const validRecords = importedRecords.filter(record =>
+                        record.supplier_name &&
+                        record.phone &&
+                        record.specialization &&
+                        record.address
+                    );
+
+                    if (!validRecords.length) {
+                        throw new Error(
+                            "No valid records found. Check your column headings and data."
+                        );
+                    }
+
+                    if (!confirm(
+                        `Found ${validRecords.length} valid supplier records.\n\nImport them into Google Sheets?`
+                    )) {
+                        return;
+                    }
+
+                    const result = await api("importSuppliers", {
+                        records: JSON.stringify(validRecords)
+                    });
+
+                    await loadSuppliers();
+
+                    const imported = result.imported ?? 0;
+                    const skipped = result.skipped ?? (validRecords.length - imported);
+
+                    setStatus(
+                        `Import completed. Imported: ${imported}. Skipped: ${skipped}.`
+                    );
+
+                    alert(
+                        `Import completed successfully.\n\nImported: ${imported}\nSkipped: ${skipped}`
+                    );
+
+                } catch (error) {
+                    console.error("Supplier import error:", error);
+                    alert(error.message || "Unable to import supplier records.");
+                } finally {
+                    event.target.value = "";
+                    setBusy(false);
+                    render();
+                }
+            });
+
+            // -----------------------------
+            // START PAGE
+            // -----------------------------
+
+            initializeSupplierPage();
+
+        })();
+
+    </script>
+</body>
+
+</html>

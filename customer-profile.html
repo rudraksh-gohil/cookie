@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | My Account</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="My-Tickets.css">
+    <link rel="stylesheet" href="Customer-Pages.css">
+</head>
+
+<body class="is-loading" data-required-role="R003">
+
+    <!-- PAGE LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner"></div>
+            <h2 id="loaderTitle">Loading your account</h2>
+            <p id="loaderMessage">Please wait while we retrieve your account information.</p>
+            <button id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">co.</div>
+                <div class="brand-details">
+                    <h2>cookie</h2>
+                    <span>HOUSE OF RUDRAKSH</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <span class="nav-label">CUSTOMER PORTAL</span>
+
+                <nav class="main-nav">
+
+                    <a href="customer-home.html" class="nav-link">
+                        <span class="nav-icon">⌂</span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="My-Tickets.html" class="nav-link">
+                        <span class="nav-icon">
+                            <i class="bi bi-ticket"></i>
+                        </span>
+                        <span>My Tickets</span>
+                        <span class="nav-count" id="sidebarTicketCount">0</span>
+                    </a>
+
+                    <a href="My-Tickets.html?action=raise" class="nav-link">
+                        <span class="nav-icon">＋</span>
+                        <span>Raise a Ticket</span>
+                    </a>
+
+                    <a href="customer-profile.html" class="nav-link active">
+                        <span class="nav-icon">◎</span>
+                        <span>My Account</span>
+                    </a>
+
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">co.</div>
+                    <div>
+                        <strong>Cookie</strong>
+                        <span>Customer Portal</span>
+                    </div>
+                </div>
+                <a href="#" class="signout-link" id="logoutButton">
+    <span>↪</span>
+    Sign out
+</a>
+
+            </div>
+
+        </aside>
+
+
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <span class="eyebrow">CUSTOMER PORTAL / ACCOUNT</span>
+                    <h1>My Account</h1>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Account Active
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="profile">
+                        <div class="profile-avatar" id="profileAvatar">--</div>
+
+                        <div class="profile-info">
+                            <strong id="profileName">Loading...</strong>
+                            <span id="profileRole">Customer</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <div class="profile-page-heading">
+                        <div>
+                            <span class="section-eyebrow">ACCOUNT SETTINGS</span>
+                            <h2>My Account</h2>
+                            <p>View your personal information and account details.</p>
+                        </div>
+                    </div>
+
+
+                    <!-- PROFILE HEADER -->
+
+                    <section class="profile-banner">
+
+                        <div class="large-avatar" id="largeAvatar">--</div>
+
+                        <div class="profile-banner-info">
+                            <h2 id="bannerName">Loading...</h2>
+                            <span id="bannerRole">Customer</span>
+                            <small>
+                                User ID: <span id="bannerUserId">--</span>
+                            </small>
+                        </div>
+
+                        <div class="account-status">
+                            <span class="status-dot"></span>
+                            Active Account
+                        </div>
+
+                    </section>
+
+
+                    <!-- PERSONAL INFORMATION -->
+
+                    <section class="profile-panel">
+
+                        <div class="profile-panel-header">
+                            <div>
+                                <h3>Personal Information</h3>
+                                <p>Your registered account details.</p>
+                            </div>
+
+                            <span class="readonly-label">READ ONLY</span>
+                        </div>
+
+                        <div class="profile-information-grid">
+
+                            <div class="profile-field">
+                                <span>FULL NAME</span>
+                                <strong id="fieldFullName">--</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>USER ID</span>
+                                <strong id="fieldUserId">--</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>EMAIL ADDRESS</span>
+                                <strong id="fieldEmail">--</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>MOBILE NUMBER</span>
+                                <strong id="fieldPhone">--</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>ACCOUNT TYPE</span>
+                                <strong id="fieldAccountType">Customer</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>ACCOUNT STATUS</span>
+                                <strong class="active-text">Active</strong>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ACCOUNT INFORMATION -->
+
+                    <section class="profile-panel">
+
+                        <div class="profile-panel-header">
+                            <div>
+                                <h3>Account Information</h3>
+                                <p>Information related to your Cookie account.</p>
+                            </div>
+                        </div>
+
+                        <div class="profile-information-grid">
+
+                            <div class="profile-field">
+                                <span>REGISTRATION DATE</span>
+                                <strong>Not available</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>LAST ACCOUNT UPDATE</span>
+                                <strong>Not available</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>PORTAL ACCESS</span>
+                                <strong>Customer Portal</strong>
+                            </div>
+
+                            <div class="profile-field">
+                                <span>SUPPORT TICKETS</span>
+                                <strong id="fieldTicketCount">Loading...</strong>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- SECURITY -->
+
+                    <section class="profile-panel security-panel">
+
+                        <div class="profile-panel-header">
+                            <div>
+                                <h3>Account Security</h3>
+                                <p>Keep your account access secure.</p>
+                            </div>
+                        </div>
+
+                        <div class="security-row">
+
+                            <div class="security-icon">▣</div>
+
+                            <div class="security-info">
+                                <strong>Password</strong>
+                                <span>Your password is protected and is not displayed here.</span>
+                            </div>
+
+                            <span class="security-status">Protected</span>
+
+                        </div>
+
+                        <div class="security-row">
+
+                            <div class="security-icon">◉</div>
+
+                            <div class="security-info">
+                                <strong>Account Access</strong>
+                                <span>Your customer account is currently active.</span>
+                            </div>
+
+                            <span class="security-status">Active</span>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- SUPPORT -->
+
+                    <div class="support-note">
+
+                        <div class="support-note-icon">i</div>
+
+                        <div>
+                            <strong>Need to update your details?</strong>
+
+                            <p>
+                                Contact our support team if your registered information needs to be changed.
+                            </p>
+
+                            <a href="My-Tickets.html" class="text-link">
+                                Contact Support <span>→</span>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- BACKEND SCRIPTS -->
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+
+    <script>
+let currentUser = null;
+
+const pageLoader = document.getElementById("pageLoader");
+const loaderTitle = document.getElementById("loaderTitle");
+const loaderMessage = document.getElementById("loaderMessage");
+const retryLoadButton = document.getElementById("retryLoadButton");
+
+
+/* =========================================
+   PAGE INITIALIZATION
+========================================= */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+    // Only R003 customers can access this page.
+    if (
+        typeof requireRole !== "function" ||
+        !requireRole("R003")
+    ) {
+        return;
+    }
+
+    retryLoadButton.addEventListener("click", initializePage);
+
+    await initializePage();
+
+});
+
+
+/* =========================================
+   LOADER
+========================================= */
+
+function showLoader(title, message, showRetry = false) {
+
+    document.body.classList.add("is-loading");
+
+    pageLoader.style.display = "flex";
+
+    loaderTitle.textContent = title;
+    loaderMessage.textContent = message;
+
+    retryLoadButton.hidden = !showRetry;
+
+}
+
+
+function hideLoader() {
+
+    document.body.classList.remove("is-loading");
+
+    pageLoader.style.display = "none";
+
+}
+
+
+/* =========================================
+   INITIALIZE PAGE
+========================================= */
+
+async function initializePage() {
+
+    showLoader(
+        "Loading your account",
+        "Please wait while we retrieve your account information."
+    );
+
+    try {
+
+        loadCurrentUser();
+
+// Keep the loader visible briefly, then reveal the profile.
+setTimeout(() => {
+    hideLoader();
+}, 700);
+
+// Load ticket count independently.
+loadTicketCount();
+
+    } catch (error) {
+
+        console.error("Account initialization error:", error);
+
+        showLoader(
+            "Unable to load your account",
+            error.message || "Something went wrong. Please try again.",
+            true
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD LOGGED-IN CUSTOMER
+========================================= */
+
+function loadCurrentUser() {
+
+    if (typeof getCookieUser !== "function") {
+        throw new Error("Session service is unavailable.");
+    }
+
+    currentUser = getCookieUser();
+
+    if (!currentUser || !currentUser.user_id) {
+        throw new Error(
+            "Your login session could not be found. Please log in again."
+        );
+    }
+
+    const fullName = currentUser.full_name || "Customer";
+    const userId = currentUser.user_id;
+    const email = currentUser.email || "Not provided";
+    const phone = currentUser.phone || "Not provided";
+    const role = currentUser.role_name || "Customer";
+
+    const initials = getInitials(fullName);
+
+
+    // TOPBAR
+
+    document.getElementById("profileAvatar").textContent = initials;
+    document.getElementById("profileName").textContent = fullName;
+    document.getElementById("profileRole").textContent = role;
+
+
+    // PROFILE BANNER
+
+    document.getElementById("largeAvatar").textContent = initials;
+    document.getElementById("bannerName").textContent = fullName;
+    document.getElementById("bannerRole").textContent = role;
+    document.getElementById("bannerUserId").textContent = userId;
+
+
+    // PERSONAL INFORMATION
+
+    document.getElementById("fieldFullName").textContent = fullName;
+    document.getElementById("fieldUserId").textContent = userId;
+    document.getElementById("fieldEmail").textContent = email;
+    document.getElementById("fieldPhone").textContent = phone;
+    document.getElementById("fieldAccountType").textContent = role;
+
+}
+
+
+/* =========================================
+   GENERATE INITIALS
+========================================= */
+
+function getInitials(name) {
+
+    return String(name)
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part.charAt(0).toUpperCase())
+        .join("");
+
+}
+
+
+/* =========================================
+   LOAD CUSTOMER TICKET COUNT
+========================================= */
+
+async function loadTicketCount() {
+
+    const countElement = document.getElementById("fieldTicketCount");
+    const sidebarCount = document.getElementById("sidebarTicketCount");
+
+    try {
+
+        const response = await sendToCookieBackend(
+            "getCustomerTickets",
+            {
+                user_id: currentUser.user_id
+            }
+        );
+
+        if (!response || !response.success) {
+            throw new Error(
+                response?.message || "Unable to retrieve your tickets."
+            );
+        }
+
+        const tickets = response.tickets || [];
+
+        countElement.textContent = `${tickets.length} Submitted`;
+        sidebarCount.textContent = tickets.length;
+
+    } catch (error) {
+
+        console.error("Ticket count loading error:", error);
+
+        countElement.textContent = "Unavailable";
+        sidebarCount.textContent = "—";
+
+    }
+
+}
+</script>
+
+</body>
+</html>

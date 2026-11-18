@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | Overview</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="home1.css">
+</head>
+
+<body data-required-role="R001" class="is-loading">
+
+    <!-- PAGE LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner"></div>
+            <h2 id="loaderTitle">Loading Overview</h2>
+            <p id="loaderMessage">Verifying your access and preparing your workspace...</p>
+            <button type="button" id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <a class="brand" href="home1.html">
+                <span class="brand-icon">co.</span>
+                <span class="brand-details">
+                    <strong>cookie</strong>
+                    <small>HOUSE OF RUDRAKSH</small>
+                </span>
+            </a>
+
+            <div class="nav-label">WORKSPACE</div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                <span>Shared workspace</span>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+
+                <a class="nav-link active" href="home1.html" aria-current="page">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+                        </svg>
+                    </span>
+                    <span>Overview</span>
+                </a>
+
+                <a class="nav-link" href="Customer.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <span>Customers</span>
+                </a>
+
+                <a class="nav-link" href="Supplier.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 7h14l-4-4" />
+                            <path d="M21 7 17 11" />
+                            <path d="M17 17H3l4 4" />
+                            <path d="m3 17 4-4" />
+                        </svg>
+                    </span>
+                    <span>Suppliers</span>
+                </a>
+
+                <a class="nav-link" href="Renewal.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                    </span>
+                    <span>Renewals</span>
+                </a>
+
+                <a class="nav-link" href="Ticketing.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m12 3 9 5-9 5-9-5z" />
+                            <path d="M3 8v9l9 5 9-5V8" />
+                            <path d="M12 13v9" />
+                        </svg>
+                    </span>
+                    <span>Ticketing</span>
+                </a>
+
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">H</div>
+                    <div>
+                        <strong>House of Rudraksh</strong>
+                        <small>Management workspace</small>
+                    </div>
+                </div>
+
+                <a class="signout-link" href="#" id="logoutButton">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 17l5-5-5-5" />
+                        <path d="M15 12H3" />
+                        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+                    </svg>
+                    <span>Sign out</span>
+                </a>
+
+            </div>
+        </aside>
+
+
+        <!-- MAIN AREA -->
+        <main class="main-area">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <h2>Overview</h2>
+                    <p>Your central management workspace.</p>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Shared workspace
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <span class="date" id="currentDate"></span>
+
+                    <div class="profile-avatar" id="profileAvatar">A</div>
+
+                </div>
+
+            </header>
+
+
+            <!-- MAIN CONTENT -->
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <!-- PAGE HEADING -->
+                    <section class="page-heading">
+
+                        <div class="heading-copy">
+                            <span class="eyebrow">COOKIE MANAGEMENT PORTAL</span>
+                            <h1 id="welcomeMessage">Overview</h1>
+                            <p>
+                                Manage your business operations, customer relationships
+                                and supplier information from one workspace.
+                            </p>
+                        </div>
+
+                        <div class="heading-decoration">
+                            <div class="heading-decoration-circle circle-one"></div>
+                            <div class="heading-decoration-circle circle-two"></div>
+                            <div class="heading-decoration-circle circle-three"></div>
+                            <span>co.</span>
+                        </div>
+
+                    </section>
+
+
+                    <!-- WORKSPACE SUMMARY -->
+                    <section class="stats-grid">
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">CUSTOMERS</span>
+
+                                <div class="stat-icon orange-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <strong class="stat-number" id="customerCount">—</strong>
+                            <span class="stat-caption">Customer directory</span>
+                        </article>
+
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">SUPPLIERS</span>
+
+                                <div class="stat-icon green-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M7 7h14l-4-4" />
+                                        <path d="M21 7 17 11" />
+                                        <path d="M17 17H3l4 4" />
+                                        <path d="m3 17 4-4" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <strong class="stat-number" id="supplierCount">—</strong>
+                            <span class="stat-caption">Supplier directory</span>
+                        </article>
+
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">RENEWALS</span>
+
+                                <div class="stat-icon blue-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M12 7v5l3 2" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <strong class="stat-number" id="renewalCount">—</strong>
+                            <span class="stat-caption">Renewal tracking</span>
+                        </article>
+
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">Ticket Open</span>
+
+                                <div class="stat-icon purple-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="m12 3 9 5-9 5-9-5z" />
+                                        <path d="M3 8v9l9 5 9-5V8" />
+                                        <path d="M12 13v9" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <span class="stat-caption">Coming soon</span>
+                            <span class="stat-caption">Inventory management</span>
+                        </article>
+
+                    </section>
+
+
+                    <!-- MANAGEMENT MODULES -->
+                    <section class="directory-panel">
+
+                        <div class="directory-header">
+
+                            <div class="directory-title">
+                                <div class="directory-title-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                                    </svg>
+                                </div>
+
+                                <div>
+                                    <h2>Management modules</h2>
+                                    <p>Choose a workspace to view and manage its records.</p>
+                                </div>
+                            </div>
+
+                            <div class="module-count">
+                                <span class="status-dot"></span>
+                                6 modules
+                            </div>
+
+                        </div>
+
+
+                        <div class="module-grid">
+
+                            <a href="Customer.html" class="module-card">
+                                <div class="module-icon orange-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    </svg>
+                                </div>
+
+                                <div class="module-info">
+                                    <h3>Customer Management</h3>
+                                    <p>Manage customer records and contact information.</p>
+                                </div>
+
+                                <span class="module-arrow">↗</span>
+                            </a>
+
+
+                            <a href="Supplier.html" class="module-card">
+                                <div class="module-icon green-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M7 7h14l-4-4" />
+                                        <path d="M21 7 17 11" />
+                                        <path d="M17 17H3l4 4" />
+                                        <path d="m3 17 4-4" />
+                                    </svg>
+                                </div>
+
+                                <div class="module-info">
+                                    <h3>Supplier Management</h3>
+                                    <p>Maintain supplier contacts and specialisations.</p>
+                                </div>
+
+                                <span class="module-arrow">↗</span>
+                            </a>
+
+
+                            <a href="Renewal.html" class="module-card">
+                                <div class="module-icon blue-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M12 7v5l3 2" />
+                                    </svg>
+                                </div>
+
+                                <div class="module-info">
+                                    <h3>Renewal Management</h3>
+                                    <p>Track renewal dates, values and statuses.</p>
+                                </div>
+
+                                <span class="module-arrow">↗</span>
+                            </a>
+
+
+                            <a href="Ticketing.html" class="module-card">
+                                <div class="module-icon purple-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="m12 3 9 5-9 5-9-5z" />
+                                        <path d="M3 8v9l9 5 9-5V8" />
+                                        <path d="M12 13v9" />
+                                    </svg>
+                                </div>
+
+                                <div class="module-info">
+                                    <h3>Ticketing Management</h3>
+<p>Manage, track, and resolve customer support tickets.</p>
+                                </div>
+
+                                <span class="module-arrow">↗</span>
+                            </a>
+
+
+                            
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- SECURITY INFORMATION -->
+                    <div class="import-status">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z" />
+                            <path d="m9 12 2 2 4-4" />
+                        </svg>
+
+                        <span>
+                            Your workspace is protected through authenticated sessions
+                            and role-based access permissions.
+                        </span>
+                    </div>
+
+
+                    <!-- FOOTER -->
+                    <footer class="dashboard-footer">
+                        <span>COOKIE <span class="footer-separator">/</span> HOUSE OF RUDRAKSH</span>
+                        <span>Overview</span>
+                    </footer>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <!-- SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+        (() => {
+
+            const $ = id => document.getElementById(id);
+
+            const loader = $("pageLoader");
+            const retry = $("retryLoadButton");
+
+            function showLoader(title, message, showRetry = false) {
+                document.body.classList.add("is-loading");
+                loader.hidden = false;
+
+                $("loaderTitle").textContent = title;
+                $("loaderMessage").textContent = message;
+                retry.hidden = !showRetry;
+            }
+
+            function hideLoader() {
+                loader.hidden = true;
+                document.body.classList.remove("is-loading");
+            }
+
+            function initializeHomePage() {
+
+                showLoader(
+                    "Loading Overview",
+                    "Verifying your access and preparing your workspace..."
+                );
+
+                try {
+
+                    if (typeof requireRole !== "function") {
+                        throw new Error("Authentication service is unavailable. Please reload the page.");
+                    }
+
+                    if (!requireRole("R001")) {
+                        return;
+                    }
+
+                    const user = getCookieUser();
+
+                    if (!user) {
+                        throw new Error("Your session could not be verified. Please sign in again.");
+                    }
+
+                    $("welcomeMessage").textContent =
+                        "Welcome back, " + (user.full_name || "Admin") + ".";
+
+                    $("profileAvatar").textContent =
+                        (user.full_name || "A").trim().charAt(0).toUpperCase();
+
+                    $("currentDate").textContent =
+                        new Intl.DateTimeFormat("en-IN", {
+                            weekday: "short",
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        }).format(new Date());
+
+                    hideLoader();
+
+                } catch (error) {
+
+                    console.error("Overview loading error:", error);
+
+                    showLoader(
+                        "Unable to load Overview",
+                        error.message || "Please check your session and try again.",
+                        true
+                    );
+
+                }
+            }
+
+            retry.addEventListener("click", initializeHomePage);
+
+            initializeHomePage();
+
+        })();
+    </script>
+
+    <script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const loader = document.getElementById("pageLoader");
+    const retryButton = document.getElementById("retryLoadButton");
+
+    const customerCount = document.getElementById("customerCount");
+    const supplierCount = document.getElementById("supplierCount");
+    const renewalCount = document.getElementById("renewalCount");
+
+    function showLoader(message) {
+        document.body.classList.add("is-loading");
+        loader.hidden = false;
+
+        document.getElementById("loaderMessage").textContent = message;
+        retryButton.hidden = true;
+    }
+
+    function hideLoader() {
+        loader.hidden = true;
+        document.body.classList.remove("is-loading");
+    }
+
+    async function loadDashboard() {
+
+        showLoader("Verifying access and loading dashboard data...");
+
+        if (!requireRole("R001")) return;
+
+        try {
+
+            const results = await Promise.all([
+                sendToCookieBackend("getCustomers"),
+                sendToCookieBackend("getSuppliers"),
+                sendToCookieBackend("getRenewals")
+            ]);
+
+            const [customers, suppliers, renewals] = results;
+
+            if (!customers.success) {
+                throw new Error("Unable to load customer records.");
+            }
+
+            if (!suppliers.success) {
+                throw new Error("Unable to load supplier records.");
+            }
+
+            if (!renewals.success) {
+                throw new Error("Unable to load renewal records.");
+            }
+
+            customerCount.textContent =
+                (customers.customers || []).length;
+
+            supplierCount.textContent =
+                (suppliers.suppliers || []).length;
+
+            renewalCount.textContent =
+                (renewals.renewals || []).length;
+
+            hideLoader();
+
+        } catch (error) {
+
+            console.error("Dashboard loading error:", error);
+
+            document.getElementById("loaderTitle").textContent =
+                "Unable to load dashboard";
+
+            document.getElementById("loaderMessage").textContent =
+                error.message || "Something went wrong while loading dashboard data.";
+
+            retryButton.hidden = false;
+        }
+    }
+
+    retryButton.addEventListener("click", loadDashboard);
+
+    await loadDashboard();
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | My Account</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Employee-Pages.css">
+    <link rel="stylesheet" href="Employee-Profile.css">
+
+    <style>
+        body.is-loading .app-shell {
+            visibility: hidden;
+        }
+
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: var(--bg, #191E1B);
+        }
+
+        .loader-card {
+            width: 100%;
+            max-width: 360px;
+            padding: 35px 25px;
+            text-align: center;
+            background: var(--panel, #252D28);
+            border: 1px solid var(--border, #39423B);
+            border-radius: 14px;
+        }
+
+        .loader-spinner {
+            width: 35px;
+            height: 35px;
+            margin: 0 auto 22px;
+            border: 3px solid var(--border, #39423B);
+            border-top-color: var(--orange, #E58B45);
+            border-radius: 50%;
+            animation: cookie-spin .8s linear infinite;
+        }
+
+        .loader-card h2 {
+            color: var(--ivory, #F2EBDD);
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .loader-card p {
+            color: var(--secondary, #B7B9AD);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #retryLoadButton {
+            margin-top: 20px;
+            padding: 10px 18px;
+            color: var(--bg, #191E1B);
+            background: var(--orange, #E58B45);
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #retryLoadButton:hover {
+            background: var(--orange-hover, #F09A54);
+        }
+
+        @keyframes cookie-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="is-loading" data-required-role="R002">
+
+    <!-- LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner" id="loaderSpinner"></div>
+            <h2 id="loaderTitle">Loading your account</h2>
+            <p id="loaderMessage">Fetching your employee information...</p>
+            <button id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">co.</div>
+                <div class="brand-details">
+                    <strong>COOKIE</strong>
+                    <span>HOUSE OF RUDRAKSH</span>
+                </div>
+            </div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                Employee Workspace
+            </div>
+
+            <nav class="main-nav">
+
+                <span class="nav-label">WORKSPACE</span>
+
+                <a href="employee-home.html" class="nav-link">
+                    <span class="nav-icon">⌂</span>
+                    Overview
+                </a>
+
+                <a href="employee-tickets.html" class="nav-link">
+                    <span class="nav-icon">
+                        <i class="bi bi-ticket"></i>
+                    </span>
+                    My Assigned Tickets
+                    <span class="nav-count" id="sidebarTicketCount">00</span>
+                </a>
+
+                <a href="employee-profile.html" class="nav-link active">
+                    <span class="nav-icon">♙</span>
+                    My Account
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">co.</div>
+                    <div>
+                        <strong>Cookie Support</strong>
+                        <span>Employee Portal</span>
+                    </div>
+                </div>
+
+                <a href="#" class="signout-link" id="logoutButton">
+                    <span>↪</span>
+                    Sign out
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN AREA -->
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <span>EMPLOYEE WORKSPACE</span>
+                    <strong>My Account</strong>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Active Session
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="date" id="currentDate">--</div>
+
+                    <div class="profile-avatar" id="profileAvatar">--</div>
+
+                </div>
+
+            </header>
+
+            <!-- SCROLLABLE CONTENT -->
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <!-- PAGE HEADING -->
+                    <section class="page-heading">
+
+                        <div>
+                            <div class="eyebrow">ACCOUNT SETTINGS</div>
+                            <h1>My account.</h1>
+                            <p>View your employee information and account access details.</p>
+                        </div>
+
+                        <div class="account-status-chip" id="accountStatusChip">
+                            <span class="status-dot"></span>
+                            <span id="accountStatusText">Loading</span>
+                        </div>
+
+                    </section>
+
+                    <!-- PROFILE BANNER -->
+                    <section class="profile-banner">
+
+                        <div class="profile-banner-main">
+
+                            <div class="large-avatar" id="largeAvatar">--</div>
+
+                            <div class="profile-banner-info">
+                                <span class="eyebrow">EMPLOYEE PROFILE</span>
+                                <h2 id="bannerName">Loading...</h2>
+                                <p id="bannerDesignation">--</p>
+
+                                <div class="profile-tags">
+                                    <span id="bannerEmployeeId">--</span>
+                                    <span id="bannerRole">Employee</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="profile-banner-side">
+                            <span>EMPLOYMENT STATUS</span>
+                            <strong>
+                                <span class="status-dot" id="employmentStatusDot"></span>
+                                <span id="employmentStatus">--</span>
+                            </strong>
+                        </div>
+
+                    </section>
+
+                    <!-- PROFILE CONTENT -->
+                    <div class="profile-layout">
+
+                        <!-- LEFT COLUMN -->
+                        <div class="profile-main-column">
+
+                            <!-- PERSONAL INFORMATION -->
+                            <section class="profile-panel">
+
+                                <div class="profile-panel-header">
+                                    <div>
+                                        <span class="eyebrow">PERSONAL DETAILS</span>
+                                        <h2>Personal information</h2>
+                                        <p>Your basic employee information.</p>
+                                    </div>
+
+                                    <div class="panel-symbol">♙</div>
+                                </div>
+
+                                <div class="profile-fields">
+
+                                    <div class="profile-field">
+                                        <span>FULL NAME</span>
+                                        <strong id="fullName">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>EMPLOYEE ID</span>
+                                        <strong id="employeeId">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>EMAIL ADDRESS</span>
+                                        <strong id="emailAddress">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>MOBILE NUMBER</span>
+                                        <strong id="mobileNumber">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>DEPARTMENT</span>
+                                        <strong id="personalDepartment">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>DESIGNATION</span>
+                                        <strong id="designation">--</strong>
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+                            <!-- EMPLOYMENT INFORMATION -->
+                            <section class="profile-panel">
+
+                                <div class="profile-panel-header">
+                                    <div>
+                                        <span class="eyebrow">ORGANISATION</span>
+                                        <h2>Employment information</h2>
+                                        <p>Your role and organisational details.</p>
+                                    </div>
+
+                                    <div class="panel-symbol">▤</div>
+                                </div>
+
+                                <div class="profile-fields">
+
+                                    <div class="profile-field">
+                                        <span>EMPLOYMENT TYPE</span>
+                                        <strong id="employmentType">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>ROLE</span>
+                                        <strong id="roleName">Employee</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>DEPARTMENT</span>
+                                        <strong id="employmentDepartment">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>REPORTING TO</span>
+                                        <strong id="reportingTo">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>JOINING DATE</span>
+                                        <strong id="joiningDate">--</strong>
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <span>WORKSPACE</span>
+                                        <strong>Cookie Employee Portal</strong>
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+                            <!-- SECURITY INFORMATION -->
+                            <section class="profile-panel">
+
+                                <div class="profile-panel-header">
+                                    <div>
+                                        <span class="eyebrow">ACCOUNT SECURITY</span>
+                                        <h2>Security information</h2>
+                                        <p>Information related to your portal access.</p>
+                                    </div>
+
+                                    <div class="panel-symbol">⌑</div>
+                                </div>
+
+                                <div class="security-list">
+
+                                    <div class="security-row">
+                                        <div class="security-icon">✓</div>
+                                        <div>
+                                            <strong>Account authentication</strong>
+                                            <span>Your account uses the Cookie sign-in system.</span>
+                                        </div>
+                                        <span class="security-state">Enabled</span>
+                                    </div>
+
+                                    <div class="security-row">
+                                        <div class="security-icon">◷</div>
+                                        <div>
+                                            <strong>Session management</strong>
+                                            <span>Your portal session is time-limited.</span>
+                                        </div>
+                                        <span class="security-state">Active</span>
+                                    </div>
+
+                                    <div class="security-row">
+                                        <div class="security-icon">⌑</div>
+                                        <div>
+                                            <strong>Access permissions</strong>
+                                            <span>Access is restricted according to your employee role.</span>
+                                        </div>
+                                        <span class="security-state">Restricted</span>
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <aside class="profile-side-column">
+
+                            <!-- ACCESS CARD -->
+                            <section class="access-card">
+
+                                <div class="access-card-heading">
+                                    <span class="eyebrow">YOUR ACCESS</span>
+                                    <h2>Employee permissions</h2>
+                                    <p>Your portal access is based on your assigned role.</p>
+                                </div>
+
+                                <div class="permission-list">
+
+                                    <div class="permission-item allowed">
+                                        <span class="permission-symbol">✓</span>
+                                        <span>View assigned tickets</span>
+                                    </div>
+
+                                    <div class="permission-item allowed">
+                                        <span class="permission-symbol">✓</span>
+                                        <span>View customer details</span>
+                                    </div>
+
+                                    <div class="permission-item allowed">
+                                        <span class="permission-symbol">✓</span>
+                                        <span>Update ticket status</span>
+                                    </div>
+
+                                    <div class="permission-item allowed">
+                                        <span class="permission-symbol">✓</span>
+                                        <span>Upload resolution proof</span>
+                                    </div>
+
+                                    <div class="permission-item restricted">
+                                        <span class="permission-symbol">×</span>
+                                        <span>Assign tickets to employees</span>
+                                    </div>
+
+                                    <div class="permission-item restricted">
+                                        <span class="permission-symbol">×</span>
+                                        <span>Manage customers and suppliers</span>
+                                    </div>
+
+                                    <div class="permission-item restricted">
+                                        <span class="permission-symbol">×</span>
+                                        <span>Access administration settings</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="access-card-footer">
+                                    <span class="status-dot"></span>
+                                    Permissions managed by administrator
+                                </div>
+
+                            </section>
+
+                            <!-- ACCOUNT DETAILS -->
+                            <section class="profile-panel account-details-panel">
+
+                                <div class="profile-panel-header">
+                                    <div>
+                                        <span class="eyebrow">ACCOUNT DETAILS</span>
+                                        <h2>Portal information</h2>
+                                    </div>
+                                </div>
+
+                                <div class="account-detail-row">
+                                    <span>ACCOUNT ID</span>
+                                    <strong id="accountId">--</strong>
+                                </div>
+
+                                <div class="account-detail-row">
+                                    <span>ACCOUNT TYPE</span>
+                                    <strong id="accountType">Employee</strong>
+                                </div>
+
+                                <div class="account-detail-row">
+                                    <span>ACCOUNT STATUS</span>
+                                    <strong class="active-account" id="accountStatusDetail">--</strong>
+                                </div>
+
+                                <div class="account-detail-row">
+                                    <span>PORTAL</span>
+                                    <strong>Employee Workspace</strong>
+                                </div>
+
+                            </section>
+
+                            <!-- SUPPORT NOTE -->
+                            <section class="profile-help-card">
+
+                                <div class="help-icon">?</div>
+
+                                <strong>Need account assistance?</strong>
+
+                                <p>
+                                    Contact your administrator if your employee information
+                                    or access permissions need to be updated.
+                                </p>
+
+                            </section>
+
+                        </aside>
+
+                    </div>
+
+                    <footer class="page-footer">
+                        <span>COOKIE · HOUSE OF RUDRAKSH</span>
+                        <span>Employee Workspace</span>
+                    </footer>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- PROJECT SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+
+        let currentUser = null;
+        let employee = null;
+
+        const $ = id => document.getElementById(id);
+
+
+        // =========================================
+        // LOADER
+        // =========================================
+
+        function showLoader(title, message, failed = false) {
+
+            $("pageLoader").style.display = "flex";
+            $("loaderTitle").textContent = title;
+            $("loaderMessage").textContent = message;
+            $("loaderSpinner").style.display = failed ? "none" : "block";
+            $("retryLoadButton").hidden = !failed;
+
+            document.body.classList.add("is-loading");
+        }
+
+        function hideLoader() {
+
+            $("pageLoader").style.display = "none";
+            document.body.classList.remove("is-loading");
+        }
+
+
+        // =========================================
+        // HELPERS
+        // =========================================
+
+        function getInitials(name) {
+
+            return String(name || "Employee")
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(part => part[0].toUpperCase())
+                .join("");
+        }
+
+        function formatDate(value) {
+
+            if (!value) return "--";
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return String(value);
+            }
+
+            return date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            });
+        }
+
+        function setText(id, value, fallback = "--") {
+
+            $(id).textContent =
+                value !== null && value !== undefined && String(value).trim() !== ""
+                    ? String(value)
+                    : fallback;
+        }
+
+
+        // =========================================
+        // LOAD EMPLOYEE PROFILE
+        // =========================================
+
+        async function loadEmployeeProfile() {
+
+            const response = await sendToCookieBackend("getEmployeeProfile");
+
+            if (!response || !response.success) {
+                throw new Error(
+                    response?.message || "Unable to load your employee profile."
+                );
+            }
+
+            employee = response.employee;
+
+            if (!employee) {
+                throw new Error("Employee profile information was not returned.");
+            }
+        }
+
+
+        // =========================================
+        // LOAD SIDEBAR TICKET COUNT
+        // =========================================
+
+        async function loadTicketCount() {
+
+            try {
+
+                const response = await sendToCookieBackend("getEmployeeTickets");
+
+                if (response && response.success && Array.isArray(response.tickets)) {
+
+                    $("sidebarTicketCount").textContent =
+                        String(response.tickets.length).padStart(2, "0");
+                }
+
+            } catch (error) {
+
+                console.warn("Unable to load employee ticket count:", error);
+                $("sidebarTicketCount").textContent = "00";
+            }
+        }
+
+
+        // =========================================
+        // RENDER PROFILE
+        // =========================================
+
+        function renderProfile() {
+
+            const fullName = currentUser.full_name || "Employee";
+            const initials = getInitials(fullName);
+
+            const employeeId = employee.employee_id || "--";
+            const department = employee.department || "--";
+            const designation = employee.designation || "--";
+            const employmentType = employee.employment_type || "--";
+            const reportingTo = employee.reporting_to || "--";
+            const joiningDate = formatDate(employee.joining_date);
+            const status = employee.status || "Active";
+            const role = currentUser.role_name || "Employee";
+
+            // Topbar and avatars
+            setText("profileAvatar", initials);
+            setText("largeAvatar", initials);
+
+            // Profile banner
+            setText("bannerName", fullName);
+            setText("bannerDesignation", `${designation} · ${department}`);
+            setText("bannerEmployeeId", employeeId);
+            setText("bannerRole", role);
+
+            // Personal information
+            setText("fullName", fullName);
+            setText("employeeId", employeeId);
+            setText("emailAddress", currentUser.email);
+            setText("mobileNumber", currentUser.phone);
+            setText("personalDepartment", department);
+            setText("designation", designation);
+
+            // Employment information
+            setText("employmentType", employmentType);
+            setText("roleName", role);
+            setText("employmentDepartment", department);
+            setText("reportingTo", reportingTo);
+            setText("joiningDate", joiningDate);
+
+            // Account details
+            setText("accountId", employeeId);
+            setText("accountType", role);
+            setText("accountStatusDetail", status);
+
+            // Employment status
+            setText("employmentStatus", status);
+            setText("accountStatusText", status);
+            setText("accountStatusDetail", status);
+
+            const isActive = String(status).toLowerCase() === "active";
+
+            $("accountStatusChip").classList.toggle("inactive", !isActive);
+            $("employmentStatusDot").style.background =
+                isActive ? "#21866A" : "#C66B54";
+
+            $("accountStatusDetail").classList.toggle(
+                "active-account",
+                isActive
+            );
+
+            $("accountStatusDetail").classList.toggle(
+                "inactive-account",
+                !isActive
+            );
+
+            // Current date
+            $("currentDate").textContent =
+                new Date().toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+        }
+
+
+        // =========================================
+        // INITIALIZE PAGE
+        // =========================================
+
+        async function initializePage() {
+
+            showLoader(
+                "Loading your account",
+                "Fetching your employee information..."
+            );
+
+            try {
+
+                if (
+                    typeof requireRole !== "function" ||
+                    !requireRole("R002")
+                ) {
+                    return;
+                }
+
+                currentUser = getCookieUser();
+
+                if (!currentUser || !currentUser.user_id) {
+                    throw new Error(
+                        "Your login session could not be found. Please sign in again."
+                    );
+                }
+
+                await loadEmployeeProfile();
+
+                renderProfile();
+
+                await loadTicketCount();
+
+                hideLoader();
+
+            } catch (error) {
+
+                console.error("Employee profile error:", error);
+
+                showLoader(
+                    "Unable to load your account",
+                    error.message || "Something went wrong while loading your profile.",
+                    true
+                );
+            }
+        }
+
+
+        // =========================================
+        // PAGE EVENTS
+        // =========================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            initializePage();
+
+            $("retryLoadButton").addEventListener("click", initializePage);
+        });
+
+    </script>
+
+</body>
+</html>

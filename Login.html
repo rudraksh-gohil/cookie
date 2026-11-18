@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#191E1B">
+    <title>Cookie | Sign In</title>
+    <link rel="stylesheet" href="Login.css">
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-brand-panel">
+
+            <a class="brand" href="index.html">
+                <span class="brand-mark">co.</span>
+                <span class="brand-name">cookie</span>
+            </a>
+
+            <div class="brand-message">
+                <span class="eyebrow">HOUSE OF RUDRAKSH</span>
+
+                <h1>
+                    Everything in<br>
+                    its <span>right place.</span>
+                </h1>
+
+                <p>
+                    A shared workspace to manage your people,
+                    customers, services and everyday operations.
+                    Keep everything connected and organised.
+                </p>
+            </div>
+
+            <div class="brand-bottom">
+                <span class="brand-line"></span>
+                <span>People. Services. Progress.</span>
+            </div>
+
+        </section>
+
+
+        <section class="login-form-panel">
+
+            <div class="login-form-wrap">
+
+                <a class="mobile-brand" href="index.html">
+                    <span class="brand-mark">co.</span>
+                    <span class="brand-name">cookie</span>
+                </a>
+
+
+                <!-- LOGIN VIEW -->
+                <div id="loginView">
+
+                    <div class="form-heading">
+                        <span class="eyebrow">WELCOME BACK</span>
+                        <h2>Sign in to Cookie</h2>
+                        <p>Enter your details to access your workspace.</p>
+                    </div>
+
+                    <form id="loginForm">
+
+                        <label for="identifier">Phone number or User ID</label>
+
+                        <input
+                            id="identifier"
+                            name="identifier"
+                            type="text"
+                            placeholder="Enter your phone number or User ID"
+                            autocomplete="username"
+                            required
+                        >
+
+                        <div class="password-label">
+                            <label for="password">Password</label>
+                        </div>
+
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <div class="forgot-password-row">
+                            <button type="button" id="forgotPasswordButton">
+                                Forgot password?
+                            </button>
+                        </div>
+
+                        <button type="submit" class="login-button" id="loginButton">
+                            Sign in <span>→</span>
+                        </button>
+
+                        <p class="form-note" id="formNote" role="status">
+                            Enter your credentials to access your workspace.
+                        </p>
+
+                    </form>
+
+                </div>
+
+
+                <!-- OTP REQUEST VIEW -->
+                <div id="otpRequestView" class="auth-view" hidden>
+
+                    <div class="form-heading">
+                        <span class="eyebrow" id="otpRequestEyebrow">ACCOUNT RECOVERY</span>
+                        <h2 id="otpRequestHeading">Forgot password?</h2>
+                        <p id="otpRequestDescription">
+                            Enter your registered email address. We'll send you a verification code.
+                        </p>
+                    </div>
+
+                    <form id="otpRequestForm">
+
+                        <label for="recoveryEmail">Registered email address</label>
+
+                        <input
+                            id="recoveryEmail"
+                            type="email"
+                            placeholder="Enter your registered email"
+                            autocomplete="email"
+                            required
+                        >
+
+                        <button type="submit" class="login-button" id="sendOtpButton">
+                            Send verification code <span>→</span>
+                        </button>
+
+                        <p class="form-note" id="otpRequestNote" role="status">
+                            The verification code will be valid for 10 minutes.
+                        </p>
+
+                    </form>
+
+                    <button type="button" class="back-button" id="backToLoginFromRequest">
+                        ← Back to sign in
+                    </button>
+
+                </div>
+
+
+                <!-- VERIFY OTP + SET PASSWORD VIEW -->
+                <div id="passwordSetupView" class="auth-view" hidden>
+
+                    <div class="form-heading">
+                        <span class="eyebrow">EMAIL VERIFICATION</span>
+                        <h2>Set your password</h2>
+                        <p>
+                            Enter the six-digit code sent to your registered email,
+                            then choose a new password.
+                        </p>
+                    </div>
+
+                    <form id="passwordSetupForm">
+
+                        <label for="verificationOtp">Verification code</label>
+
+                        <input
+                            id="verificationOtp"
+                            type="text"
+                            inputmode="numeric"
+                            maxlength="6"
+                            placeholder="Enter 6-digit OTP"
+                            autocomplete="one-time-code"
+                            pattern="[0-9]{6}"
+                            required
+                        >
+
+                        <label for="newPassword">New password</label>
+
+                        <input
+                            id="newPassword"
+                            type="password"
+                            placeholder="Minimum 8 characters"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+                        <label for="confirmPassword">Confirm password</label>
+
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="Re-enter your password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+                        <button type="submit" class="login-button" id="resetPasswordButton">
+                            Set password <span>→</span>
+                        </button>
+
+                        <p class="form-note" id="passwordSetupNote" role="status">
+                            Your OTP expires after 10 minutes.
+                        </p>
+
+                    </form>
+
+                    <div class="otp-actions">
+                        <button type="button" id="resendOtpButton">
+                            Resend OTP
+                        </button>
+
+                        <button type="button" class="back-button" id="backToEmailButton">
+                            Change email
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-footer">
+                <span>© <span id="year"></span> Cookie</span>
+                <span>HOUSE OF RUDRAKSH</span>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/login.js"></script>
+
+    <script>
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>

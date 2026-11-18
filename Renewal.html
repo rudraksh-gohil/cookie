@@ -1,0 +1,1357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | Renewal Management</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="Renewal.css">
+</head>
+
+<body data-required-role="R001" class="is-loading">
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-card">
+        <div class="loader-spinner"></div>
+        <h2 id="loaderTitle">Loading Renewal Management</h2>
+        <p id="loaderMessage">Verifying your access and preparing renewal records...</p>
+        <button type="button" id="retryLoadButton" hidden>Retry loading</button>
+    </div>
+</div>
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <a class="brand" href="home1.html">
+                <span class="brand-icon">co.</span>
+                <span class="brand-details">
+                    <strong>cookie</strong>
+                    <small>HOUSE OF RUDRAKSH</small>
+                </span>
+            </a>
+
+            <div class="nav-label">WORKSPACE</div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                <span>Shared workspace</span>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+
+                <a class="nav-link" href="home1.html" aria-current="page">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+                        </svg>
+                    </span>
+                    <span>Overview</span>
+                </a>
+
+                <a class="nav-link" href="Customer.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <span>Customers</span>
+                </a>
+
+                <a class="nav-link" href="Supplier.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 7h14l-4-4" />
+                            <path d="M21 7 17 11" />
+                            <path d="M17 17H3l4 4" />
+                            <path d="m3 17 4-4" />
+                        </svg>
+                    </span>
+                    <span>Suppliers</span>
+                </a>
+
+                <a class="nav-link active" href="Renewal.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                    </span>
+                    <span>Renewals</span>
+                </a>
+
+                <a class="nav-link" href="Ticketing.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m12 3 9 5-9 5-9-5z" />
+                            <path d="M3 8v9l9 5 9-5V8" />
+                            <path d="M12 13v9" />
+                        </svg>
+                    </span>
+                    <span>Ticketing</span>
+                </a>
+
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">H</div>
+                    <div>
+                        <strong>House of Rudraksh</strong>
+                        <small>Management workspace</small>
+                    </div>
+                </div>
+
+                <a class="signout-link" href="#" id="logoutButton">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 17l5-5-5-5" />
+                        <path d="M15 12H3" />
+                        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+                    </svg>
+                    <span>Sign out</span>
+                </a>
+
+            </div>
+        </aside>
+
+
+        <!-- MAIN AREA -->
+        <main class="main-area">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <h2>Renewal Management</h2>
+                    <p>Track contracts, AMCs and upcoming service renewals.</p>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Shared workspace
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <span class="date" id="currentDate"></span>
+
+                    <div class="profile-avatar">A</div>
+                </div>
+
+            </header>
+
+
+            <!-- MAIN CONTENT -->
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <!-- PAGE HEADING -->
+                    <section class="page-heading">
+
+                        <div class="heading-copy">
+                            <span class="eyebrow">SERVICE OPERATIONS</span>
+                            <h1>Renewal Tracking</h1>
+                            <p>
+                                Keep contracts, AMCs and service renewals
+                                organised and on schedule.
+                            </p>
+                        </div>
+
+                        <div class="heading-actions">
+
+    <input
+        type="file"
+        id="renewalImportFile"
+        accept=".csv,.xlsx"
+        hidden
+    >
+
+    <button class="button button-secondary" id="importRenewals" type="button">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 16V4" />
+            <path d="m7 9 5-5 5 5" />
+            <path d="M4 16v4h16v-4" />
+        </svg>
+        Import
+    </button>
+
+    <button class="button button-primary" id="showForm" type="button">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14" />
+        </svg>
+        Add renewal
+    </button>
+
+</div>
+
+                    </section>
+
+
+                    <!-- STATISTICS -->
+                    <section class="stats-grid">
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">TOTAL RENEWALS</span>
+                                <div class="stat-icon orange-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8 3h8l4 4v14H4V3z" />
+                                        <path d="M8 3v5h8V3M8 13h8M8 17h5" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number" id="totalCount">0</strong>
+                            <span class="stat-caption">All tracked records</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">DUE IN 30 DAYS</span>
+                                <div class="stat-icon blue-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M12 7v5l3 2" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number" id="dueCount">0</strong>
+                            <span class="stat-caption">Requires attention</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">OVERDUE</span>
+                                <div class="stat-icon red-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M12 7v5M12 16h.01" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number" id="overdueCount">0</strong>
+                            <span class="stat-caption">Past renewal date</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">RENEWED</span>
+                                <div class="stat-icon green-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="m5 12 4 4L19 6" />
+                                        <circle cx="12" cy="12" r="9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number" id="renewedCount">0</strong>
+                            <span class="stat-caption">Marked as completed</span>
+                        </article>
+
+                    </section>
+
+
+                    <!-- RENEWAL FORM -->
+                    <section class="directory-panel form-panel" id="formPanel" hidden>
+
+                        <div class="directory-header">
+
+                            <div class="directory-title">
+                                <div class="directory-title-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 5v14M5 12h14" />
+                                    </svg>
+                                </div>
+
+                                <div>
+                                    <h2>Add renewal record</h2>
+                                    <p>Enter the service or contract details.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="close-form" id="closeForm"
+                                aria-label="Close form">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="m18 6-12 12M6 6l12 12" />
+                                </svg>
+                            </button>
+
+                        </div>
+
+                        <form id="renewalForm" class="entry-form renewal-form">
+
+                            <div class="form-grid">
+
+                                <div class="field">
+                                    <label for="renewalCustomer">
+                                        Customer / Company <span>*</span>
+                                    </label>
+                                    <input id="renewalCustomer" name="customer" required
+                                        placeholder="e.g. Acme Industries">
+                                </div>
+
+                                <div class="field">
+                                    <label for="renewalService">
+                                        Service / Contract <span>*</span>
+                                    </label>
+                                    <input id="renewalService" name="service" required
+                                        placeholder="e.g. Annual Maintenance Contract">
+                                </div>
+
+                                <div class="field">
+    <label for="customerMobile">Customer Mobile Number</label>
+    <input
+        type="tel"
+        id="customerMobile"
+        name="customer_mobile"
+        placeholder="Enter mobile number"
+    >
+</div>
+
+                                <div class="field">
+                                    <label for="renewalReference">
+                                        Reference number
+                                    </label>
+                                    <input id="renewalReference" name="reference"
+                                        placeholder="e.g. AMC-2026-014">
+                                </div>
+
+                                <div class="field">
+                                    <label for="renewalDate">
+                                        Renewal date <span>*</span>
+                                    </label>
+                                    <input id="renewalDate" name="date" type="date" required>
+                                </div>
+
+                                <div class="field">
+                                    <label for="renewalValue">
+                                        Renewal value (optional)
+                                    </label>
+                                    <input id="renewalValue" name="value" type="number"
+                                        min="0" step="0.01" placeholder="0.00">
+                                </div>
+
+                                <div class="field">
+                                    <label for="renewalStatus">
+                                        Status
+                                    </label>
+                                    <select id="renewalStatus" name="status">
+                                        <option value="Pending">Pending</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Renewed">Renewed</option>
+                                        <option value="Not Renewing">Not Renewing</option>
+                                    </select>
+                                </div>
+
+                                <div class="field field-wide">
+                                    <label for="renewalNotes">Notes</label>
+                                    <textarea id="renewalNotes" name="notes" rows="2"
+                                        placeholder="Add any relevant details..."></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="button button-secondary"
+                                    id="cancelForm">
+                                    Cancel
+                                </button>
+
+                                <button class="button button-primary" type="submit">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                    Save renewal
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </section>
+
+
+                    <!-- RENEWAL DIRECTORY -->
+                    <section class="directory-panel">
+
+                        <div class="directory-header">
+
+                            <div class="directory-title">
+                                <div class="directory-title-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M12 7v5l3 2" />
+                                    </svg>
+                                </div>
+
+                                <div>
+                                    <h2>Renewal register</h2>
+                                    <p>Search and monitor upcoming renewals.</p>
+                                </div>
+                            </div>
+
+                            <div class="directory-tools">
+
+                                <label class="search-wrap">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m20 20-4-4" />
+                                    </svg>
+
+                                    <input id="searchInput" type="search"
+                                        placeholder="Search customer, service or reference..."
+                                        aria-label="Search renewals">
+                                </label>
+
+                                <select id="statusFilter" class="status-filter"
+                                    aria-label="Filter by renewal status">
+                                    <option value="">All statuses</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Renewed">Renewed</option>
+                                    <option value="Not Renewing">Not Renewing</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TABLE -->
+                        <div class="table-wrap">
+
+                            <table>
+
+                                <thead>
+    <tr>
+        <th>CUSTOMER / COMPANY</th>
+        <th>MOBILE</th>
+        <th>SERVICE / CONTRACT</th>
+        <th>REFERENCE</th>
+        <th>RENEWAL DATE</th>
+        <th>VALUE</th>
+        <th>STATUS</th>
+        <th class="action-col">ACTION</th>
+    </tr>
+</thead>
+
+                                <tbody id="renewalRows">
+
+                                    <tr class="empty-row">
+                                        <td colspan="8">
+                                            <div class="empty-state">
+                                                <div class="empty-state-icon">◷</div>
+                                                <strong>No renewal records yet</strong>
+                                                <small>Add your first renewal to get started.</small>
+                                                <button type="button" class="empty-add-button"
+                                                    id="emptyAddButton">
+                                                    ＋ Add renewal
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                        <!-- TABLE FOOTER -->
+                        <div class="table-footer">
+                            <span id="recordSummary">Showing 0 records</span>
+                            <span class="register-label">Renewal register</span>
+                        </div>
+
+                    </section>
+
+
+                    <!-- INFORMATION -->
+                    <div class="import-status">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 11v5M12 8h.01" />
+                        </svg>
+                        <span>
+                            Renewal records are currently stored in this browser page only.
+                            Connect the shared backend to enable persistent records,
+                            reminders and access across users.
+                        </span>
+                    </div>
+
+
+                    <!-- FOOTER -->
+                    <footer class="dashboard-footer">
+                        <span>
+                            COOKIE <span class="footer-separator">/</span>
+                            HOUSE OF RUDRAKSH
+                        </span>
+                        <span>Renewal Management</span>
+                    </footer>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    
+    <script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/session.js"></script>
+<script src="js/logout.js"></script>
+
+    <!-- RENEWAL LOGIC -->
+    
+<script>
+(() => {
+
+    const $ = id => document.getElementById(id);
+
+    const loader = $("pageLoader");
+    const retry = $("retryLoadButton");
+
+    const formPanel = $("formPanel");
+    const form = $("renewalForm");
+    const rows = $("renewalRows");
+
+    const searchInput = $("searchInput");
+    const statusFilter = $("statusFilter");
+
+    const importButton = $("importRenewals");
+const importFile = $("renewalImportFile");
+
+importButton.addEventListener("click", () => {
+    importFile.click();
+});
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const addButtonLabel = submitButton.textContent.trim();
+
+    let renewals = [];
+    let isBusy = false;
+    let editingRenewalId = null;
+
+
+    // =============================================
+    // LOADER
+    // =============================================
+
+    function showLoader(title, message, showRetry = false) {
+
+        document.body.classList.add("is-loading");
+        loader.hidden = false;
+
+        $("loaderTitle").textContent = title;
+        $("loaderMessage").textContent = message;
+
+        retry.hidden = !showRetry;
+
+    }
+
+    function hideLoader() {
+
+        loader.hidden = true;
+        document.body.classList.remove("is-loading");
+
+    }
+
+
+    // =============================================
+    // CURRENT DATE
+    // =============================================
+
+    $("currentDate").textContent = new Intl.DateTimeFormat("en-IN", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    }).format(new Date());
+
+
+    // =============================================
+    // AUTHENTICATION
+    // =============================================
+
+    if (typeof requireRole !== "function" || !requireRole("R001")) {
+        return;
+    }
+
+
+    // =============================================
+    // BACKEND REQUEST
+    // =============================================
+
+    async function api(action, data = {}) {
+
+        const result = await sendToCookieBackend(action, data);
+
+        if (!result || result.success !== true) {
+            throw new Error(result?.message || "Request failed.");
+        }
+
+        return result;
+
+    }
+
+
+    // =============================================
+    // BUSY STATE
+    // =============================================
+
+    function setBusy(state) {
+
+        isBusy = state;
+
+        document.querySelectorAll(
+            "#renewalForm button, #showForm, #emptyAddButton, .delete-btn, .edit-btn"
+        ).forEach(button => {
+
+            button.disabled = state;
+
+        });
+
+        searchInput.disabled = state;
+        statusFilter.disabled = state;
+
+    }
+
+
+    // =============================================
+    // FORM
+    // =============================================
+
+    const openForm = () => {
+
+        if (isBusy) return;
+
+        formPanel.hidden = false;
+
+        formPanel.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    };
+
+
+    const resetEditMode = () => {
+
+        editingRenewalId = null;
+        submitButton.textContent = addButtonLabel;
+
+    };
+
+
+    const closeForm = () => {
+
+        formPanel.hidden = true;
+        form.reset();
+
+        resetEditMode();
+
+    };
+
+
+    function startEdit(record) {
+
+        if (isBusy) return;
+
+        editingRenewalId = record.id;
+
+        form.querySelector('[name="customer"]').value = record.customer;
+form.querySelector('[name="customer_mobile"]').value = record.customer_mobile || "";
+form.querySelector('[name="service"]').value = record.service;
+        form.querySelector('[name="reference"]').value = record.reference;
+        form.querySelector('[name="date"]').value = record.date;
+        form.querySelector('[name="value"]').value = record.value;
+        form.querySelector('[name="status"]').value = record.status;
+        form.querySelector('[name="notes"]').value = record.notes;
+
+        submitButton.textContent = "Save Changes";
+
+        openForm();
+
+    }
+
+
+    $("showForm").addEventListener("click", () => {
+
+        if (editingRenewalId) return;
+
+        form.reset();
+        resetEditMode();
+
+        openForm();
+
+    });
+
+
+    $("emptyAddButton").addEventListener("click", () => {
+
+        form.reset();
+        resetEditMode();
+
+        openForm();
+
+    });
+
+
+    ["closeForm", "cancelForm"].forEach(id => {
+
+        $(id).addEventListener("click", closeForm);
+
+    });
+
+
+    // =============================================
+    // SEARCH AND FILTER
+    // =============================================
+
+    searchInput.addEventListener("input", render);
+    statusFilter.addEventListener("change", render);
+
+
+    // =============================================
+    // DATE CALCULATIONS
+    // =============================================
+
+    const daysUntil = date => {
+
+        const target = new Date(date + "T00:00:00");
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return Math.round(
+            (target - today) / 86400000
+        );
+
+    };
+
+
+    // =============================================
+    // LOAD RENEWALS
+    // =============================================
+
+    async function loadRenewals() {
+
+        try {
+
+            setBusy(true);
+
+            const result = await api("getRenewals");
+
+            renewals = (result.renewals || []).map(r => ({
+    id: r.renewal_id,
+    customer: r.customer || "",
+    customer_mobile: r.customer_mobile || "",
+    service: r.service || "",
+    reference: r.reference || "",
+    date: r.renewal_date || "",
+    value: r.value ?? "",
+    status: r.status || "Pending",
+    notes: r.notes || ""
+}));
+
+            render();
+
+        } finally {
+
+            setBusy(false);
+
+        }
+
+    }
+
+
+    // =============================================
+    // RENDER
+    // =============================================
+
+    function render() {
+
+        const q = searchInput.value.trim().toLowerCase();
+        const status = statusFilter.value;
+
+        const visible = renewals.filter(r => {
+
+            const matchesStatus = !status || r.status === status;
+
+            const matchesSearch = [
+    r.customer,
+    r.customer_mobile,
+    r.service,
+    r.reference
+].join(" ").toLowerCase().includes(q);
+
+            return matchesStatus && matchesSearch;
+
+        });
+
+
+        // TABLE ROWS
+
+        rows.replaceChildren();
+
+        if (visible.length) {
+
+            visible.forEach(r => {
+
+                const days = daysUntil(r.date);
+
+                const dateLabel = r.date
+                    ? new Date(r.date + "T00:00:00").toLocaleDateString(
+                        "en-IN",
+                        {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        }
+                    )
+                    : "—";
+
+                let timing = "";
+
+                if (
+                    r.status !== "Renewed" &&
+                    r.status !== "Not Renewing" &&
+                    r.date
+                ) {
+
+                    if (days < 0) {
+
+                        timing = `
+                            <small class="date-hint overdue">
+                                ${Math.abs(days)} days overdue
+                            </small>
+                        `;
+
+                    } else if (days <= 30) {
+
+                        timing = `
+                            <small class="date-hint soon">
+                                ${days === 0
+                                    ? "Due today"
+                                    : "Due in " + days + " days"}
+                            </small>
+                        `;
+
+                    }
+
+                }
+
+
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+    <td>
+        <strong>${escapeHtml(r.customer)}</strong>
+    </td>
+
+    <td>
+        ${escapeHtml(r.customer_mobile || "—")}
+    </td>
+
+    <td>${escapeHtml(r.service)}</td>
+
+    <td>${escapeHtml(r.reference || "—")}</td>
+
+    <td>
+        ${dateLabel}
+        ${timing}
+    </td>
+
+    <td>
+        ${r.value !== "" && r.value != null
+            ? Number(r.value).toLocaleString("en-IN")
+            : "—"}
+    </td>
+
+    <td>
+        <span class="status-pill ${r.status.toLowerCase().replaceAll(" ", "-")}">
+            ${escapeHtml(r.status)}
+        </span>
+    </td>
+
+    <td class="action-cell">
+        <button type="button"
+            class="edit-btn"
+            data-id="${escapeHtml(r.id)}"
+            aria-label="Edit renewal"
+            ${isBusy ? "disabled" : ""}>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
+            </svg>
+        </button>
+
+        <button type="button"
+            class="delete-btn"
+            data-id="${escapeHtml(r.id)}"
+            aria-label="Delete renewal"
+            ${isBusy ? "disabled" : ""}>
+            <svg viewBox="0 0 24 24">
+                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" />
+                <path d="M10 11v5M14 11v5" />
+            </svg>
+        </button>
+    </td>
+`;
+
+                rows.appendChild(tr);
+
+            });
+
+        } else {
+
+            const tr = document.createElement("tr");
+            tr.className = "empty-row";
+
+            const td = document.createElement("td");
+            td.colSpan = 8;
+
+            const state = document.createElement("div");
+            state.className = "empty-state";
+
+            const icon = document.createElement("div");
+            icon.className = "empty-state-icon";
+            icon.textContent = "◷";
+
+            const title = document.createElement("strong");
+            title.textContent = renewals.length
+                ? "No matching renewals"
+                : "No renewal records yet";
+
+            const message = document.createElement("small");
+            message.textContent = renewals.length
+                ? "Try changing your search or status filter."
+                : "Add your first renewal to get started.";
+
+            state.append(icon, title, message);
+
+            if (!renewals.length) {
+
+                const add = document.createElement("button");
+
+                add.type = "button";
+                add.className = "empty-add-button";
+                add.textContent = "＋ Add renewal";
+                add.disabled = isBusy;
+
+                add.addEventListener("click", () => {
+
+                    form.reset();
+                    resetEditMode();
+                    openForm();
+
+                });
+
+                state.append(add);
+
+            }
+
+            td.appendChild(state);
+            tr.appendChild(td);
+            rows.appendChild(tr);
+
+        }
+        // =============================================
+// RENEWAL IMPORT
+// =============================================
+
+importFile.addEventListener("change", async () => {
+
+    const file = importFile.files[0];
+
+    if (!file) return;
+
+    try {
+
+        if (typeof XLSX === "undefined") {
+            throw new Error("Excel import library is not loaded.");
+        }
+
+        showLoader(
+            "Importing Renewals",
+            "Reading your file and uploading renewal records..."
+        );
+
+        const buffer = await file.arrayBuffer();
+
+        const workbook = XLSX.read(buffer, {
+            type: "array",
+            cellDates: false
+        });
+
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        const rawRecords = XLSX.utils.sheet_to_json(firstSheet, {
+            defval: ""
+        });
+
+        if (!rawRecords.length) {
+            throw new Error("The selected file contains no records.");
+        }
+
+        const records = rawRecords.map(row => {
+
+            const normalized = {};
+
+            Object.keys(row).forEach(key => {
+                normalized[
+                    String(key).trim().toLowerCase()
+                        .replace(/[\s-]+/g, "_")
+                ] = row[key];
+            });
+
+            let date = normalized.renewal_date || normalized.date || "";
+
+            // Convert Excel date serial to YYYY-MM-DD.
+            if (typeof date === "number") {
+                const parsed = XLSX.SSF.parse_date_code(date);
+
+                if (parsed) {
+                    date = [
+                        parsed.y,
+                        String(parsed.m).padStart(2, "0"),
+                        String(parsed.d).padStart(2, "0")
+                    ].join("-");
+                }
+            }
+
+            // Convert date strings.
+            if (date instanceof Date) {
+                date = [
+                    date.getFullYear(),
+                    String(date.getMonth() + 1).padStart(2, "0"),
+                    String(date.getDate()).padStart(2, "0")
+                ].join("-");
+            } else if (typeof date === "string") {
+                date = date.trim();
+
+                const match = date.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+
+                if (match) {
+                    date = [
+                        match[3],
+                        match[2].padStart(2, "0"),
+                        match[1].padStart(2, "0")
+                    ].join("-");
+                }
+            }
+
+            return {
+    customer: normalized.customer || normalized.customer_name || "",
+    customer_mobile: String(
+        normalized.customer_mobile ||
+        normalized.mobile ||
+        normalized.phone ||
+        normalized.phone_number ||
+        ""
+    ).trim(),
+    service: normalized.service || normalized.contract || "",
+    reference: normalized.reference || normalized.reference_number || "",
+    renewal_date: date,
+    value: normalized.value || normalized.renewal_value || "",
+    status: normalized.status || "Pending",
+    notes: normalized.notes || ""
+};
+
+        });
+
+        const result = await api("importRenewals", {
+            records: JSON.stringify(records)
+        });
+
+        await loadRenewals();
+
+        hideLoader();
+
+        alert(
+            "Import completed!\n\n" +
+            "Imported: " + result.imported +
+            "\nSkipped: " + result.skipped +
+            (result.errors && result.errors.length
+                ? "\n\nErrors:\n" + result.errors.map(error =>
+                    "Row " + error.row + ": " + error.reason
+                ).join("\n")
+                : "")
+        );
+
+    } catch (error) {
+
+        console.error("Renewal import error:", error);
+
+        showLoader(
+            "Import failed",
+            error.message || "Unable to import renewal records.",
+            true
+        );
+
+    } finally {
+
+        importFile.value = "";
+
+    }
+
+});
+
+
+        // =============================================
+        // STATISTICS
+        // =============================================
+
+        $("totalCount").textContent = renewals.length;
+
+        $("dueCount").textContent = renewals.filter(r => {
+
+            const days = daysUntil(r.date);
+
+            return r.status !== "Renewed" &&
+                r.status !== "Not Renewing" &&
+                days >= 0 &&
+                days <= 30;
+
+        }).length;
+
+
+        $("overdueCount").textContent = renewals.filter(r => {
+
+            return r.status !== "Renewed" &&
+                r.status !== "Not Renewing" &&
+                daysUntil(r.date) < 0;
+
+        }).length;
+
+
+        $("renewedCount").textContent = renewals.filter(
+            r => r.status === "Renewed"
+        ).length;
+
+
+        // TABLE SUMMARY
+
+        $("recordSummary").textContent =
+            `Showing ${visible.length} of ${renewals.length} records`;
+
+
+        // =============================================
+        // EDIT EVENTS
+        // =============================================
+
+        rows.querySelectorAll(".edit-btn").forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                if (isBusy) return;
+
+                const record = renewals.find(
+                    r => r.id === btn.dataset.id
+                );
+
+                if (!record) return;
+
+                startEdit(record);
+
+            });
+
+        });
+
+
+        // =============================================
+        // DELETE EVENTS
+        // =============================================
+
+        rows.querySelectorAll(".delete-btn").forEach(btn => {
+
+            btn.addEventListener("click", async () => {
+
+                if (isBusy) return;
+
+                const id = btn.dataset.id;
+
+                const record = renewals.find(r => r.id === id);
+
+                if (!record) return;
+
+                if (!confirm(
+                    `Delete the renewal record for "${record.customer}"?`
+                )) return;
+
+                try {
+
+                    setBusy(true);
+
+                    await api("deleteRenewal", {
+                        renewal_id: id
+                    });
+
+                    renewals = renewals.filter(r => r.id !== id);
+
+                    render();
+
+                } catch (error) {
+
+                    alert("Unable to delete renewal: " + error.message);
+
+                } finally {
+
+                    setBusy(false);
+                    render();
+
+                }
+
+            });
+
+        });
+
+    }
+
+
+    // =============================================
+    // HTML ESCAPING
+    // =============================================
+
+    function escapeHtml(value) {
+
+        return String(value).replace(/[&<>"']/g, c => ({
+
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+
+        }[c]));
+
+    }
+
+
+    // =============================================
+    // ADD / UPDATE RENEWAL
+    // =============================================
+
+    form.addEventListener("submit", async e => {
+
+        e.preventDefault();
+
+        if (isBusy) return;
+        if (!form.reportValidity()) return;
+
+        const d = Object.fromEntries(
+            new FormData(form).entries()
+        );
+
+        const isEditing = Boolean(editingRenewalId);
+
+        const payload = {
+    customer: d.customer,
+    customer_mobile: d.customer_mobile,
+    service: d.service,
+    reference: d.reference,
+    renewal_date: d.date,
+    value: d.value,
+    status: d.status,
+    notes: d.notes
+};
+
+        try {
+
+            setBusy(true);
+
+            if (isEditing) {
+
+                await api("updateRenewal", {
+                    renewal_id: editingRenewalId,
+                    ...payload
+                });
+
+            } else {
+
+                await api("addRenewal", payload);
+
+            }
+
+            closeForm();
+
+            await loadRenewals();
+
+            alert(
+                isEditing
+                    ? "Renewal updated successfully."
+                    : "Renewal added successfully."
+            );
+
+        } catch (error) {
+
+            alert(
+                (isEditing
+                    ? "Unable to update renewal: "
+                    : "Unable to save renewal: ") + error.message
+            );
+
+        } finally {
+
+            setBusy(false);
+            render();
+
+        }
+
+    });
+
+
+    // =============================================
+    // INITIALIZE
+    // =============================================
+
+    async function initializeRenewalPage() {
+
+        showLoader(
+            "Loading Renewal Management",
+            "Verifying your access and retrieving renewal records..."
+        );
+
+        try {
+
+            await loadRenewals();
+
+            hideLoader();
+
+        } catch (error) {
+
+            console.error("Renewal loading error:", error);
+
+            showLoader(
+                "Unable to load renewals",
+                error.message || "Please check your connection and try again.",
+                true
+            );
+
+        }
+
+    }
+
+    retry.addEventListener("click", initializeRenewalPage);
+
+    initializeRenewalPage();
+
+})();
+</script>
+
+
+</body>
+
+</html>

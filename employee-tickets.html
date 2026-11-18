@@ -1,0 +1,1568 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | My Assigned Tickets</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Employee-Pages.css">
+    <link rel="stylesheet" href="Employee-Tickets.css">
+
+    <style>
+        body.is-loading .app-shell {
+            visibility: hidden;
+        }
+
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: var(--bg, #191E1B);
+        }
+
+        .loader-card {
+            width: 100%;
+            max-width: 360px;
+            padding: 35px 25px;
+            text-align: center;
+            background: var(--panel, #252D28);
+            border: 1px solid var(--border, #39423B);
+            border-radius: 14px;
+        }
+
+        .loader-spinner {
+            width: 35px;
+            height: 35px;
+            margin: 0 auto 22px;
+            border: 3px solid var(--border, #39423B);
+            border-top-color: var(--orange, #E58B45);
+            border-radius: 50%;
+            animation: cookie-spin .8s linear infinite;
+        }
+
+        .loader-card h2 {
+            color: var(--ivory, #F2EBDD);
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .loader-card p {
+            color: var(--secondary, #B7B9AD);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #retryLoadButton {
+            margin-top: 20px;
+            padding: 10px 18px;
+            color: var(--bg, #191E1B);
+            background: var(--orange, #E58B45);
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #retryLoadButton:hover {
+            background: var(--orange-hover, #F09A54);
+        }
+
+        .existing-proof-link {
+            display: inline-block;
+            margin-top: 5px;
+            color: var(--orange, #E58B45);
+            font-size: 12px;
+            text-decoration: underline;
+            overflow-wrap: anywhere;
+        }
+
+        .remove-proof-button {
+            display: block;
+            margin-top: 10px;
+            padding: 7px 11px;
+            color: #E58B45;
+            background: transparent;
+            border: 1px solid #6B4630;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .remove-proof-button:hover {
+            color: #191E1B;
+            background: #E58B45;
+        }
+
+        .remove-proof-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        #saveTicket:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        #resolutionOtpInput {
+            box-sizing: border-box;
+            padding: 12px 14px;
+            color: var(--ivory, #F2EBDD);
+            background: var(--surface, #2C3530);
+            border: 1px solid var(--border, #39423B);
+            border-radius: 7px;
+            font: inherit;
+            font-size: 18px;
+            letter-spacing: .25em;
+        }
+
+        #sendResolutionOtpButton:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        @keyframes cookie-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="is-loading" data-required-role="R002">
+
+    <!-- LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner" id="loaderSpinner"></div>
+            <h2 id="loaderTitle">Loading assigned tickets</h2>
+            <p id="loaderMessage">Fetching your ticket queue...</p>
+            <button id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">co.</div>
+                <div class="brand-details">
+                    <strong>COOKIE</strong>
+                    <span>HOUSE OF RUDRAKSH</span>
+                </div>
+            </div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                Employee Workspace
+            </div>
+
+            <nav class="main-nav">
+
+                <span class="nav-label">WORKSPACE</span>
+
+                <a href="employee-home.html" class="nav-link">
+                    <span class="nav-icon">⌂</span>
+                    Overview
+                </a>
+
+                <a href="employee-tickets.html" class="nav-link active">
+                    <span class="nav-icon">
+                        <i class="bi bi-ticket"></i>
+                    </span>
+                    My Assigned Tickets
+                    <span class="nav-count" id="sidebarTicketCount">00</span>
+                </a>
+
+                <a href="employee-profile.html" class="nav-link">
+                    <span class="nav-icon">♙</span>
+                    My Account
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">co.</div>
+                    <div>
+                        <strong>Cookie Support</strong>
+                        <span>Employee Portal</span>
+                    </div>
+                </div>
+
+                <a href="#" class="signout-link" id="logoutButton">
+                    <span>↪</span>
+                    Sign out
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN AREA -->
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <span>EMPLOYEE WORKSPACE</span>
+                    <strong>My Assigned Tickets</strong>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Active Session
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="date" id="currentDate">--</div>
+
+                    <div class="profile-avatar" id="profileAvatar">--</div>
+
+                </div>
+
+            </header>
+
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <section class="page-heading">
+
+                        <div>
+                            <div class="eyebrow">TICKET MANAGEMENT</div>
+                            <h1>My assigned tickets.</h1>
+                            <p>Review customer requests and manage the tickets assigned to you.</p>
+                        </div>
+
+                        <div class="queue-indicator">
+                            <span class="status-dot"></span>
+                            <span>Personal Queue</span>
+                        </div>
+
+                    </section>
+
+                    <!-- SUMMARY -->
+                    <section class="ticket-summary">
+
+                        <div class="summary-item">
+                            <span>ALL ASSIGNED</span>
+                            <strong id="totalCount">00</strong>
+                        </div>
+
+                        <div class="summary-item">
+                            <span>PENDING</span>
+                            <strong id="pendingCount">00</strong>
+                        </div>
+
+                        <div class="summary-item">
+                            <span>IN PROGRESS</span>
+                            <strong id="progressCount">00</strong>
+                        </div>
+
+                        <div class="summary-item">
+                            <span>RESOLVED</span>
+                            <strong id="resolvedCount">00</strong>
+                        </div>
+
+                    </section>
+
+                    <!-- TICKET DIRECTORY -->
+                    <section class="ticket-directory">
+
+                        <div class="directory-header">
+
+                            <div>
+                                <span class="eyebrow">YOUR WORK QUEUE</span>
+                                <h2>Assigned ticket directory</h2>
+                                <p>Only tickets assigned to your employee account are shown here.</p>
+                            </div>
+
+                            <div class="directory-total">
+                                <strong id="visibleCount">00</strong>
+                                <span>tickets displayed</span>
+                            </div>
+
+                        </div>
+
+                        <!-- FILTERS -->
+                        <div class="filter-bar">
+
+                            <div class="search-box">
+                                <span class="search-icon">⌕</span>
+                                <input
+                                    type="search"
+                                    id="searchInput"
+                                    placeholder="Search ID, customer, mobile or subject..."
+                                >
+                            </div>
+
+                            <select id="statusFilter">
+                                <option value="">All statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+
+                            <select id="priorityFilter">
+                                <option value="">All priorities</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+
+                            <button type="button" class="reset-button" id="resetFilters">
+                                Reset
+                            </button>
+
+                        </div>
+
+                        <!-- TABLE -->
+                        <div class="table-container">
+
+                            <table class="ticket-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>TICKET ID</th>
+                                        <th>CUSTOMER</th>
+                                        <th>MOBILE NUMBER</th>
+                                        <th>SUBJECT</th>
+                                        <th>PRIORITY</th>
+                                        <th>STATUS</th>
+                                        <th>LAST UPDATED</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="ticketTableBody"></tbody>
+
+                            </table>
+
+                            <div class="empty-state" id="emptyState" hidden>
+                                <div class="empty-icon">⌕</div>
+                                <strong>No tickets found</strong>
+                                <p>Try changing your search or filter criteria.</p>
+                                <button type="button" class="reset-button" onclick="resetFilters()">
+                                    Clear filters
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="table-footer">
+                            <span id="tableFooterText">Showing 0 assigned tickets</span>
+                            <span>Employee ticket queue</span>
+                        </div>
+
+                    </section>
+
+                    <footer class="page-footer">
+                        <span>COOKIE · HOUSE OF RUDRAKSH</span>
+                        <span>Employee Workspace</span>
+                    </footer>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- TICKET DETAILS MODAL -->
+    <div class="modal-overlay" id="ticketModal">
+
+        <div class="ticket-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <span class="eyebrow">TICKET WORKSPACE</span>
+                    <h2 id="modalTicketId">TKT-0000</h2>
+                    <p id="modalTicketSubject">Ticket subject</p>
+                </div>
+
+                <button type="button" class="modal-close" id="closeModal">×</button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <!-- CUSTOMER INFORMATION -->
+                <section class="modal-section">
+
+                    <div class="modal-section-heading">
+                        <h3>Customer information</h3>
+                    </div>
+
+                    <div class="detail-grid">
+
+                        <div class="detail-field">
+                            <span>CUSTOMER NAME</span>
+                            <strong id="modalCustomer">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>MOBILE NUMBER</span>
+                            <strong id="modalMobile">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>CATEGORY</span>
+                            <strong id="modalCategory">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>CREATED ON</span>
+                            <strong id="modalCreated">--</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- DESCRIPTION -->
+                <section class="modal-section">
+
+                    <div class="modal-section-heading">
+                        <h3>Issue description</h3>
+                    </div>
+
+                    <div class="description-box" id="modalDescription">--</div>
+
+                </section>
+
+                <!-- TICKET DETAILS -->
+                <section class="modal-section">
+
+                    <div class="modal-section-heading">
+                        <h3>Ticket details</h3>
+                    </div>
+
+                    <div class="detail-grid">
+
+                        <div class="detail-field">
+                            <span>PRIORITY</span>
+                            <strong id="modalPriority">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>CURRENT STATUS</span>
+                            <strong id="modalStatus">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>ASSIGNED TO</span>
+                            <strong id="modalAssignedEmployee">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>LAST UPDATED</span>
+                            <strong id="modalUpdated">--</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- CUSTOMER RESOLUTION VERIFICATION -->
+                <section class="modal-section" id="resolutionOtpSection" hidden>
+
+                    <div class="modal-section-heading">
+                        <h3>Customer verification</h3>
+                        <span class="required-label">Required to resolve</span>
+                    </div>
+
+                    <p class="status-hint" id="resolutionOtpDescription">
+                        Send a verification code to the customer's registered email. The customer must share this code with you to confirm resolution.
+                    </p>
+                    <br>
+                    <button type="button" class="secondary-button" id="sendResolutionOtpButton">
+                        <i class="bi bi-envelope"></i>
+                        Send Customer OTP
+                    </button>
+
+                    <div id="resolutionOtpEntry" hidden style="margin-top:14px;">
+                        <label class="field-label" for="resolutionOtpInput">CUSTOMER OTP</label>
+                        <input
+                            type="text"
+                            id="resolutionOtpInput"
+                            inputmode="numeric"
+                            autocomplete="one-time-code"
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            placeholder="Enter 6-digit OTP"
+                            style="width:100%; margin-top:8px;"
+                        >
+                        <p class="status-hint" id="resolutionOtpStatus" aria-live="polite">
+                            OTP sent. Ask the customer to share the code.
+                        </p>
+                    </div>
+
+                </section>
+
+                <!-- RESOLUTION PROOF -->
+                <section class="modal-section">
+
+                    <div class="modal-section-heading">
+                        <h3>Resolution proof</h3>
+                        <span class="required-label">Optional</span>
+                    </div>
+
+                    <div class="proof-existing" id="existingProof" hidden>
+
+                        <span class="proof-file-icon">&#128196;</span>
+
+                        <div>
+                            <strong id="existingProofName">Resolution proof</strong>
+                            <span>Previously uploaded proof</span>
+
+                            <a
+                                id="existingProofLink"
+                                class="existing-proof-link"
+                                href="#"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >Open proof</a>
+
+                            <button
+                                type="button"
+                                class="remove-proof-button"
+                                id="removeProofButton"
+                            >
+                                <i class="bi bi-trash"></i>
+                                Remove proof
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <label class="proof-upload" for="proofInput" id="proofUploadArea">
+
+                        <span class="upload-icon">↑</span>
+                        <strong>Upload resolution proof (optional)</strong>
+                        <span>PDF, PNG or JPG · Maximum 25 MB</span>
+
+                        <input
+                            type="file"
+                            id="proofInput"
+                            accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+                        >
+
+                        <span class="selected-file" id="selectedFileName">
+                            No file selected
+                        </span>
+
+                    </label>
+
+                </section>
+
+                <!-- STATUS UPDATE -->
+                <section class="modal-section update-section">
+
+                    <div class="modal-section-heading">
+                        <h3>Update ticket status</h3>
+                    </div>
+
+                    <label class="field-label" for="statusUpdate">
+                        NEW STATUS
+                    </label>
+
+                    <select id="statusUpdate" class="status-update-select">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+
+                    <p class="status-hint" id="statusHint">
+                        Update the ticket status as work progresses.
+                    </p>
+
+                </section>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="secondary-button" id="cancelModal">
+                    Cancel
+                </button>
+
+                <button type="button" class="primary-button" id="saveTicket">
+                    Save Changes <span>→</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PROJECT SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+
+        let tickets = [];
+        let employee = null;
+        let currentUser = null;
+        let activeTicketId = null;
+        let isSaving = false;
+        let isSendingResolutionOtp = false;
+        let resolutionOtpSent = false;
+        let removeExistingProof = false;
+
+        const MAX_PROOF_SIZE = 25 * 1024 * 1024;
+
+        const $ = id => document.getElementById(id);
+
+        const tableBody = $("ticketTableBody");
+        const searchInput = $("searchInput");
+        const statusFilter = $("statusFilter");
+        const priorityFilter = $("priorityFilter");
+
+        const modal = $("ticketModal");
+        const proofInput = $("proofInput");
+
+
+        // =========================================
+        // LOADER
+        // =========================================
+
+        function showLoader(title, message, failed = false) {
+
+            $("pageLoader").style.display = "flex";
+            $("loaderTitle").textContent = title;
+            $("loaderMessage").textContent = message;
+            $("loaderSpinner").style.display = failed ? "none" : "block";
+            $("retryLoadButton").hidden = !failed;
+
+            document.body.classList.add("is-loading");
+        }
+
+        function hideLoader() {
+            $("pageLoader").style.display = "none";
+            document.body.classList.remove("is-loading");
+        }
+
+
+        // =========================================
+        // HELPERS
+        // =========================================
+
+        function escapeHTML(value) {
+
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            })[char]);
+        }
+
+        function getInitials(name) {
+
+            return String(name || "Employee")
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(part => part[0].toUpperCase())
+                .join("");
+        }
+
+        function formatMobile(value) {
+
+            const digits = String(value || "").replace(/\D/g, "");
+
+            if (digits.length === 10) {
+                return digits.replace(/(\d{5})(\d{5})/, "$1 $2");
+            }
+
+            return digits || "--";
+        }
+
+        function formatDate(value) {
+
+            if (!value) return "--";
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return String(value);
+            }
+
+            return date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+        }
+
+        function formatDateTime(value) {
+
+            if (!value) return "--";
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return String(value);
+            }
+
+            return date.toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function normalizeStatus(status) {
+
+            const value = String(status || "").trim().toLowerCase();
+
+            if (value === "open" || value === "pending") return "Pending";
+            if (value === "in progress" || value === "in-progress") return "In Progress";
+            if (value === "resolved" || value === "closed") return "Resolved";
+
+            return status || "Unknown";
+        }
+
+        function getStatusClass(status) {
+            return normalizeStatus(status).toLowerCase().replace(/\s+/g, "-");
+        }
+
+        function normalizeTicket(ticket) {
+
+            return {
+                id: String(ticket.ticket_id || ""),
+                userId: String(ticket.user_id || ""),
+                customer: ticket.customer_name || "Customer",
+                mobile: ticket.customer_mobile || "",
+                subject: ticket.subject || "Untitled ticket",
+                category: ticket.category || "General",
+                priority: String(ticket.priority || "Low"),
+                status: normalizeStatus(ticket.status),
+                created: ticket.created_at,
+                updated: ticket.updated_at,
+                description: ticket.description || "",
+                employee: ticket.assigned_employee_name || "",
+                proof: ticket.resolution_proof_url || "",
+                resolvedAt: ticket.resolved_at || ""
+            };
+        }
+
+
+        // =========================================
+        // LOAD LIVE TICKETS
+        // =========================================
+
+        async function loadTickets() {
+
+            const response = await sendToCookieBackend("getEmployeeTickets");
+
+            if (!response || !response.success) {
+                throw new Error(
+                    response?.message || "Unable to load assigned tickets."
+                );
+            }
+
+            employee = response.employee || null;
+
+            if (!employee) {
+                throw new Error("Employee information was not returned.");
+            }
+
+            tickets = (
+                Array.isArray(response.tickets)
+                    ? response.tickets
+                    : []
+            ).map(normalizeTicket);
+        }
+
+
+        // =========================================
+        // EMPLOYEE DETAILS
+        // =========================================
+
+        function renderEmployeeDetails() {
+
+            const name = currentUser.full_name || "Employee";
+
+            $("profileAvatar").textContent = getInitials(name);
+
+            $("sidebarTicketCount").textContent =
+                String(tickets.length).padStart(2, "0");
+        }
+
+
+        // =========================================
+        // DATE
+        // =========================================
+
+        function setCurrentDate() {
+
+            $("currentDate").textContent =
+                new Date().toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+        }
+
+
+        // =========================================
+        // SUMMARY
+        // =========================================
+
+        function updateSummary() {
+
+            const pending = tickets.filter(t => t.status === "Pending").length;
+            const progress = tickets.filter(t => t.status === "In Progress").length;
+            const resolved = tickets.filter(t => t.status === "Resolved").length;
+
+            $("totalCount").textContent =
+                String(tickets.length).padStart(2, "0");
+
+            $("pendingCount").textContent =
+                String(pending).padStart(2, "0");
+
+            $("progressCount").textContent =
+                String(progress).padStart(2, "0");
+
+            $("resolvedCount").textContent =
+                String(resolved).padStart(2, "0");
+        }
+
+
+        // =========================================
+        // FILTER AND RENDER
+        // =========================================
+
+        function renderTickets() {
+
+            const query = searchInput.value.trim().toLowerCase();
+            const normalizedQuery = query.replace(/\s+/g, "");
+
+            const status = statusFilter.value;
+            const priority = priorityFilter.value;
+
+            const visibleTickets = tickets.filter(ticket => {
+
+                const searchable = [
+                    ticket.id,
+                    ticket.customer,
+                    ticket.mobile,
+                    ticket.subject,
+                    ticket.category
+                ].join(" ").toLowerCase();
+
+                const matchesSearch =
+                    !query ||
+                    searchable.includes(query) ||
+                    searchable.replace(/\s+/g, "").includes(normalizedQuery);
+
+                const matchesStatus =
+                    !status || ticket.status === status;
+
+                const matchesPriority =
+                    !priority ||
+                    ticket.priority.toLowerCase() === priority.toLowerCase();
+
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+
+            tableBody.innerHTML = "";
+
+            visibleTickets.forEach(ticket => {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>
+                        <span class="table-ticket-id">${escapeHTML(ticket.id)}</span>
+                    </td>
+
+                    <td>
+                        <div class="customer-cell">
+                            <strong>${escapeHTML(ticket.customer)}</strong>
+                        </div>
+                    </td>
+
+                    <td>
+                        <span class="mobile-number">
+                            ${escapeHTML(formatMobile(ticket.mobile))}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="subject-cell">
+                            <strong>${escapeHTML(ticket.subject)}</strong>
+                            <span>${escapeHTML(ticket.category)}</span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <span class="priority-badge ${escapeHTML(ticket.priority.toLowerCase())}">
+                            ${escapeHTML(ticket.priority)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="status-badge ${getStatusClass(ticket.status)}">
+                            ${escapeHTML(ticket.status)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="updated-cell">
+                            ${escapeHTML(formatDateTime(ticket.updated))}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button
+                            type="button"
+                            class="view-button"
+                            data-ticket-id="${escapeHTML(ticket.id)}"
+                        >
+                            View →
+                        </button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+
+            $("visibleCount").textContent =
+                String(visibleTickets.length).padStart(2, "0");
+
+            $("tableFooterText").textContent =
+                `Showing ${visibleTickets.length} of ${tickets.length} assigned tickets`;
+
+            $("emptyState").hidden = visibleTickets.length !== 0;
+        }
+
+
+        // =========================================
+        // OPEN TICKET MODAL
+        // =========================================
+
+        function openTicket(ticketId) {
+
+            const ticket = tickets.find(t => t.id === ticketId);
+
+            if (!ticket) return;
+
+            activeTicketId = ticketId;
+            removeExistingProof = false;
+            resolutionOtpSent = false;
+            $("resolutionOtpInput").value = "";
+            $("resolutionOtpEntry").hidden = true;
+            $("resolutionOtpSection").hidden = true;
+            $("resolutionOtpStatus").textContent = "OTP sent. Ask the customer to share the code.";
+            $("sendResolutionOtpButton").disabled = false;
+            $("sendResolutionOtpButton").innerHTML = '<i class="bi bi-envelope"></i> Send Customer OTP';
+
+            $("modalTicketId").textContent = ticket.id;
+            $("modalTicketSubject").textContent = ticket.subject;
+
+            $("modalCustomer").textContent = ticket.customer;
+            $("modalMobile").textContent = formatMobile(ticket.mobile);
+            $("modalCategory").textContent = ticket.category;
+            $("modalCreated").textContent = formatDate(ticket.created);
+
+            $("modalDescription").textContent =
+                ticket.description || "No description provided.";
+
+            $("modalPriority").textContent = ticket.priority;
+            $("modalStatus").textContent = ticket.status;
+
+            $("modalAssignedEmployee").textContent =
+                ticket.employee || currentUser.full_name || "Assigned employee";
+
+            $("modalUpdated").textContent =
+                formatDateTime(ticket.updated);
+
+            $("statusUpdate").value = ticket.status;
+
+            proofInput.value = "";
+            $("selectedFileName").textContent = "No file selected";
+
+            if (ticket.proof) {
+
+                $("existingProof").hidden = false;
+
+                $("existingProofName").textContent = "Previously uploaded resolution proof";
+
+                $("existingProofLink").href = ticket.proof;
+
+            } else {
+
+                $("existingProof").hidden = true;
+                $("existingProofLink").removeAttribute("href");
+            }
+
+            $("removeProofButton").disabled = false;
+
+            updateProofRequirement();
+
+            modal.classList.add("active");
+            document.body.classList.add("modal-open");
+        }
+
+
+        // =========================================
+        // CLOSE MODAL
+        // =========================================
+
+        function closeTicketModal() {
+
+            if (isSaving) return;
+
+            modal.classList.remove("active");
+            document.body.classList.remove("modal-open");
+
+            activeTicketId = null;
+            removeExistingProof = false;
+            resolutionOtpSent = false;
+            $("resolutionOtpInput").value = "";
+            $("resolutionOtpEntry").hidden = true;
+            $("resolutionOtpSection").hidden = true;
+
+            proofInput.value = "";
+            $("selectedFileName").textContent = "No file selected";
+        }
+
+
+        // =========================================
+        // FILE TO BASE64
+        // =========================================
+
+        function fileToBase64(file) {
+
+            return new Promise((resolve, reject) => {
+
+                const reader = new FileReader();
+
+                reader.onload = () => {
+
+                    const result = String(reader.result || "");
+                    const base64 = result.split(",")[1];
+
+                    if (!base64) {
+                        reject(new Error("Unable to convert the proof file."));
+                        return;
+                    }
+
+                    resolve(base64);
+                };
+
+                reader.onerror = () => {
+                    reject(new Error("Unable to read the selected proof file."));
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+
+        // =========================================
+        // PROOF FILE VALIDATION
+        // =========================================
+
+        proofInput.addEventListener("change", () => {
+
+            const file = proofInput.files[0];
+
+            if (!file) {
+
+                $("selectedFileName").textContent =
+                    removeExistingProof
+                        ? "Existing resolution proof will be removed."
+                        : "No file selected";
+
+                updateProofRequirement();
+                return;
+            }
+
+            const allowedTypes = [
+                "application/pdf",
+                "image/png",
+                "image/jpeg"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert("Only PDF, PNG and JPG files are allowed.");
+
+                proofInput.value = "";
+
+                $("selectedFileName").textContent =
+                    removeExistingProof
+                        ? "Existing resolution proof will be removed."
+                        : "No file selected";
+
+                updateProofRequirement();
+                return;
+            }
+
+            if (file.size > MAX_PROOF_SIZE) {
+
+                alert("The selected file exceeds the 25 MB upload limit.");
+
+                proofInput.value = "";
+
+                $("selectedFileName").textContent =
+                    removeExistingProof
+                        ? "Existing resolution proof will be removed."
+                        : "No file selected";
+
+                updateProofRequirement();
+                return;
+            }
+
+            // A valid replacement cancels the pending removal request.
+            removeExistingProof = false;
+
+            const ticket = tickets.find(t => t.id === activeTicketId);
+
+            $("existingProof").hidden = !(ticket && ticket.proof);
+
+            $("selectedFileName").textContent =
+                `${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+
+            updateProofRequirement();
+        });
+
+
+        // =========================================
+        // REMOVE EXISTING PROOF
+        // =========================================
+
+        $("removeProofButton").addEventListener("click", () => {
+
+            if (isSaving) return;
+
+            const ticket = tickets.find(t => t.id === activeTicketId);
+
+            if (!ticket || !ticket.proof) return;
+
+            const confirmed = confirm(
+                "Remove the existing resolution proof? The file will be removed when you save your changes."
+            );
+
+            if (!confirmed) return;
+
+            proofInput.value = "";
+            removeExistingProof = true;
+
+            $("existingProof").hidden = true;
+
+            $("selectedFileName").textContent =
+                "Existing resolution proof will be removed.";
+
+            updateProofRequirement();
+        });
+
+
+        // =========================================
+        // STATUS REQUIREMENTS
+        // =========================================
+
+        function updateProofRequirement() {
+
+            const newStatus = $("statusUpdate").value;
+            const ticket = tickets.find(t => t.id === activeTicketId);
+            const hasNewProof = proofInput.files.length > 0;
+
+            // Proof is optional for every status, including Resolved.
+            $("proofUploadArea").classList.remove("proof-required");
+
+            // Customer OTP is required only when resolving a ticket.
+            $("resolutionOtpSection").hidden = newStatus !== "Resolved";
+
+            if (newStatus === "Resolved") {
+                $("statusHint").textContent = resolutionOtpSent
+                    ? "Enter the OTP shared by the customer. Resolution proof is optional."
+                    : "Send a verification OTP to the customer's registered email before resolving this ticket. Resolution proof is optional.";
+            } else if (removeExistingProof) {
+                $("statusHint").textContent =
+                    "The existing proof will be removed from the ticket and moved to Google Drive Trash when you save.";
+            } else if (hasNewProof) {
+                $("statusHint").textContent =
+                    "The selected file will replace the existing resolution proof when you save.";
+            } else {
+                $("statusHint").textContent =
+                    "Update the ticket status as work progresses. Resolution proof is optional.";
+            }
+        }
+
+        $("statusUpdate").addEventListener("change", () => {
+            $("resolutionOtpInput").value = "";
+            updateProofRequirement();
+        });
+
+        $("resolutionOtpInput").addEventListener("input", event => {
+            event.target.value = event.target.value.replace(/\D/g, "").slice(0, 6);
+        });
+
+        // =========================================
+        // SEND CUSTOMER RESOLUTION OTP
+        // =========================================
+
+        async function sendResolutionOtp() {
+
+            if (isSendingResolutionOtp || !activeTicketId) return;
+
+            const button = $("sendResolutionOtpButton");
+            const originalHTML = button.innerHTML;
+
+            isSendingResolutionOtp = true;
+            button.disabled = true;
+            button.textContent = "Sending OTP...";
+            $("resolutionOtpStatus").textContent = "Sending verification code to the customer's registered email...";
+
+            try {
+                const response = await sendToCookieBackend(
+                    "requestTicketResolutionOtp",
+                    { ticket_id: activeTicketId }
+                );
+
+                if (!response || !response.success) {
+                    throw new Error(response?.message || "Unable to send customer OTP.");
+                }
+
+                resolutionOtpSent = true;
+                $("resolutionOtpEntry").hidden = false;
+                $("resolutionOtpInput").value = "";
+                $("resolutionOtpStatus").textContent =
+                    (response.message || "OTP sent successfully.") +
+                    (response.email_hint ? " Sent to " + response.email_hint + "." : "") +
+                    " The code expires in 10 minutes.";
+                $("resolutionOtpDescription").textContent =
+                    "Ask the customer to check their registered email and share the six-digit verification code.";
+                button.disabled = false;
+                button.innerHTML = '<i class="bi bi-arrow-repeat"></i> Resend OTP';
+                updateProofRequirement();
+
+            } catch (error) {
+                console.error("Resolution OTP error:", error);
+                $("resolutionOtpStatus").textContent = error.message || "Unable to send OTP.";
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+            } finally {
+                isSendingResolutionOtp = false;
+            }
+        }
+
+        $("sendResolutionOtpButton").addEventListener("click", sendResolutionOtp);
+
+
+        // =========================================
+        // SAVE TICKET TO BACKEND
+        // =========================================
+
+        async function saveTicketChanges() {
+
+            if (isSaving) return;
+
+            const ticket = tickets.find(t => t.id === activeTicketId);
+
+            if (!ticket) {
+                alert("Ticket not found. Please close and reopen it.");
+                return;
+            }
+
+            const newStatus = $("statusUpdate").value;
+            const selectedFile = proofInput.files[0];
+
+            const resolutionOtp = $("resolutionOtpInput").value.trim();
+
+            if (newStatus === "Resolved" && !/^\d{6}$/.test(resolutionOtp)) {
+                alert("Send the customer an OTP and enter the six-digit code before resolving this ticket.");
+                $("resolutionOtpSection").hidden = false;
+                $("resolutionOtpInput").focus();
+                return;
+            }
+
+            if (selectedFile && selectedFile.size > MAX_PROOF_SIZE) {
+                alert("The selected file exceeds the 25 MB upload limit.");
+                return;
+            }
+
+            const saveButton = $("saveTicket");
+            const removeButton = $("removeProofButton");
+            const originalButtonHTML = saveButton.innerHTML;
+
+            isSaving = true;
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+            removeButton.disabled = true;
+
+            try {
+
+                const payload = {
+                    ticket_id: ticket.id,
+                    status: newStatus,
+                    remove_proof: removeExistingProof ? "true" : "false"
+                };
+
+                if (newStatus === "Resolved") {
+                    payload.resolution_otp = resolutionOtp;
+                }
+
+                if (selectedFile) {
+
+                    $("statusHint").textContent =
+                        "Preparing your proof file for upload...";
+
+                    payload.proof_base64 = await fileToBase64(selectedFile);
+                    payload.proof_file_name = selectedFile.name;
+                    payload.proof_mime_type = selectedFile.type;
+                }
+
+                $("statusHint").textContent =
+                    "Saving ticket changes. Please wait...";
+
+                const response = await sendToCookieBackend(
+                    "updateEmployeeTicket",
+                    payload
+                );
+
+                if (!response || !response.success) {
+                    throw new Error(
+                        response?.message || "Unable to save ticket changes."
+                    );
+                }
+
+                // Reload the latest ticket information.
+                await loadTickets();
+
+                renderEmployeeDetails();
+                updateSummary();
+                renderTickets();
+
+                // Close modal after successful save.
+                modal.classList.remove("active");
+                document.body.classList.remove("modal-open");
+
+                activeTicketId = null;
+                removeExistingProof = false;
+                resolutionOtpSent = false;
+                $("resolutionOtpInput").value = "";
+                $("resolutionOtpEntry").hidden = true;
+                $("resolutionOtpSection").hidden = true;
+
+                proofInput.value = "";
+
+                $("selectedFileName").textContent = "No file selected";
+                $("existingProof").hidden = true;
+
+                if (response.old_proof_deleted === false) {
+                    alert(
+                        "Ticket updated."
+                    );
+                } else {
+                    alert("Ticket updated successfully.");
+                }
+
+            } catch (error) {
+
+                console.error("Ticket update error:", error);
+
+                alert(
+                    error.message ||
+                    "Something went wrong while updating the ticket."
+                );
+
+                $("statusHint").textContent =
+                    error.message || "Unable to save changes. Please try again.";
+
+            } finally {
+
+                isSaving = false;
+
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalButtonHTML;
+
+                removeButton.disabled = false;
+            }
+        }
+
+        $("saveTicket").addEventListener("click", saveTicketChanges);
+
+
+        // =========================================
+        // FILTER EVENTS
+        // =========================================
+
+        searchInput.addEventListener("input", renderTickets);
+        statusFilter.addEventListener("change", renderTickets);
+        priorityFilter.addEventListener("change", renderTickets);
+
+        function resetFilters() {
+
+            searchInput.value = "";
+            statusFilter.value = "";
+            priorityFilter.value = "";
+
+            renderTickets();
+        }
+
+        $("resetFilters").addEventListener("click", resetFilters);
+
+
+        // =========================================
+        // TABLE ACTION
+        // =========================================
+
+        tableBody.addEventListener("click", event => {
+
+            const button = event.target.closest("[data-ticket-id]");
+
+            if (!button) return;
+
+            openTicket(button.dataset.ticketId);
+        });
+
+
+        // =========================================
+        // MODAL EVENTS
+        // =========================================
+
+        $("closeModal").addEventListener("click", closeTicketModal);
+        $("cancelModal").addEventListener("click", closeTicketModal);
+
+        modal.addEventListener("click", event => {
+
+            if (event.target === modal) {
+                closeTicketModal();
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains("active")
+            ) {
+                closeTicketModal();
+            }
+        });
+
+
+        // =========================================
+        // OPEN TICKET FROM URL
+        // =========================================
+
+        function openTicketFromURL() {
+
+            const params = new URLSearchParams(window.location.search);
+            const ticketId = params.get("ticket");
+
+            if (!ticketId) return;
+
+            if (tickets.some(ticket => ticket.id === ticketId)) {
+                openTicket(ticketId);
+            }
+
+            window.history.replaceState(
+                {},
+                document.title,
+                window.location.pathname
+            );
+        }
+
+
+        // =========================================
+        // INITIALIZE
+        // =========================================
+
+        async function initializePage() {
+
+            showLoader(
+                "Loading assigned tickets",
+                "Fetching your employee information and ticket queue..."
+            );
+
+            try {
+
+                if (
+                    typeof requireRole !== "function" ||
+                    !requireRole("R002")
+                ) {
+                    return;
+                }
+
+                currentUser = getCookieUser();
+
+                if (!currentUser || !currentUser.user_id) {
+                    throw new Error(
+                        "Your login session could not be found. Please sign in again."
+                    );
+                }
+
+                await loadTickets();
+
+                renderEmployeeDetails();
+                setCurrentDate();
+                updateSummary();
+                renderTickets();
+                openTicketFromURL();
+
+                hideLoader();
+
+            } catch (error) {
+
+                console.error("Employee tickets error:", error);
+
+                showLoader(
+                    "Unable to load assigned tickets",
+                    error.message || "Something went wrong while loading your ticket queue.",
+                    true
+                );
+            }
+        }
+
+
+        // =========================================
+        // PAGE EVENTS
+        // =========================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            initializePage();
+
+            $("retryLoadButton").addEventListener("click", initializePage);
+        });
+
+    </script>
+
+</body>
+</html>

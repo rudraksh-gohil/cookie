@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | Customer Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="Customer.css">
+</head>
+
+<body data-required-role="R001" class="is-loading">
+    <div class="page-loader" id="pageLoader">
+    <div class="loader-card">
+        <div class="loader-spinner"></div>
+
+        <h2 id="loaderTitle">Loading Customer Management</h2>
+
+        <p id="loaderMessage">
+            Verifying your access and loading customer records...
+        </p>
+
+        <button type="button" id="retryLoadButton" hidden>
+            Retry loading
+        </button>
+    </div>
+</div>
+    
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <a class="brand" href="home1.html">
+                <span class="brand-icon">co.</span>
+                <span class="brand-details">
+                    <strong>cookie</strong>
+                    <small>HOUSE OF RUDRAKSH</small>
+                </span>
+            </a>
+
+            <div class="nav-label">WORKSPACE</div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                <span>Shared workspace</span>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+
+                <a class="nav-link" href="home1.html" aria-current="page">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+                        </svg>
+                    </span>
+                    <span>Overview</span>
+                </a>
+
+                <a class="nav-link active" href="Customer.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <span>Customers</span>
+                </a>
+
+                <a class="nav-link" href="Supplier.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 7h14l-4-4" />
+                            <path d="M21 7 17 11" />
+                            <path d="M17 17H3l4 4" />
+                            <path d="m3 17 4-4" />
+                        </svg>
+                    </span>
+                    <span>Suppliers</span>
+                </a>
+
+                <a class="nav-link" href="Renewal.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                    </span>
+                    <span>Renewals</span>
+                </a>
+
+                <a class="nav-link" href="Ticketing.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m12 3 9 5-9 5-9-5z" />
+                            <path d="M3 8v9l9 5 9-5V8" />
+                            <path d="M12 13v9" />
+                        </svg>
+                    </span>
+                    <span>Ticketing</span>
+                </a>
+
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">H</div>
+                    <div>
+                        <strong>House of Rudraksh</strong>
+                        <small>Management workspace</small>
+                    </div>
+                </div>
+
+                <a class="signout-link" href="#" id="logoutButton">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 17l5-5-5-5" />
+                        <path d="M15 12H3" />
+                        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+                    </svg>
+                    <span>Sign out</span>
+                </a>
+
+            </div>
+        </aside>
+
+
+        <!-- MAIN -->
+        <main class="main-area">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="topbar-heading">
+                    <h2>Customer Management</h2>
+                    <p>Manage your customer directory and records.</p>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Shared workspace
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <span class="date" id="currentDate"></span>
+
+                    <div class="profile-avatar">A</div>
+                </div>
+            </header>
+
+
+            <!-- SCROLLABLE CONTENT -->
+            <section class="main-content">
+                <div class="content-wrapper">
+
+                    <!-- PAGE INTRO -->
+                    <section class="page-heading">
+                        <div class="heading-copy">
+                            <span class="eyebrow">CUSTOMER DIRECTORY</span>
+                            <h1>Customers</h1>
+                            <p>Keep customer information organised, accessible and up to date.</p>
+                        </div>
+
+                        <div class="heading-actions">
+                            <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" hidden>
+
+                            <button class="button button-secondary" id="importButton" type="button">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 16V4" />
+                                    <path d="m7 9 5-5 5 5" />
+                                    <path d="M4 16v4h16v-4" />
+                                </svg>
+                                Import file
+                            </button>
+
+                            <button class="button button-primary" id="addButton" type="button">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 5v14M5 12h14" />
+                                </svg>
+                                Add customer
+                            </button>
+                        </div>
+                    </section>
+
+
+                    <!-- STATISTICS -->
+                    <section class="stats-grid">
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">TOTAL CUSTOMERS</span>
+                                <div class="stat-icon orange-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number" id="totalCount">0</strong>
+                            <span class="stat-caption">Registered customer records</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">DATA SOURCE</span>
+                                <div class="stat-icon green-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M4 5h16v14H4z" />
+                                        <path d="M4 9h16M8 5v4" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number source-number">Shared</strong>
+                            <span class="stat-caption">Platform workbook</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-label">CURRENT VIEW</span>
+                                <div class="stat-icon blue-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m20 20-4-4" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <strong class="stat-number" id="visibleCount">0</strong>
+                            <span class="stat-caption">Records matching your search</span>
+                        </article>
+
+                    </section>
+
+
+                    <!-- CUSTOMER DIRECTORY -->
+                    <section class="directory-panel">
+
+                        <div class="directory-header">
+                            <div class="directory-title">
+                                <div class="directory-title-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2>Customer directory</h2>
+                                    <p>View, search and manage registered customers.</p>
+                                </div>
+                            </div>
+
+                            <div class="directory-tools">
+                                <label class="search-wrap">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m20 20-4-4" />
+                                    </svg>
+                                    <input id="searchInput" type="search" placeholder="Search name or phone..."
+                                        aria-label="Search customers">
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <!-- ADD CUSTOMER FORM -->
+                        <form class="entry-form" id="entryForm" hidden>
+
+                            <div class="form-heading">
+                                <div>
+                                    <span class="form-eyebrow">NEW RECORD</span>
+                                    <h3>Add a customer</h3>
+                                    <p>Enter the customer's contact information.</p>
+                                </div>
+
+                                <button type="button" class="close-form" id="closeForm" aria-label="Close form">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="m18 6-12 12M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="form-grid">
+
+                                <div class="field">
+                                    <label for="customerName">Customer name <span>*</span></label>
+                                    <input id="customerName" name="name" type="text" placeholder="Enter full name"
+                                        required>
+                                </div>
+
+                                <div class="field">
+                                    <label for="customerNumber">Phone number <span>*</span></label>
+                                    <input id="customerNumber" name="number" type="tel"
+                                        placeholder="Enter contact number" required>
+                                </div>
+
+                                <div class="field field-wide">
+                                    <label for="customerAddress">Address <span>*</span></label>
+                                    <textarea id="customerAddress" name="address" rows="2"
+                                        placeholder="Enter complete address" required></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="button button-secondary" id="cancelForm">Cancel</button>
+                                <button type="submit" class="button button-primary">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                    Save customer
+                                </button>
+                            </div>
+
+                        </form>
+
+
+                        <!-- TABLE -->
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>CUSTOMER</th>
+                                        <th>PHONE NUMBER</th>
+                                        <th>ADDRESS</th>
+                                        <th class="action-col">ACTION</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="customerRows">
+                                    <tr class="empty-row">
+                                        <td colspan="5">
+                                            <div class="empty-state">
+                                                <div class="empty-state-icon">
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                                        <circle cx="9" cy="7" r="4" />
+                                                    </svg>
+                                                </div>
+                                                <strong>No customer records yet</strong>
+                                                <small>Add your first customer to get started.</small>
+                                                <button type="button" class="empty-add-button" id="emptyAddButton">＋ Add
+                                                    customer</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!-- TABLE FOOTER -->
+                        <div class="table-footer">
+    <span id="recordSummary">Showing 0 records</span>
+
+    <div class="pagination" id="pagination">
+        <button type="button" id="previousPage" disabled>
+            Previous
+        </button>
+
+        <span id="pageIndicator">Page 1 of 1</span>
+
+        <button type="button" id="nextPage" disabled>
+            Next
+        </button>
+    </div>
+</div>
+
+                    </section>
+
+
+                    <div class="import-status" id="importStatus">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 11v5M12 8h.01" />
+                        </svg>
+                        <span>Customer data is stored locally in this interface until backend integration is
+                            connected.</span>
+                    </div>
+
+
+                    <footer class="dashboard-footer">
+                        <span>COOKIE <span class="footer-separator">/</span> HOUSE OF RUDRAKSH</span>
+                        <span>Customer Management</span>
+                    </footer>
+
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+
+    <script>
+
+        (function () {
+
+    // Admin-only page protection.
+    if (!requireRole("R001")) {
+        return;
+    }
+
+        // DATE
+        document.getElementById("currentDate").textContent =
+            new Intl.DateTimeFormat("en-IN", {
+                weekday: "short",
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }).format(new Date());
+
+
+        // ELEMENTS
+        const form = document.getElementById("entryForm");
+        const rows = document.getElementById("customerRows");
+        const search = document.getElementById("searchInput");
+
+        const totalCount = document.getElementById("totalCount");
+        const visibleCount = document.getElementById("visibleCount");
+        const recordSummary = document.getElementById("recordSummary");
+        const importStatus = document.getElementById("importStatus");
+
+        let records = [];
+let editingCustomerId = null;
+
+const PAGE_SIZE = 8;
+let currentPage = 1;
+
+const previousPageButton =
+    document.getElementById("previousPage");
+
+const nextPageButton =
+    document.getElementById("nextPage");
+
+const pageIndicator =
+    document.getElementById("pageIndicator");
+
+const pagination =
+    document.getElementById("pagination");
+
+
+        // STATUS MESSAGE
+        function setStatus(message) {
+            importStatus.querySelector("span").textContent = message;
+        }
+
+
+        // GET CURRENT USER
+        function getCurrentUserId() {
+            if (typeof getCookieUser === "function") {
+                const user = getCookieUser();
+                return user?.user_id || "";
+            }
+
+            return "";
+        }
+
+
+        // OPEN FORM
+        function openForm() {
+            form.hidden = false;
+            document.getElementById("customerName").focus();
+            form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+
+        document.getElementById("addButton").addEventListener("click", openForm);
+        document.getElementById("emptyAddButton").addEventListener("click", openForm);
+
+
+        // CLOSE FORM
+        function closeForm() {
+    form.reset();
+    form.hidden = true;
+    editingCustomerId = null;
+
+    const saveButton = form.querySelector('button[type="submit"]');
+    saveButton.textContent = "Save customer";
+}
+
+        document.getElementById("closeForm").addEventListener("click", closeForm);
+        document.getElementById("cancelForm").addEventListener("click", closeForm);
+
+
+        // LOAD CUSTOMERS FROM GOOGLE SHEETS
+        async function loadCustomers() {
+    try {
+        setStatus("Loading customers from Google Sheets...");
+
+        const response = await sendToCookieBackend("getCustomers");
+
+        if (!response.success) {
+            throw new Error(response.message || "Unable to load customers.");
+        }
+
+        records = (response.customers || []).map(customer => ({
+            customer_id: customer.customer_id,
+            name: customer.customer_name || "",
+            number: String(customer.phone || ""),
+            address: customer.address || ""
+        }));
+
+        render();
+
+        setStatus(
+            `Connected to Google Sheets. ${records.length} active customers loaded.`
+        );
+
+        return true;
+
+    } catch (error) {
+        console.error("Customer loading error:", error);
+
+        setStatus("Could not load customers: " + error.message);
+
+        return false;
+    }
+}
+
+        // RENDER TABLE
+        function render() {
+    const query = search.value.trim().toLowerCase();
+
+    const filtered = records.filter(record =>
+        record.name.toLowerCase().includes(query) ||
+        record.number.toLowerCase().includes(query)
+    );
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filtered.length / PAGE_SIZE)
+    );
+
+    currentPage = Math.min(currentPage, totalPages);
+
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+
+    const paginatedRecords = filtered.slice(
+        startIndex,
+        startIndex + PAGE_SIZE
+    );
+
+    rows.innerHTML = "";
+
+    if (!filtered.length) {
+        const tr = document.createElement("tr");
+        tr.className = "empty-row";
+
+        const td = document.createElement("td");
+        td.colSpan = 5;
+
+        const state = document.createElement("div");
+        state.className = "empty-state";
+
+        const icon = document.createElement("div");
+        icon.className = "empty-state-icon";
+        icon.textContent = "⌕";
+
+        const strong = document.createElement("strong");
+        strong.textContent = records.length
+            ? "No matching customers"
+            : "No customer records yet";
+
+        const small = document.createElement("small");
+        small.textContent = records.length
+            ? "Try searching with another name or phone number."
+            : "Add your first customer to get started.";
+
+        state.append(icon, strong, small);
+
+        if (!records.length) {
+            const add = document.createElement("button");
+            add.type = "button";
+            add.className = "empty-add-button";
+            add.textContent = "＋ Add customer";
+            add.addEventListener("click", openForm);
+            state.append(add);
+        }
+
+        td.append(state);
+        tr.append(td);
+        rows.append(tr);
+
+    } else {
+        paginatedRecords.forEach((record, index) => {
+            const tr = document.createElement("tr");
+
+            const numberCell = document.createElement("td");
+            numberCell.className = "number-cell";
+            numberCell.textContent = String(startIndex + index + 1);
+
+            const nameCell = document.createElement("td");
+            nameCell.className = "customer-name-cell";
+
+            const avatar = document.createElement("span");
+            avatar.className = "customer-avatar";
+            avatar.textContent = record.name.charAt(0).toUpperCase();
+
+            const name = document.createElement("strong");
+            name.textContent = record.name;
+
+            nameCell.append(avatar, name);
+
+            const phoneCell = document.createElement("td");
+            phoneCell.className = "phone-cell";
+            phoneCell.textContent = record.number;
+
+            const addressCell = document.createElement("td");
+            addressCell.className = "address-cell";
+            addressCell.textContent = record.address;
+
+            const actionCell = document.createElement("td");
+            actionCell.className = "row-action";
+
+            const edit = document.createElement("button");
+            edit.type = "button";
+            edit.className = "edit-button";
+            edit.textContent = "Edit";
+            edit.addEventListener("click", () => editCustomer(record));
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "delete-button";
+            remove.textContent = "Remove";
+            remove.addEventListener("click", () => deleteCustomer(record));
+
+            actionCell.append(edit, remove);
+
+            tr.append(
+                numberCell,
+                nameCell,
+                phoneCell,
+                addressCell,
+                actionCell
+            );
+
+            rows.append(tr);
+        });
+    }
+
+    totalCount.textContent = records.length;
+    visibleCount.textContent = filtered.length;
+
+    const showingFrom = filtered.length ? startIndex + 1 : 0;
+    const showingTo = Math.min(
+        startIndex + PAGE_SIZE,
+        filtered.length
+    );
+
+    recordSummary.textContent =
+        `Showing ${showingFrom}-${showingTo} of ${filtered.length} records`;
+
+    pageIndicator.textContent =
+        `Page ${currentPage} of ${totalPages}`;
+
+    previousPageButton.disabled = currentPage === 1;
+    nextPageButton.disabled = currentPage >= totalPages;
+
+    pagination.hidden = totalPages <= 1;
+}
+previousPageButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+        currentPage--;
+        render();
+    }
+});
+
+nextPageButton.addEventListener("click", () => {
+    const query = search.value.trim().toLowerCase();
+
+    const filteredCount = records.filter(record =>
+        record.name.toLowerCase().includes(query) ||
+        record.number.toLowerCase().includes(query)
+    ).length;
+
+    const totalPages = Math.ceil(filteredCount / PAGE_SIZE);
+
+    if (currentPage < totalPages) {
+        currentPage++;
+        render();
+    }
+});
+
+        function editCustomer(record) {
+    editingCustomerId = record.customer_id;
+
+    document.getElementById("customerName").value = record.name;
+    document.getElementById("customerNumber").value = record.number;
+    document.getElementById("customerAddress").value = record.address;
+
+    const saveButton = form.querySelector('button[type="submit"]');
+    saveButton.textContent = "Update customer";
+
+    form.hidden = false;
+    form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+
+        // ADD CUSTOMER TO GOOGLE SHEETS
+        form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const name = document.getElementById("customerName").value.trim();
+    const number = document.getElementById("customerNumber").value.trim();
+    const address = document.getElementById("customerAddress").value.trim();
+
+    if (!name || !number || !address) return;
+
+    const isEditing = Boolean(editingCustomerId);
+    const saveButton = form.querySelector('button[type="submit"]');
+
+    saveButton.disabled = true;
+    saveButton.textContent = isEditing ? "Updating..." : "Saving...";
+
+    try {
+        const action = isEditing ? "updateCustomer" : "addCustomer";
+
+        const payload = {
+            customer_name: name,
+            phone: number,
+            address: address
+        };
+
+        if (isEditing) {
+            payload.customer_id = editingCustomerId;
+        } else {
+            payload.created_by = getCurrentUserId();
+        }
+
+        const response = await sendToCookieBackend(action, payload);
+
+        if (!response.success) {
+            throw new Error(response.message || "Operation failed.");
+        }
+
+        closeForm();
+        await loadCustomers();
+
+        setStatus(
+            isEditing
+                ? `Customer "${name}" updated successfully.`
+                : `Customer "${name}" added successfully.`
+        );
+
+    } catch (error) {
+        console.error("Customer save error:", error);
+        alert(error.message);
+
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save customer";
+    }
+});
+
+        // DELETE CUSTOMER FROM GOOGLE SHEETS
+        async function deleteCustomer(record) {
+            if (!confirm(`Remove ${record.name} from the customer directory?`)) {
+                return;
+            }
+
+            try {
+                const response = await sendToCookieBackend("deleteCustomer", {
+                    customer_id: record.customer_id
+                });
+
+                if (!response.success) {
+                    throw new Error(response.message || "Unable to remove customer.");
+                }
+
+                await loadCustomers();
+                setStatus(`Customer "${record.name}" removed successfully.`);
+
+            } catch (error) {
+                console.error("Delete customer error:", error);
+                alert(error.message);
+            }
+        }
+
+
+        // SEARCH
+        search.addEventListener("input", () => {
+    currentPage = 1;
+    render();
+});
+
+
+
+        // IMPORT CUSTOMERS FROM CSV / EXCEL
+
+        document.getElementById("importButton").addEventListener("click", () => {
+            document.getElementById("excelFile").click();
+        });
+
+        document.getElementById("excelFile").addEventListener("change", async event => {
+            const file = event.target.files[0];
+
+            if (!file) return;
+
+            try {
+                setStatus(`Reading ${file.name}...`);
+
+                // Read file
+                const data = await file.arrayBuffer();
+
+                const workbook = XLSX.read(data, {
+                    type: "array"
+                });
+
+                // Read first worksheet
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+                const rawRecords = XLSX.utils.sheet_to_json(worksheet, {
+                    defval: ""
+                });
+
+                if (!rawRecords.length) {
+                    throw new Error("The selected file contains no records.");
+                }
+
+                // Normalize column names
+                const importedRecords = rawRecords.map(row => {
+                    const normalized = {};
+
+                    Object.keys(row).forEach(key => {
+                        normalized[key.trim().toLowerCase().replace(/[\s_-]/g, "")] =
+                            String(row[key] ?? "").trim();
+                    });
+
+                    return {
+                        customer_name:
+                            normalized.customername ||
+                            normalized.name ||
+                            "",
+
+                        phone:
+                            normalized.phone ||
+                            normalized.phonenumber ||
+                            normalized.number ||
+                            "",
+
+                        address:
+                            normalized.address ||
+                            ""
+                    };
+                }).filter(record =>
+                    record.customer_name &&
+                    record.phone &&
+                    record.address
+                );
+
+                if (!importedRecords.length) {
+                    throw new Error(
+                        "No valid records found. Required columns: Name, Phone, Address."
+                    );
+                }
+
+                if (!confirm(
+                    `${importedRecords.length} valid customer records found.\n\nImport them into Google Sheets?`
+                )) {
+                    setStatus("Import cancelled.");
+                    return;
+                }
+
+                setStatus(`Importing ${importedRecords.length} customers...`);
+
+                // Send to Apps Script
+                const response = await sendToCookieBackend("importCustomers", {
+                    records: JSON.stringify(importedRecords),
+                    created_by: getCurrentUserId()
+                });
+
+                if (!response.success) {
+                    throw new Error(response.message || "Import failed.");
+                }
+
+                // Refresh customer table
+                await loadCustomers();
+
+                const imported = response.imported ?? 0;
+                const skipped = response.skipped ?? 0;
+
+                let message =
+                    `Import completed!\n\n` +
+                    `Imported: ${imported}\n` +
+                    `Skipped: ${skipped}`;
+
+                if (response.errors?.length) {
+                    message += "\n\nErrors:\n" + response.errors.join("\n");
+                }
+
+                alert(message);
+
+                setStatus(
+                    `Import completed. ${imported} imported, ${skipped} skipped.`
+                );
+
+            } catch (error) {
+                console.error("Import error:", error);
+
+                alert("Import failed:\n" + error.message);
+                setStatus("Import failed: " + error.message);
+
+            } finally {
+                // Allow selecting the same file again
+                event.target.value = "";
+            }
+        });
+
+
+
+        // INITIAL LOAD
+        // INITIAL PAGE LOAD
+async function initializeCustomerPage() {
+    const loader = document.getElementById("pageLoader");
+    const loaderTitle = document.getElementById("loaderTitle");
+    const loaderMessage = document.getElementById("loaderMessage");
+    const retryButton = document.getElementById("retryLoadButton");
+
+    retryButton.hidden = true;
+    loaderTitle.textContent = "Loading Customer Management";
+    loaderMessage.textContent =
+        "Verifying your access and loading customer records...";
+
+    const loaded = await loadCustomers();
+
+    if (loaded) {
+        document.body.classList.remove("is-loading");
+        loader.hidden = true;
+    } else {
+        loaderTitle.textContent = "Unable to load customers";
+        loaderMessage.textContent =
+            "Your customer records could not be loaded. Check your connection and try again.";
+
+        retryButton.hidden = false;
+    }
+}
+
+document.getElementById("retryLoadButton")
+    .addEventListener("click", initializeCustomerPage);
+
+initializeCustomerPage();
+})();
+    </script>
+
+
+</body>
+
+</html>

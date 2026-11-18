@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#191E1B">
+    <title>Cookie | Customer Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="My-Tickets.css">
+    <link rel="stylesheet" href="Customer-Pages.css">
+</head>
+
+<body class="is-loading" data-required-role="R003">
+
+    <!-- PAGE LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner"></div>
+            <h2 id="loaderTitle">Loading Dashboard</h2>
+            <p id="loaderMessage">Fetching your account and support activity...</p>
+            <button type="button" id="retryLoadButton" hidden>
+                Retry Loading
+            </button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">co.</div>
+                <div class="brand-details">
+                    <h2>cookie</h2>
+                    <span>HOUSE OF RUDRAKSH</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <span class="nav-label">CUSTOMER PORTAL</span>
+
+                <nav class="main-nav">
+
+                    <a href="customer-home.html" class="nav-link active" aria-current="page">
+                        <span class="nav-icon">⌂</span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="My-Tickets.html" class="nav-link">
+                        <span class="nav-icon">
+                            <i class="bi bi-ticket"></i>
+                        </span>
+                        <span>My Tickets</span>
+                        <span class="nav-count" id="sidebarTicketCount">0</span>
+                    </a>
+
+                    <a href="My-Tickets.html?action=raise" class="nav-link">
+                        <span class="nav-icon">＋</span>
+                        <span>Raise a Ticket</span>
+                    </a>
+
+                    <a href="customer-profile.html" class="nav-link">
+                        <span class="nav-icon">◎</span>
+                        <span>My Account</span>
+                    </a>
+
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">co.</div>
+                    <div>
+                        <strong>Cookie</strong>
+                        <span>Customer Portal</span>
+                    </div>
+                </div>
+                <a href="#" class="signout-link" id="logoutButton">
+    <span>↪</span>
+    Sign out
+</a>
+
+            </div>
+
+        </aside>
+
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <span class="eyebrow">CUSTOMER PORTAL / OVERVIEW</span>
+                    <h1>Dashboard</h1>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Support Active
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="profile">
+                        <div class="profile-avatar" id="profileAvatar">CU</div>
+                        <div class="profile-info">
+                            <strong id="profileName">Customer</strong>
+                            <span>Customer</span>
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <!-- WELCOME -->
+
+                    <section class="dashboard-welcome">
+
+                        <div>
+                            <span class="section-eyebrow">YOUR COOKIE ACCOUNT</span>
+                            <h2 id="welcomeHeading">Welcome back.</h2>
+                            <p>Here's an overview of your support activity and account.</p>
+                        </div>
+
+                        <a href="My-Tickets.html?action=raise" class="primary-button">
+                            <span>＋</span> Raise a Ticket
+                        </a>
+
+                    </section>
+
+                    <!-- ACCOUNT STRIP -->
+
+                    <section class="account-strip">
+
+                        <div class="account-avatar" id="accountAvatar">CU</div>
+
+                        <div class="account-strip-info">
+                            <span>YOUR ACCOUNT</span>
+                            <strong id="accountName">Customer</strong>
+                            <small id="accountId">User ID: -</small>
+                        </div>
+
+                        <a href="customer-profile.html" class="text-link">
+                            View Account <span>→</span>
+                        </a>
+
+                    </section>
+
+                    <!-- STATISTICS -->
+
+                    <section class="summary-grid">
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>Total Tickets</span>
+                                <div class="summary-icon neutral"><i class="bi bi-ticket"></i></div>
+                            </div>
+                            <div class="summary-value" id="totalCount">00</div>
+                            <span class="summary-caption">All support requests</span>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>Open</span>
+                                <div class="summary-icon orange">◷</div>
+                            </div>
+                            <div class="summary-value" id="openCount">00</div>
+                            <span class="summary-caption">Awaiting support</span>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>In Progress</span>
+                                <div class="summary-icon blue">↻</div>
+                            </div>
+                            <div class="summary-value" id="progressCount">00</div>
+                            <span class="summary-caption">Being handled</span>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>Resolved</span>
+                                <div class="summary-icon green">✓</div>
+                            </div>
+                            <div class="summary-value" id="resolvedCount">00</div>
+                            <span class="summary-caption">Successfully resolved</span>
+                        </div>
+
+                    </section>
+
+                    <!-- RECENT TICKETS -->
+
+                    <section class="dashboard-panel">
+
+                        <div class="dashboard-panel-header">
+                            <div>
+                                <h3>Recent Support Requests</h3>
+                                <p>Keep track of your latest conversations with our team.</p>
+                            </div>
+
+                            <a href="My-Tickets.html" class="text-link">
+                                View All <span>→</span>
+                            </a>
+                        </div>
+
+                        <div class="recent-ticket-list" id="recentTicketList">
+
+                            <div class="recent-ticket-empty">
+                                Loading your recent tickets...
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- QUICK ACTIONS -->
+
+                    <section class="quick-actions-section">
+
+                        <div class="quick-actions-heading">
+                            <h3>Quick Actions</h3>
+                            <p>Access the things you need most.</p>
+                        </div>
+
+                        <div class="quick-actions-grid">
+
+                            <a href="My-Tickets.html?action=raise" class="quick-action-card">
+                                <div class="quick-action-icon orange-icon">＋</div>
+                                <div>
+                                    <strong>Raise a Ticket</strong>
+                                    <span>Tell us about an issue</span>
+                                </div>
+                                <span class="quick-action-arrow">→</span>
+                            </a>
+
+                            <a href="My-Tickets.html" class="quick-action-card">
+                                <div class="quick-action-icon blue-icon"><i class="bi bi-ticket"></i></div>
+                                <div>
+                                    <strong>Track Requests</strong>
+                                    <span>Check your ticket status</span>
+                                </div>
+                                <span class="quick-action-arrow">→</span>
+                            </a>
+
+                            <a href="customer-profile.html" class="quick-action-card">
+                                <div class="quick-action-icon green-icon">◎</div>
+                                <div>
+                                    <strong>My Account</strong>
+                                    <span>View your account details</span>
+                                </div>
+                                <span class="quick-action-arrow">→</span>
+                            </a>
+
+                        </div>
+
+                    </section>
+
+                    <!-- SUPPORT FOOTER -->
+
+                    <div class="support-note">
+                        <div class="support-note-icon">i</div>
+                        <div>
+                            <strong>We're here to help.</strong>
+                            <p>If you have a question or need assistance, raise a support ticket and our team will get back to you.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- PROJECT SCRIPTS -->
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            // =========================================
+            // ROLE ENFORCEMENT
+            // =========================================
+
+            if (
+                typeof requireRole !== "function" ||
+                !requireRole("R003")
+            ) {
+                return;
+            }
+
+            let currentUser = null;
+            let tickets = [];
+
+            // =========================================
+            // ELEMENTS
+            // =========================================
+
+            const pageLoader = document.getElementById("pageLoader");
+            const loaderTitle = document.getElementById("loaderTitle");
+            const loaderMessage = document.getElementById("loaderMessage");
+            const retryLoadButton = document.getElementById("retryLoadButton");
+
+            const recentTicketList = document.getElementById("recentTicketList");
+
+            // =========================================
+            // LOADER
+            // =========================================
+
+            function showLoader(title, message, showRetry = false) {
+
+                document.body.classList.add("is-loading");
+
+                pageLoader.style.display = "flex";
+
+                loaderTitle.textContent = title;
+                loaderMessage.textContent = message;
+
+                retryLoadButton.hidden = !showRetry;
+
+            }
+
+            function hideLoader() {
+
+                pageLoader.style.display = "none";
+
+                document.body.classList.remove("is-loading");
+
+            }
+
+            // =========================================
+            // HELPERS
+            // =========================================
+
+            function escapeHTML(value) {
+
+                return String(value ?? "").replace(/[&<>"']/g, char => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                })[char]);
+
+            }
+
+            function formatDate(value) {
+
+                if (!value) return "-";
+
+                const date = new Date(value);
+
+                if (isNaN(date.getTime())) {
+                    return String(value);
+                }
+
+                return date.toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+
+            }
+
+            function getInitials(name) {
+
+                return String(name || "Customer")
+                    .trim()
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .map(part => part[0].toUpperCase())
+                    .join("");
+
+            }
+
+            function statusClass(status) {
+
+                return String(status || "")
+                    .toLowerCase()
+                    .replace(/\s+/g, "-");
+
+            }
+
+            // =========================================
+            // CURRENT LOGGED-IN USER
+            // =========================================
+
+            function loadCurrentUser() {
+
+                if (typeof getCookieUser !== "function") {
+                    throw new Error("Session functions are not loaded.");
+                }
+
+                currentUser = getCookieUser();
+
+                if (!currentUser || !currentUser.user_id) {
+                    throw new Error("Your session has expired. Please log in again.");
+                }
+
+                const fullName = currentUser.full_name || "Customer";
+                const initials = getInitials(fullName);
+
+                document.getElementById("profileName").textContent = fullName;
+                document.getElementById("profileAvatar").textContent = initials;
+
+                document.getElementById("welcomeHeading").textContent =
+                    `Welcome back, ${fullName.split(/\s+/)[0]}.`;
+
+                document.getElementById("accountName").textContent = fullName;
+                document.getElementById("accountAvatar").textContent = initials;
+
+                document.getElementById("accountId").textContent =
+                    `User ID: ${currentUser.user_id}`;
+
+            }
+
+            // =========================================
+            // FETCH CUSTOMER TICKETS
+            // =========================================
+
+            async function loadTickets() {
+
+                const response = await sendToCookieBackend("getCustomerTickets", {
+                    user_id: currentUser.user_id
+                });
+
+                if (!response.success) {
+                    throw new Error(response.message || "Unable to load your tickets.");
+                }
+
+                tickets = (response.tickets || []).map(ticket => ({
+                    id: ticket.ticket_id,
+                    subject: ticket.subject,
+                    category: ticket.category,
+                    priority: ticket.priority,
+                    status: ticket.status,
+                    createdAt: ticket.created_at,
+                    updatedAt: ticket.updated_at,
+                    employee: ticket.assigned_employee_name || "Not assigned",
+                    proofUrl: ticket.resolution_proof_url || ""
+                }));
+
+                updateStats();
+                renderRecentTickets();
+
+                document.getElementById("sidebarTicketCount").textContent =
+                    tickets.length;
+
+            }
+
+            // =========================================
+            // UPDATE DASHBOARD STATISTICS
+            // =========================================
+
+            function updateStats() {
+
+                document.getElementById("totalCount").textContent =
+                    String(tickets.length).padStart(2, "0");
+
+                document.getElementById("openCount").textContent =
+                    String(tickets.filter(ticket =>
+                        ticket.status === "Open"
+                    ).length).padStart(2, "0");
+
+                document.getElementById("progressCount").textContent =
+                    String(tickets.filter(ticket =>
+                        ticket.status === "In Progress"
+                    ).length).padStart(2, "0");
+
+                document.getElementById("resolvedCount").textContent =
+                    String(tickets.filter(ticket =>
+                        ticket.status === "Resolved"
+                    ).length).padStart(2, "0");
+
+            }
+
+            // =========================================
+            // RENDER RECENT TICKETS
+            // =========================================
+
+            function renderRecentTickets() {
+
+                recentTicketList.innerHTML = "";
+
+                if (tickets.length === 0) {
+
+                    recentTicketList.innerHTML = `
+                        <div class="recent-ticket-empty">
+                            You haven't raised any support tickets yet.
+                            <a href="My-Tickets.html?action=raise">Raise your first ticket →</a>
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+                const recentTickets = [...tickets]
+                    .sort((a, b) => {
+                        return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+                    })
+                    .slice(0, 4);
+
+                recentTickets.forEach(ticket => {
+
+                    const link = document.createElement("a");
+
+                    link.href = "My-Tickets.html";
+                    link.className = "recent-ticket";
+
+                    const iconClass =
+                        ticket.status === "Resolved"
+                            ? "green-icon"
+                            : ticket.status === "In Progress"
+                                ? "blue-icon"
+                                : "orange-icon";
+
+                    const icon =
+                        ticket.status === "Resolved"
+                            ? "✓"
+                            : ticket.status === "In Progress"
+                                ? "↻"
+                                : "▤";
+
+                    link.innerHTML = `
+                        <div class="recent-ticket-icon ${iconClass}">
+                            ${icon}
+                        </div>
+
+                        <div class="recent-ticket-info">
+                            <strong>${escapeHTML(ticket.subject)}</strong>
+                            <span>
+                                ${escapeHTML(ticket.id)}
+                                · Opened ${escapeHTML(formatDate(ticket.createdAt))}
+                            </span>
+                        </div>
+
+                        <span class="status-badge ${statusClass(ticket.status)}">
+                            ${escapeHTML(ticket.status)}
+                        </span>
+
+                        <span class="recent-arrow">→</span>
+                    `;
+
+                    recentTicketList.appendChild(link);
+
+                });
+
+            }
+
+            // =========================================
+            // INITIALIZE DASHBOARD
+            // =========================================
+
+            async function initializePage() {
+
+                showLoader(
+                    "Loading Dashboard",
+                    "Fetching your account and support activity..."
+                );
+
+                try {
+
+                    loadCurrentUser();
+
+                    await loadTickets();
+
+                    hideLoader();
+
+                } catch (error) {
+
+                    console.error("Customer dashboard error:", error);
+
+                    showLoader(
+                        "Unable to load Dashboard",
+                        error.message || "Something went wrong. Please try again.",
+                        true
+                    );
+
+                }
+
+            }
+
+            // =========================================
+            // RETRY
+            // =========================================
+
+            retryLoadButton.addEventListener("click", initializePage);
+
+            // =========================================
+            // START
+            // =========================================
+
+            await initializePage();
+
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#191E1B">
+    <title>Cookie | My Tickets</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="My-Tickets.css">
+
+    <style>
+        .ticket-details-loader {
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            padding: 30px 18px;
+            color: var(--text, #F2EBDD);
+        }
+        .ticket-details-loader[hidden],
+        #ticketDetailsContent[hidden] { display: none !important; }
+        .ticket-details-spinner {
+            width: 38px;
+            height: 38px;
+            border: 3px solid rgba(229, 139, 69, .22);
+            border-top-color: var(--orange, #E58B45);
+            border-radius: 50%;
+            animation: ticketDetailsSpin .8s linear infinite;
+            margin-bottom: 5px;
+        }
+        .ticket-details-loader strong { font-size: 15px; font-weight: 700; }
+        .ticket-details-loader p { margin: 0; color: var(--secondary, #B7B9AD); font-size: 13px; }
+        .ticket-details-loader button {
+            margin-top: 8px; padding: 9px 16px; border: 1px solid var(--border, #39423B);
+            border-radius: 8px; background: var(--surface, #2C3530); color: var(--text, #F2EBDD);
+            font: inherit; cursor: pointer;
+        }
+        @keyframes ticketDetailsSpin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+
+<body class="is-loading" data-required-role="R003">
+
+    <!-- PAGE LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner"></div>
+            <h2 id="loaderTitle">Loading My Tickets</h2>
+            <p id="loaderMessage">Fetching your support requests...</p>
+            <button type="button" id="retryLoadButton" hidden>
+                Retry Loading
+            </button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">co.</div>
+                <div class="brand-details">
+                    <h2>cookie</h2>
+                    <span>HOUSE OF RUDRAKSH</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <span class="nav-label">CUSTOMER PORTAL</span>
+
+                <nav class="main-nav">
+
+                    <a href="customer-home.html" class="nav-link">
+                        <span class="nav-icon">⌂</span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="My-Tickets.html" class="nav-link active" aria-current="page">
+                        <span class="nav-icon">
+                            <i class="bi bi-ticket"></i>
+                        </span>
+                        <span>My Tickets</span>
+                        <span class="nav-count" id="sidebarTicketCount">0</span>
+                    </a>
+
+                    <button type="button" class="nav-link" id="sidebarRaiseTicket">
+                        <span class="nav-icon">＋</span>
+                        <span>Raise a Ticket</span>
+                    </button>
+
+                    <a href="customer-profile.html" class="nav-link">
+                        <span class="nav-icon">◎</span>
+                        <span>My Account</span>
+                    </a>
+
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+
+                
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">co.</div>
+                    <div>
+                        <strong>Cookie Support</strong>
+                        <span>Customer Portal</span>
+                    </div>
+                </div>
+                <a href="#" class="signout-link" id="logoutButton">
+    <span>↪</span>
+    Sign out
+</a>
+
+            </div>
+
+        </aside>
+
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-heading">
+                    <span class="eyebrow">CUSTOMER PORTAL / SUPPORT</span>
+                    <h1>My Tickets</h1>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Support Active
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="profile">
+                        <div class="profile-avatar" id="profileAvatar">CU</div>
+                        <div class="profile-info">
+                            <strong id="profileName">Customer</strong>
+                            <span>Customer</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="main-content">
+
+                <div class="content-wrapper">
+
+                    <div class="page-heading">
+
+                        <div class="page-heading-copy">
+                            <span class="section-eyebrow">YOUR SUPPORT CENTRE</span>
+                            <h2>How can we help you?</h2>
+                            <p>Track your support requests and stay updated on their progress.</p>
+                        </div>
+
+                        <button type="button" class="primary-button" id="raiseTicketButton">
+                            <span class="button-plus">＋</span>
+                            Raise a Ticket
+                        </button>
+
+                    </div>
+
+                    <div class="summary-grid">
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>Total Tickets</span>
+                                <div class="summary-icon neutral"><i class="bi bi-ticket"></i></div>
+                            </div>
+                            <div class="summary-value" id="totalCount">00</div>
+                            <span class="summary-caption">All your support requests</span>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>Open</span>
+                                <div class="summary-icon orange">◷</div>
+                            </div>
+                            <div class="summary-value" id="openCount">00</div>
+                            <span class="summary-caption">Awaiting support</span>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>In Progress</span>
+                                <div class="summary-icon blue">↻</div>
+                            </div>
+                            <div class="summary-value" id="progressCount">00</div>
+                            <span class="summary-caption">Currently being handled</span>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-top">
+                                <span>Resolved</span>
+                                <div class="summary-icon green">✓</div>
+                            </div>
+                            <div class="summary-value" id="resolvedCount">00</div>
+                            <span class="summary-caption">Successfully resolved</span>
+                        </div>
+
+                    </div>
+
+                    <div class="tickets-panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-heading-copy">
+                                <span class="panel-eyebrow">TICKET DIRECTORY</span>
+                                <h3>Your Support Requests</h3>
+                                <p>View and manage all your submitted tickets.</p>
+                            </div>
+
+                            <span class="record-count" id="recordCount">00 TICKETS</span>
+
+                        </div>
+
+                        <div class="filter-bar">
+
+                            <div class="search-box">
+                                <span class="search-icon">⌕</span>
+                                <input
+                                    type="text"
+                                    id="searchInput"
+                                    placeholder="Search ticket ID, subject or category..."
+                                    aria-label="Search tickets"
+                                >
+                            </div>
+
+                            <select id="statusFilter" aria-label="Filter by status">
+                                <option value="">All Statuses</option>
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+
+                            <select id="priorityFilter" aria-label="Filter by priority">
+                                <option value="">All Priorities</option>
+                                <option value="Urgent">Urgent</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>TICKET ID</th>
+                                        <th>SUBJECT</th>
+                                        <th>PRIORITY</th>
+                                        <th>STATUS</th>
+                                        <th>OPENED ON</th>
+                                        <th>LAST UPDATED</th>
+                                        <th class="action-heading">ACTION</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="ticketRows"></tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="table-footer">
+                            <span id="tableFooterText">Loading tickets...</span>
+                            <span class="footer-note">Updates appear here as your tickets progress.</span>
+                        </div>
+
+                    </div>
+
+                    <div class="support-note">
+                        <div class="support-note-icon">i</div>
+                        <div>
+                            <strong>Need to follow up?</strong>
+                            <p>Open any ticket to view its details and the latest updates from our support team.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- TICKET DETAILS MODAL -->
+
+    <div class="modal-overlay" id="detailsModal">
+
+        <div class="modal-card details-modal" role="dialog" aria-modal="true" aria-labelledby="modalTicketId">
+
+            <div class="modal-header">
+                <div>
+                    <span class="modal-eyebrow">SUPPORT REQUEST</span>
+                    <h2 id="modalTicketId">Ticket Details</h2>
+                </div>
+                <button type="button" class="close-button" data-close="detailsModal" aria-label="Close">×</button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="ticket-details-loader" id="ticketDetailsLoader" role="status" aria-live="polite">
+                    <div class="ticket-details-spinner" id="ticketDetailsSpinner"></div>
+                    <strong id="ticketDetailsLoaderTitle">Loading ticket details</strong>
+                    <p id="ticketDetailsLoaderMessage">Please wait while we fetch the latest information.</p>
+                    <button type="button" id="retryTicketDetailsButton" hidden>Try Again</button>
+                </div>
+
+                <div id="ticketDetailsContent" hidden>
+
+                <div class="detail-heading">
+                    <div>
+                        <h3 id="modalSubject">Ticket subject</h3>
+                        <span id="modalStatus" class="status-badge">Open</span>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <span>Priority</span>
+                        <strong id="modalPriority">-</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Category</span>
+                        <strong id="modalCategory">-</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Opened On</span>
+                        <strong id="modalOpened">-</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Last Updated</span>
+                        <strong id="modalUpdated">-</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Assigned To</span>
+                        <strong id="modalEmployee">Not assigned</strong>
+                    </div>
+
+                </div>
+
+                <div class="detail-section">
+                    <h4>Your Description</h4>
+                    <p id="modalDescription"></p>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Support Team Update</h4>
+                    <p id="modalUpdate">No update has been added yet.</p>
+                </div>
+
+                <div class="detail-section" id="resolutionSection" hidden>
+                    <h4>Resolution Proof</h4>
+                    <div id="resolutionProof" class="proof-list"></div>
+                </div>
+
+                </div><!-- /ticketDetailsContent -->
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="secondary-button" data-close="detailsModal">Close</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RAISE TICKET MODAL -->
+
+    <div class="modal-overlay" id="createModal">
+
+        <div class="modal-card create-modal" role="dialog" aria-modal="true" aria-labelledby="createModalTitle">
+
+            <div class="modal-header">
+                <div>
+                    <span class="modal-eyebrow">CUSTOMER SUPPORT</span>
+                    <h2 id="createModalTitle">Raise a Ticket</h2>
+                    <p>Tell us what you need help with.</p>
+                </div>
+
+                <button type="button" class="close-button" data-close="createModal" aria-label="Close">×</button>
+            </div>
+
+            <form id="createTicketForm">
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="newSubject">Subject <span>*</span></label>
+                        <input
+                            type="text"
+                            id="newSubject"
+                            placeholder="Briefly describe your issue"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newCategory">Category <span>*</span></label>
+                        <select id="newCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="Order & Delivery">Order & Delivery</option>
+                            <option value="Payment & Billing">Payment & Billing</option>
+                            <option value="Product Issue">Product Issue</option>
+                            <option value="Account & Access">Account & Access</option>
+                            <option value="Service & Renewal">Service & Renewal</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPriority">Priority <span>*</span></label>
+                        <select id="newPriority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Urgent">Urgent</option>
+                        </select>
+                        <span class="field-hint">Choose the priority that best describes your issue.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newDescription">Description <span>*</span></label>
+                        <textarea
+                            id="newDescription"
+                            rows="5"
+                            placeholder="Explain your issue in detail..."
+                            maxlength="1500"
+                            required
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="secondary-button" data-close="createModal">Cancel</button>
+                    <button type="submit" class="primary-button" id="submitTicketButton">
+                        Submit Ticket <span>→</span>
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- PROJECT SCRIPTS -->
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            // =========================================
+            // ROLE ENFORCEMENT
+            // =========================================
+
+            if (
+                typeof requireRole !== "function" ||
+                !requireRole("R003")
+            ) {
+                return;
+            }
+
+            let tickets = [];
+            let currentUser = null;
+
+            const ticketRows = document.getElementById("ticketRows");
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+            const priorityFilter = document.getElementById("priorityFilter");
+            const createTicketForm = document.getElementById("createTicketForm");
+            const submitTicketButton = document.getElementById("submitTicketButton");
+
+            // =========================================
+            // LOADER
+            // =========================================
+
+            const pageLoader = document.getElementById("pageLoader");
+            const loaderTitle = document.getElementById("loaderTitle");
+            const loaderMessage = document.getElementById("loaderMessage");
+            const retryLoadButton = document.getElementById("retryLoadButton");
+
+            function showLoader(title, message, showRetry = false) {
+
+                document.body.classList.add("is-loading");
+
+                pageLoader.style.display = "flex";
+
+                loaderTitle.textContent = title;
+                loaderMessage.textContent = message;
+
+                retryLoadButton.hidden = !showRetry;
+
+            }
+
+            function hideLoader() {
+
+                pageLoader.style.display = "none";
+
+                document.body.classList.remove("is-loading");
+
+            }
+
+            // =========================================
+            // HELPERS
+            // =========================================
+
+            function escapeHTML(value) {
+
+                return String(value ?? "").replace(/[&<>"']/g, char => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                })[char]);
+
+            }
+
+            function statusClass(status) {
+
+                return String(status || "")
+                    .toLowerCase()
+                    .replace(/\s+/g, "-");
+
+            }
+
+            function priorityClass(priority) {
+
+                return String(priority || "").toLowerCase();
+
+            }
+
+            function formatDate(value) {
+
+                if (!value) return "-";
+
+                const date = new Date(value);
+
+                if (isNaN(date.getTime())) {
+                    return String(value);
+                }
+
+                return date.toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+
+            }
+
+            function openModal(id) {
+
+                document.getElementById(id).classList.add("show");
+                document.body.classList.add("modal-open");
+
+            }
+
+            function closeModal(id) {
+
+                document.getElementById(id).classList.remove("show");
+
+                if (!document.querySelector(".modal-overlay.show")) {
+                    document.body.classList.remove("modal-open");
+                }
+
+            }
+
+            function showEmptyState(message) {
+
+                ticketRows.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <div class="empty-icon">⌕</div>
+                            <strong>${escapeHTML(message)}</strong>
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+            // =========================================
+            // CURRENT LOGGED-IN USER
+            // =========================================
+
+            function loadCurrentUser() {
+
+                if (typeof getCookieUser !== "function") {
+                    throw new Error("Session functions are not loaded.");
+                }
+
+                currentUser = getCookieUser();
+
+                if (!currentUser || !currentUser.user_id) {
+                    throw new Error("Your session has expired. Please log in again.");
+                }
+
+                const fullName = currentUser.full_name || "Customer";
+
+                document.getElementById("profileName").textContent = fullName;
+
+                document.getElementById("profileAvatar").textContent =
+                    fullName
+                        .split(/\s+/)
+                        .filter(Boolean)
+                        .slice(0, 2)
+                        .map(part => part[0].toUpperCase())
+                        .join("");
+
+            }
+
+            // =========================================
+            // FETCH CUSTOMER TICKETS
+            // =========================================
+
+            async function loadTickets() {
+
+                try {
+
+                    const response = await sendToCookieBackend("getCustomerTickets", {
+                        user_id: currentUser.user_id
+                    });
+
+                    if (!response.success) {
+                        throw new Error(response.message || "Unable to load tickets.");
+                    }
+
+                    tickets = (response.tickets || []).map(ticket => ({
+
+                        id: ticket.ticket_id,
+                        subject: ticket.subject,
+                        category: ticket.category,
+                        priority: ticket.priority,
+                        status: ticket.status,
+                        opened: formatDate(ticket.created_at),
+                        updated: formatDate(ticket.updated_at),
+                        employee: ticket.assigned_employee_name || "Not assigned",
+                        description: ticket.description,
+                        update: "No update has been added yet.",
+                        proofUrl: ticket.resolution_proof_url || ""
+
+                    }));
+
+                    updateStats();
+                    renderTickets();
+
+                } catch (error) {
+
+                    console.error("Ticket loading error:", error);
+                    throw error;
+
+                }
+
+            }
+
+            // =========================================
+            // RENDER TICKETS
+            // =========================================
+
+            function renderTickets() {
+
+                const query = searchInput.value.trim().toLowerCase();
+                const selectedStatus = statusFilter.value;
+                const selectedPriority = priorityFilter.value;
+
+                const filtered = tickets.filter(ticket => {
+
+                    const matchesSearch = [
+                        ticket.id,
+                        ticket.subject,
+                        ticket.category
+                    ].join(" ").toLowerCase().includes(query);
+
+                    const matchesStatus =
+                        !selectedStatus || ticket.status === selectedStatus;
+
+                    const matchesPriority =
+                        !selectedPriority || ticket.priority === selectedPriority;
+
+                    return matchesSearch && matchesStatus && matchesPriority;
+
+                });
+
+                ticketRows.innerHTML = "";
+
+                if (filtered.length === 0) {
+
+                    showEmptyState(
+                        tickets.length === 0
+                            ? "You haven't raised any tickets yet."
+                            : "No tickets found. Try changing your search or filters."
+                    );
+
+                } else {
+
+                    filtered.forEach(ticket => {
+
+                        const row = document.createElement("tr");
+
+                        row.innerHTML = `
+                            <td>
+                                <span class="ticket-id">${escapeHTML(ticket.id)}</span>
+                            </td>
+
+                            <td>
+                                <div class="subject-cell">
+                                    <strong>${escapeHTML(ticket.subject)}</strong>
+                                    <span>${escapeHTML(ticket.category)}</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="priority-badge ${priorityClass(ticket.priority)}">
+                                    ${escapeHTML(ticket.priority)}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge ${statusClass(ticket.status)}">
+                                    ${escapeHTML(ticket.status)}
+                                </span>
+                            </td>
+
+                            <td>${escapeHTML(ticket.opened)}</td>
+
+                            <td>${escapeHTML(ticket.updated)}</td>
+
+                            <td class="action-cell">
+                                <button type="button" class="view-button" data-ticket-id="${escapeHTML(ticket.id)}">
+                                    View <span>→</span>
+                                </button>
+                            </td>
+                        `;
+
+                        ticketRows.appendChild(row);
+
+                    });
+
+                }
+
+                document.getElementById("recordCount").textContent =
+                    `${String(filtered.length).padStart(2, "0")} TICKETS`;
+
+                document.getElementById("tableFooterText").textContent =
+                    `Showing ${filtered.length} of ${tickets.length} tickets`;
+
+                document.getElementById("sidebarTicketCount").textContent =
+                    tickets.length;
+
+            }
+
+            // =========================================
+            // UPDATE SUMMARY CARDS
+            // =========================================
+
+            function updateStats() {
+
+                document.getElementById("totalCount").textContent =
+                    String(tickets.length).padStart(2, "0");
+
+                document.getElementById("openCount").textContent =
+                    String(tickets.filter(t => t.status === "Open").length).padStart(2, "0");
+
+                document.getElementById("progressCount").textContent =
+                    String(tickets.filter(t => t.status === "In Progress").length).padStart(2, "0");
+
+                document.getElementById("resolvedCount").textContent =
+                    String(tickets.filter(t => t.status === "Resolved").length).padStart(2, "0");
+
+            }
+
+            // =========================================
+            // FETCH AND OPEN TICKET DETAILS
+            // =========================================
+
+            let activeDetailsTicketId = null;
+            let detailsRequestId = 0;
+
+            function setTicketDetailsLoading(mode, message = "") {
+                const loader = document.getElementById("ticketDetailsLoader");
+                const spinner = document.getElementById("ticketDetailsSpinner");
+                const title = document.getElementById("ticketDetailsLoaderTitle");
+                const messageElement = document.getElementById("ticketDetailsLoaderMessage");
+                const retryButton = document.getElementById("retryTicketDetailsButton");
+                const content = document.getElementById("ticketDetailsContent");
+
+                loader.hidden = false;
+                content.hidden = true;
+                retryButton.hidden = true;
+
+                if (mode === "loading") {
+                    spinner.hidden = false;
+                    title.textContent = "Loading ticket details";
+                    messageElement.textContent = "Please wait while we fetch the latest information.";
+                } else {
+                    spinner.hidden = true;
+                    title.textContent = "Unable to load ticket details";
+                    messageElement.textContent = message || "Something went wrong. Please try again.";
+                    retryButton.hidden = false;
+                }
+            }
+
+            async function openDetails(ticketId) {
+
+                activeDetailsTicketId = ticketId;
+                const requestId = ++detailsRequestId;
+
+                document.getElementById("modalTicketId").textContent = ticketId;
+                setTicketDetailsLoading("loading");
+                openModal("detailsModal");
+
+                try {
+
+                    const response = await sendToCookieBackend("getTicketDetails", {
+                        ticket_id: ticketId,
+                        user_id: currentUser.user_id
+                    });
+
+                    if (requestId !== detailsRequestId) return;
+
+                    if (!response.success || !response.ticket) {
+                        throw new Error(response.message || "Unable to fetch ticket details.");
+                    }
+
+                    const ticket = response.ticket;
+
+                    document.getElementById("modalTicketId").textContent = ticket.ticket_id;
+                    document.getElementById("modalSubject").textContent = ticket.subject || "-";
+                    document.getElementById("modalOpened").textContent = formatDate(ticket.created_at);
+                    document.getElementById("modalUpdated").textContent = formatDate(ticket.updated_at);
+                    document.getElementById("modalPriority").textContent = ticket.priority || "-";
+                    document.getElementById("modalCategory").textContent = ticket.category || "-";
+                    document.getElementById("modalEmployee").textContent =
+                        ticket.assigned_employee_name || "Not assigned";
+
+                    document.getElementById("modalDescription").textContent =
+                        ticket.description || "-";
+
+                    document.getElementById("modalUpdate").textContent =
+                        "No update has been added yet.";
+
+                    const statusElement = document.getElementById("modalStatus");
+
+                    statusElement.textContent = ticket.status || "Open";
+                    statusElement.className =
+                        `status-badge ${statusClass(ticket.status || "Open")}`;
+
+                    const resolutionSection = document.getElementById("resolutionSection");
+                    const proofContainer = document.getElementById("resolutionProof");
+
+                    proofContainer.innerHTML = "";
+
+                    if (ticket.status === "Resolved" && ticket.resolution_proof_url) {
+
+                        resolutionSection.hidden = false;
+
+                        const proofLink = document.createElement("a");
+                        proofLink.className = "proof-item";
+                        proofLink.href = ticket.resolution_proof_url;
+                        proofLink.target = "_blank";
+                        proofLink.rel = "noopener noreferrer";
+                        proofLink.textContent = "View resolution proof ↗";
+
+                        proofContainer.appendChild(proofLink);
+
+                    } else {
+
+                        resolutionSection.hidden = true;
+
+                    }
+
+                    document.getElementById("ticketDetailsLoader").hidden = true;
+                    document.getElementById("ticketDetailsContent").hidden = false;
+
+                } catch (error) {
+
+                    if (requestId !== detailsRequestId) return;
+
+                    console.error("Ticket details error:", error);
+                    setTicketDetailsLoading("error", error.message);
+
+                }
+
+            }
+
+            document.getElementById("retryTicketDetailsButton").addEventListener("click", () => {
+                if (activeDetailsTicketId) openDetails(activeDetailsTicketId);
+            });
+
+            // =========================================
+            // SEARCH AND FILTERS
+            // =========================================
+
+            searchInput.addEventListener("input", renderTickets);
+            statusFilter.addEventListener("change", renderTickets);
+            priorityFilter.addEventListener("change", renderTickets);
+
+            // =========================================
+            // OPEN TICKET DETAILS
+            // =========================================
+
+            ticketRows.addEventListener("click", event => {
+
+                const button = event.target.closest("[data-ticket-id]");
+
+                if (!button) return;
+
+                openDetails(button.dataset.ticketId);
+
+            });
+
+            // =========================================
+            // OPEN CREATE MODAL
+            // =========================================
+
+            document.getElementById("raiseTicketButton").addEventListener("click", () => {
+                openModal("createModal");
+            });
+
+            document.getElementById("sidebarRaiseTicket").addEventListener("click", () => {
+                openModal("createModal");
+            });
+
+            const helpRaiseTicket = document.getElementById("helpRaiseTicket");
+
+if (helpRaiseTicket) {
+    helpRaiseTicket.addEventListener("click", () => {
+        openModal("createModal");
+    });
+}
+
+            // =========================================
+            // CLOSE MODALS
+            // =========================================
+
+            document.querySelectorAll("[data-close]").forEach(button => {
+
+                button.addEventListener("click", () => {
+                    closeModal(button.dataset.close);
+                });
+
+            });
+
+            document.querySelectorAll(".modal-overlay").forEach(overlay => {
+
+                overlay.addEventListener("click", event => {
+
+                    if (event.target === overlay) {
+                        closeModal(overlay.id);
+                    }
+
+                });
+
+            });
+
+            document.addEventListener("keydown", event => {
+
+                if (event.key === "Escape") {
+
+                    document.querySelectorAll(".modal-overlay.show").forEach(modal => {
+                        closeModal(modal.id);
+                    });
+
+                }
+
+            });
+
+            // =========================================
+            // CREATE TICKET
+            // =========================================
+
+            createTicketForm.addEventListener("submit", async event => {
+
+                event.preventDefault();
+
+                const subject = document.getElementById("newSubject").value.trim();
+                const category = document.getElementById("newCategory").value;
+                const priority = document.getElementById("newPriority").value;
+                const description = document.getElementById("newDescription").value.trim();
+
+                if (!subject || !category || !priority || !description) {
+                    alert("Please complete all required fields.");
+                    return;
+                }
+
+                submitTicketButton.disabled = true;
+                submitTicketButton.textContent = "Submitting...";
+
+                try {
+
+                    const response = await sendToCookieBackend("createTicket", {
+                        user_id: currentUser.user_id,
+                        subject,
+                        category,
+                        priority,
+                        description
+                    });
+
+                    if (!response.success) {
+                        throw new Error(response.message || "Ticket creation failed.");
+                    }
+
+                    createTicketForm.reset();
+
+                    closeModal("createModal");
+
+                    await loadTickets();
+
+                    alert(
+                        `Your ticket ${response.ticket_id} has been created successfully.`
+                    );
+
+                } catch (error) {
+
+                    console.error("Ticket creation error:", error);
+                    alert(error.message || "Unable to create ticket. Please try again.");
+
+                } finally {
+
+                    submitTicketButton.disabled = false;
+                    submitTicketButton.innerHTML = 'Submit Ticket <span>→</span>';
+
+                }
+
+            });
+
+            // =========================================
+            // INITIALIZE PAGE
+            // =========================================
+
+            async function initializePage() {
+
+                showLoader(
+                    "Loading My Tickets",
+                    "Fetching your support requests..."
+                );
+
+                try {
+
+                    loadCurrentUser();
+                    await loadTickets();
+
+                    hideLoader();
+
+                } catch (error) {
+
+                    console.error("Customer portal initialization error:", error);
+
+                    showLoader(
+                        "Unable to load My Tickets",
+                        error.message || "Something went wrong. Please try again.",
+                        true
+                    );
+
+                }
+
+            }
+
+            retryLoadButton.addEventListener("click", initializePage);
+
+            // =========================================
+            // OPEN RAISE TICKET MODAL FROM OVERVIEW
+            // =========================================
+
+            const params = new URLSearchParams(window.location.search);
+            const shouldRaiseTicket = params.get("action") === "raise";
+
+            if (shouldRaiseTicket) {
+
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    window.location.pathname
+                );
+
+            }
+
+            await initializePage();
+
+            if (shouldRaiseTicket && !document.body.classList.contains("is-loading")) {
+                openModal("createModal");
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

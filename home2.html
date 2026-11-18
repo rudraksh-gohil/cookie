@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Employee Dashboard</title>
+</head>
+
+<body data-required-role="R002">
+
+    <script src="js/session.js"></script>
+    <script>
+        const user = getCookieUser();
+
+        if (requireRole("R002") && user) {
+            window.location.replace("employee-home.html");
+        }
+    </script>
+
+</body>
+</html>

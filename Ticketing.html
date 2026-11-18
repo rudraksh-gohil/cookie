@@ -1,0 +1,1217 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie | Ticket Management</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Ticket.css">
+</head>
+
+<body data-required-role="R001" class="is-loading">
+
+    <!-- LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-card">
+            <div class="loader-spinner"></div>
+            <h2 id="loaderTitle">Loading Ticket Management</h2>
+            <p id="loaderMessage">Verifying your access and preparing tickets...</p>
+            <button type="button" id="retryLoadButton" hidden>Retry loading</button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <a class="brand" href="home1.html">
+                <span class="brand-icon">co.</span>
+                <span class="brand-details">
+                    <strong>cookie</strong>
+                    <small>HOUSE OF RUDRAKSH</small>
+                </span>
+            </a>
+
+            <div class="nav-label">WORKSPACE</div>
+
+            <div class="workspace-chip">
+                <span class="status-dot"></span>
+                <span>Shared workspace</span>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+
+                <a class="nav-link" href="home1.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+                        </svg>
+                    </span>
+                    <span>Overview</span>
+                </a>
+
+                <a class="nav-link" href="Customer.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <span>Customers</span>
+                </a>
+
+                <a class="nav-link" href="Supplier.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 7h14l-4-4" />
+                            <path d="M21 7 17 11" />
+                            <path d="M17 17H3l4 4" />
+                            <path d="m3 17 4-4" />
+                        </svg>
+                    </span>
+                    <span>Suppliers</span>
+                </a>
+
+                <a class="nav-link" href="Renewal.html">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                    </span>
+                    <span>Renewals</span>
+                </a>
+
+                <a class="nav-link active" href="Ticket.html" aria-current="page">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m12 3 9 5-9 5-9-5z" />
+                            <path d="M3 8v9l9 5 9-5V8" />
+                            <path d="M12 13v9" />
+                        </svg>
+                    </span>
+                    <span>Ticketing</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-footer">
+                    <div class="footer-brand-mark">H</div>
+                    <div>
+                        <strong>House of Rudraksh</strong>
+                        <small>Management workspace</small>
+                    </div>
+                </div>
+
+                <a class="signout-link" href="#" id="logoutButton">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 17l5-5-5-5" />
+                        <path d="M15 12H3" />
+                        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+                    </svg>
+                    <span>Sign out</span>
+                </a>
+
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-area">
+
+            <header class="topbar">
+                <div class="topbar-heading">
+                    <h2>Ticket Management</h2>
+                    <p>Manage customer support requests and assignments</p>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="workspace-status">
+                        <span class="status-dot"></span>
+                        Workspace active
+                    </div>
+
+                    <div class="topbar-divider"></div>
+
+                    <span class="date" id="currentDate"></span>
+                    <div class="profile-avatar" id="profileAvatar">A</div>
+                </div>
+            </header>
+
+            <section class="main-content">
+                <div class="content-wrapper">
+
+                    <!-- PAGE INTRO -->
+                    <div class="page-intro">
+                        <div>
+                            <span class="eyebrow">CUSTOMER SUPPORT / TICKETS</span>
+                            <h1>Ticket Management</h1>
+                            <p>Track issues, manage priorities and assign tickets to your team.</p>
+                        </div>
+
+                        <button class="primary-button" id="newTicketButton" type="button">
+                            <span>＋</span> New ticket
+                        </button>
+                    </div>
+
+                    <!-- SUMMARY -->
+                    <section class="stats-grid">
+
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">Total tickets</span>
+                                <span class="stat-icon orange"><i class="bi bi-ticket"></i></span>
+                            </div>
+                            <strong class="stat-number" id="totalCount">0</strong>
+                            <span class="stat-caption">All support requests</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">Open</span>
+                                <span class="stat-icon blue">○</span>
+                            </div>
+                            <strong class="stat-number" id="openCount">0</strong>
+                            <span class="stat-caption">Awaiting assignment</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">In progress</span>
+                                <span class="stat-icon amber">◷</span>
+                            </div>
+                            <strong class="stat-number" id="progressCount">0</strong>
+                            <span class="stat-caption">Currently being handled</span>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">Resolved</span>
+                                <span class="stat-icon green">✓</span>
+                            </div>
+                            <strong class="stat-number" id="resolvedCount">0</strong>
+                            <span class="stat-caption">Successfully resolved</span>
+                        </article>
+
+                    </section>
+
+                    <!-- TICKET TABLE -->
+                    <section class="ticket-section">
+
+                        <div class="section-heading">
+                            <div>
+                                <span class="eyebrow">SUPPORT DIRECTORY</span>
+                                <h2>All tickets</h2>
+                                <p>Review and manage customer requests.</p>
+                            </div>
+
+                            <span class="record-count" id="recordCount">0 RECORDS</span>
+                        </div>
+
+                        <div class="toolbar">
+
+                            <div class="search-box">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="11" cy="11" r="7" />
+                                    <path d="m16 16 4 4" />
+                                </svg>
+
+                                <input
+                                    type="search"
+                                    id="searchInput"
+                                    placeholder="Search ticket, customer, mobile number or subject..."
+                                >
+                            </div>
+
+                            <select id="statusFilter">
+                                <option value="">All statuses</option>
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+
+                            <select id="priorityFilter">
+                                <option value="">All priorities</option>
+                                <option value="Urgent">Urgent</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>TICKET ID</th>
+                                        <th>CUSTOMER / SUBJECT</th>
+                                        <th>MOBILE NUMBER</th>
+                                        <th>PRIORITY</th>
+                                        <th>ASSIGNED TO</th>
+                                        <th>STATUS</th>
+                                        <th>OPENED</th>
+                                        <th>CLOSED</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="ticketRows"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-footer">
+                            <span id="tableSummary">Showing 0 tickets</span>
+                            <span>COOKIE <span class="footer-separator">/</span> TICKET MANAGEMENT</span>
+                        </div>
+
+                    </section>
+
+                    <footer class="dashboard-footer">
+                        <span>COOKIE <span class="footer-separator">/</span> HOUSE OF RUDRAKSH</span>
+                        <span>Ticket Management</span>
+                    </footer>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- TICKET DETAIL MODAL -->
+    <div class="modal-overlay" id="ticketModal" hidden>
+        <div class="ticket-modal">
+
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow" id="modalTicketId">TICKET DETAILS</span>
+                    <h2 id="modalTitle">Ticket details</h2>
+                </div>
+
+                <button type="button" class="close-button" id="closeModal">×</button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <span>Customer</span>
+                        <strong id="modalCustomer">—</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Mobile number</span>
+                        <strong id="modalMobile">—</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Opened on</span>
+                        <strong id="modalDate">—</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Priority</span>
+                        <strong id="modalPriority">—</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Current status</span>
+                        <strong id="modalStatus">—</strong>
+                    </div>
+
+                </div>
+
+                <div class="description-block">
+                    <span class="field-label">ISSUE DESCRIPTION</span>
+                    <p id="modalDescription"></p>
+                </div>
+
+                <!-- EXISTING RESOLUTION PROOF -->
+                <div class="form-field proof-field">
+
+                    <label>
+                        Resolution proof
+                    </label>
+
+                    <p class="field-hint">
+                        Resolution proof is uploaded by the assigned employee from their ticket workspace.
+                    </p>
+
+                    <div id="proofFileList" class="proof-file-list"></div>
+
+                </div>
+
+                <!-- ASSIGNMENT AND STATUS -->
+                <div class="form-grid">
+
+                    <div class="form-field">
+                        <label for="assignEmployee">Assign employee</label>
+                        <select id="assignEmployee">
+                            <option value="">Unassigned</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="editPriority">Priority</label>
+                        <select id="editPriority">
+                            <option>Low</option>
+                            <option>Medium</option>
+                            <option>High</option>
+                            <option>Urgent</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field full-field">
+                        <label for="editStatus">Ticket status</label>
+                        <select id="editStatus">
+                            <option>Open</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                            <option>Closed</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-field notes-field">
+                    <label for="internalNote">Internal note</label>
+                    <textarea id="internalNote" rows="3" placeholder="Internal notes are not saved yet..." disabled></textarea>
+                    <small class="field-hint">Internal notes are not connected to the backend yet.</small>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="secondary-button" id="cancelModal">Cancel</button>
+                <button type="button" class="primary-button" id="saveTicket">Save assignment</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- NEW TICKET MODAL -->
+    <div class="modal-overlay" id="newTicketModal" hidden>
+        <div class="ticket-modal">
+
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">SUPPORT DIRECTORY</span>
+                    <h2>Create a ticket</h2>
+                </div>
+
+                <button type="button" class="close-button" id="closeNewTicket">×</button>
+            </div>
+
+            <form id="newTicketForm" class="modal-body">
+
+                <div class="form-field">
+                    <label for="newMobile">Registered customer mobile number</label>
+                    <input
+                        id="newMobile"
+                        type="tel"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        placeholder="Enter registered mobile number"
+                        maxlength="15"
+                        required
+                    >
+                    <small class="field-hint">
+                        The mobile number must belong to an existing registered customer account.
+                    </small>
+                </div>
+
+                <div class="form-field">
+                    <label for="newSubject">Subject</label>
+                    <input id="newSubject" type="text" placeholder="Briefly describe the issue" required>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+                        <label for="newPriority">Priority</label>
+                        <select id="newPriority">
+                            <option>Medium</option>
+                            <option>Low</option>
+                            <option>High</option>
+                            <option>Urgent</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="newAssign">Assign employee</label>
+                        <select id="newAssign">
+                            <option value="">Unassigned</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-field">
+                    <label for="newDescription">Issue description</label>
+                    <textarea id="newDescription" rows="4" placeholder="Describe the issue..." required></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="secondary-button" id="cancelNewTicket">Cancel</button>
+                    <button type="submit" class="primary-button" id="createTicketButton">Create ticket</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- COMMON SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/logout.js"></script>
+
+    <!-- TICKET MANAGEMENT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const loader = document.getElementById("pageLoader");
+            const retryButton = document.getElementById("retryLoadButton");
+
+            const tickets = [];
+            let employees = [];
+            let selectedTicketId = null;
+
+            const rows = document.getElementById("ticketRows");
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+            const priorityFilter = document.getElementById("priorityFilter");
+
+            const assignEmployee = document.getElementById("assignEmployee");
+            const newAssign = document.getElementById("newAssign");
+
+            /* DATE FORMAT */
+
+            function formatTicketDate(value) {
+                if (!value) return "—";
+
+                let date;
+
+                if (value instanceof Date) {
+                    date = value;
+                } else {
+                    date = new Date(value);
+                }
+
+                if (isNaN(date.getTime())) {
+                    return String(value);
+                }
+
+                return new Intl.DateTimeFormat("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }).format(date);
+            }
+
+            /* LOADER */
+
+            function hideLoader() {
+                loader.hidden = true;
+                document.body.classList.remove("is-loading");
+            }
+
+            function showLoader(message) {
+                document.body.classList.add("is-loading");
+                loader.hidden = false;
+
+                document.getElementById("loaderTitle").textContent =
+                    "Loading Ticket Management";
+
+                document.getElementById("loaderMessage").textContent = message;
+                retryButton.hidden = true;
+            }
+
+            /* HTML ESCAPING */
+
+            function escapeHTML(value) {
+                return String(value ?? "").replace(/[&<>"']/g, char => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                })[char]);
+            }
+
+            /* NORMALIZE MOBILE NUMBER */
+
+            function normalizeMobile(value) {
+                return String(value || "").replace(/\D/g, "");
+            }
+
+            /* STATUS CLASS */
+
+            function statusClass(status) {
+                return String(status || "")
+                    .toLowerCase()
+                    .replace(/\s+/g, "-");
+            }
+
+            /* EMPLOYEE DROPDOWNS */
+
+            function populateEmployeeDropdowns() {
+
+                const dropdowns = [assignEmployee, newAssign];
+
+                dropdowns.forEach(select => {
+
+                    const selectedValue = select.value;
+
+                    select.innerHTML = '<option value="">Unassigned</option>';
+
+                    employees.forEach(employee => {
+
+                        const option = document.createElement("option");
+
+                        option.value = employee.employee_id;
+
+                        const details = [
+                            employee.employee_name,
+                            employee.designation,
+                            employee.department
+                        ].filter(Boolean);
+
+                        option.textContent = details.join(" · ");
+
+                        select.appendChild(option);
+
+                    });
+
+                    if (
+                        selectedValue &&
+                        employees.some(e => e.employee_id === selectedValue)
+                    ) {
+                        select.value = selectedValue;
+                    }
+
+                });
+
+            }
+
+            async function loadEmployees() {
+
+                const result = await sendToCookieBackend("getActiveEmployees");
+
+                if (!result.success) {
+                    throw new Error(
+                        result.message || "Unable to load active employees."
+                    );
+                }
+
+                employees = Array.isArray(result.employees)
+                    ? result.employees
+                    : [];
+
+                populateEmployeeDropdowns();
+            }
+
+            /* STATISTICS */
+
+            function updateStats() {
+
+                document.getElementById("totalCount").textContent =
+                    tickets.length;
+
+                document.getElementById("openCount").textContent =
+                    tickets.filter(t => t.status === "Open").length;
+
+                document.getElementById("progressCount").textContent =
+                    tickets.filter(t => t.status === "In Progress").length;
+
+                document.getElementById("resolvedCount").textContent =
+                    tickets.filter(t =>
+                        t.status === "Resolved" || t.status === "Closed"
+                    ).length;
+            }
+
+            /* LOAD TICKETS */
+
+            async function loadTickets() {
+
+                const result = await sendToCookieBackend("getAdminTickets");
+
+                if (!result.success) {
+                    throw new Error(
+                        result.message || "Unable to load tickets."
+                    );
+                }
+
+                tickets.length = 0;
+
+                (result.tickets || []).forEach(ticket => {
+
+                    tickets.push({
+
+                        id: ticket.ticket_id,
+                        userId: ticket.user_id,
+
+                        customer: ticket.customer_name || "Customer",
+                        mobile: ticket.customer_mobile || "",
+
+                        subject: ticket.subject || "",
+                        category: ticket.category || "General",
+                        description: ticket.description || "",
+
+                        priority: ticket.priority || "Medium",
+                        status: ticket.status || "Open",
+
+                        employee: ticket.assigned_employee_name || "",
+                        employeeId: ticket.assigned_employee_id || "",
+
+                        openedDate: formatTicketDate(ticket.created_at),
+
+                        closedDate: ticket.resolved_at
+                            ? formatTicketDate(ticket.resolved_at)
+                            : "—",
+
+                        proofUrl: ticket.resolution_proof_url || ""
+
+                    });
+
+                });
+
+                updateStats();
+                renderTickets();
+            }
+
+            /* TICKET TABLE */
+
+            function renderTickets() {
+
+                const query = searchInput.value.trim().toLowerCase();
+                const mobileQuery = normalizeMobile(query);
+
+                const status = statusFilter.value;
+                const priority = priorityFilter.value;
+
+                const filtered = tickets.filter(ticket => {
+
+                    const searchableText = [
+                        ticket.id,
+                        ticket.customer,
+                        ticket.subject,
+                        ticket.employee,
+                        ticket.userId
+                    ].join(" ").toLowerCase();
+
+                    const normalizedTicketMobile =
+                        normalizeMobile(ticket.mobile);
+
+                    const matchesText = searchableText.includes(query);
+
+                    const matchesMobile =
+                        mobileQuery.length > 0 &&
+                        normalizedTicketMobile.includes(mobileQuery);
+
+                    const matchesSearch =
+                        !query || matchesText || matchesMobile;
+
+                    const matchesStatus =
+                        !status || ticket.status === status;
+
+                    const matchesPriority =
+                        !priority || ticket.priority === priority;
+
+                    return matchesSearch && matchesStatus && matchesPriority;
+
+                });
+
+                rows.innerHTML = "";
+
+                if (!filtered.length) {
+
+                    rows.innerHTML = `
+                        <tr>
+                            <td colspan="9" class="empty-state">
+                                ${tickets.length
+                                    ? "No tickets match your search."
+                                    : "No tickets have been created yet."}
+                            </td>
+                        </tr>
+                    `;
+
+                } else {
+
+                    filtered.forEach(ticket => {
+
+                        const tr = document.createElement("tr");
+
+                        tr.innerHTML = `
+                            <td class="ticket-id">
+                                ${escapeHTML(ticket.id)}
+                            </td>
+
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>${escapeHTML(ticket.customer)}</strong>
+                                    <span>${escapeHTML(ticket.subject)}</span>
+                                </div>
+                            </td>
+
+                            <td class="mobile-cell">
+                                ${escapeHTML(ticket.mobile || "—")}
+                            </td>
+
+                            <td>
+                                <span class="priority-badge ${statusClass(ticket.priority)}">
+                                    ${escapeHTML(ticket.priority)}
+                                </span>
+                            </td>
+
+                            <td class="employee-cell">
+                                ${escapeHTML(ticket.employee || "Unassigned")}
+                            </td>
+
+                            <td>
+                                <span class="status-badge ${statusClass(ticket.status)}">
+                                    ${escapeHTML(ticket.status)}
+                                </span>
+                            </td>
+
+                            <td class="date-cell">
+                                ${escapeHTML(ticket.openedDate)}
+                            </td>
+
+                            <td class="date-cell">
+                                ${escapeHTML(ticket.closedDate || "—")}
+                            </td>
+
+                            <td>
+                                <button
+                                    class="view-button"
+                                    type="button"
+                                    data-ticket-id="${escapeHTML(ticket.id)}">
+                                    View →
+                                </button>
+                            </td>
+                        `;
+
+                        rows.appendChild(tr);
+
+                    });
+
+                }
+
+                document.getElementById("recordCount").textContent =
+                    `${filtered.length} RECORDS`;
+
+                document.getElementById("tableSummary").textContent =
+                    `Showing ${filtered.length} of ${tickets.length} tickets`;
+            }
+
+            /* RESOLUTION PROOF DISPLAY */
+
+            function renderProofFiles(ticket) {
+
+                const proofFileList =
+                    document.getElementById("proofFileList");
+
+                proofFileList.innerHTML = "";
+
+                if (!ticket.proofUrl) {
+
+                    const empty = document.createElement("small");
+                    empty.className = "field-hint";
+                    empty.textContent = "No resolution proof uploaded.";
+
+                    proofFileList.appendChild(empty);
+                    return;
+                }
+
+                const link = document.createElement("a");
+
+                link.href = ticket.proofUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.textContent = "View resolution proof ↗";
+
+                proofFileList.appendChild(link);
+            }
+
+            /* OPEN TICKET */
+
+            function openTicket(ticketId) {
+
+                const ticket = tickets.find(t => t.id === ticketId);
+
+                if (!ticket) return;
+
+                selectedTicketId = ticket.id;
+
+                document.getElementById("modalTicketId").textContent =
+                    ticket.id;
+
+                document.getElementById("modalTitle").textContent =
+                    ticket.subject;
+
+                document.getElementById("modalCustomer").textContent =
+                    ticket.customer;
+
+                document.getElementById("modalMobile").textContent =
+                    ticket.mobile || "—";
+
+                document.getElementById("modalDate").textContent =
+                    ticket.openedDate;
+
+                document.getElementById("modalPriority").textContent =
+                    ticket.priority;
+
+                document.getElementById("modalStatus").textContent =
+                    ticket.status;
+
+                document.getElementById("modalDescription").textContent =
+                    ticket.description;
+
+                assignEmployee.value = ticket.employeeId || "";
+
+                document.getElementById("editPriority").value =
+                    ticket.priority;
+
+                document.getElementById("editStatus").value =
+                    ticket.status;
+
+                document.getElementById("internalNote").value = "";
+
+                renderProofFiles(ticket);
+
+                document.getElementById("ticketModal").hidden = false;
+            }
+
+            /* CLOSE TICKET MODAL */
+
+            function closeTicketModal() {
+
+                document.getElementById("ticketModal").hidden = true;
+
+                selectedTicketId = null;
+            }
+
+            /* SAVE ASSIGNMENT */
+
+
+/* SAVE ASSIGNMENT */
+
+
+/* SAVE ADMIN TICKET CHANGES */
+
+async function saveTicketChanges() {
+    const ticket = tickets.find(t => t.id === selectedTicketId);
+    if (!ticket) return;
+
+    const employeeId = assignEmployee.value;
+    const priority = document.getElementById("editPriority").value;
+    const status = document.getElementById("editStatus").value;
+
+    const saveButton = document.getElementById("saveTicket");
+    const originalText = saveButton.textContent;
+
+    try {
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving changes...";
+
+        showLoader("Updating ticket details...");
+
+        const result = await sendToCookieBackend("updateAdminTicket", {
+            ticket_id: ticket.id,
+            employee_id: employeeId,
+            priority: priority,
+            status: status
+        });
+
+        if (!result.success) {
+            throw new Error(
+                result.message || "Unable to update ticket."
+            );
+        }
+
+        // Refresh the table with the latest backend data.
+        await loadTickets();
+
+        // Close the modal after successful saving.
+        closeTicketModal();
+
+        hideLoader();
+
+        alert("Ticket updated successfully.");
+
+    } catch (error) {
+        console.error("Ticket update failed:", error);
+
+        hideLoader();
+
+        alert(
+            error.message ||
+            "Unable to update ticket. Please try again."
+        );
+
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = originalText;
+    }
+}
+
+
+/* CREATE TICKET */
+
+async function createTicket(event) {
+    event.preventDefault();
+
+    const mobile = document.getElementById("newMobile").value.trim();
+    const subject = document.getElementById("newSubject").value.trim();
+    const description = document.getElementById("newDescription").value.trim();
+    const priority = document.getElementById("newPriority").value;
+    const employeeId = newAssign.value;
+
+    const normalizedMobile = normalizeMobile(mobile);
+
+    if (!mobile || !subject || !description) {
+        alert("Please complete all required fields.");
+        return;
+    }
+
+    if (normalizedMobile.length !== 10) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+    }
+
+    const submitButton = document.getElementById("createTicketButton");
+    const originalText = submitButton.textContent;
+
+    try {
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating...";
+
+        showLoader("Creating your ticket...");
+
+        const result = await sendToCookieBackend("createAdminTicket", {
+            mobile,
+            subject,
+            priority,
+            description,
+            category: "General"
+        });
+
+        if (!result.success) {
+            throw new Error(result.message || "Unable to create ticket.");
+        }
+
+        // Close and reset the dialog immediately after successful creation.
+        document.getElementById("newTicketForm").reset();
+        document.getElementById("newTicketModal").hidden = true;
+
+        // Assign employee if one was selected.
+        let assignmentMessage = "";
+
+        if (employeeId) {
+            const assignmentResult = await sendToCookieBackend("assignTicket", {
+                ticket_id: result.ticket_id,
+                employee_id: employeeId
+            });
+
+            if (!assignmentResult.success) {
+                assignmentMessage =
+                    "\n\nHowever, employee assignment failed: " +
+                    (assignmentResult.message || "Please assign it manually.");
+            }
+        }
+
+        // Refresh the ticket table while the loading overlay is visible.
+        await loadTickets();
+
+        hideLoader();
+
+        alert(
+            `Ticket ${result.ticket_id || ""} created successfully.` +
+            assignmentMessage
+        );
+
+    } catch (error) {
+        console.error("Ticket creation failed:", error);
+
+        hideLoader();
+
+        alert(
+            error.message ||
+            "Unable to create ticket. Please try again."
+        );
+
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+    }
+}
+
+            /* TABLE EVENTS */
+
+            rows.addEventListener("click", event => {
+
+                const button = event.target.closest("[data-ticket-id]");
+
+                if (button) {
+                    openTicket(button.dataset.ticketId);
+                }
+
+            });
+
+            /* FILTER EVENTS */
+
+            [searchInput, statusFilter, priorityFilter].forEach(element => {
+
+                element.addEventListener("input", renderTickets);
+                element.addEventListener("change", renderTickets);
+
+            });
+
+            /* SAVE AND CLOSE DETAILS */
+
+            document.getElementById("saveTicket").addEventListener(
+                "click",
+                saveTicketChanges
+            );
+
+            document.getElementById("closeModal").addEventListener(
+                "click",
+                closeTicketModal
+            );
+
+            document.getElementById("cancelModal").addEventListener(
+                "click",
+                closeTicketModal
+            );
+
+            /* NEW TICKET MODAL */
+
+            document.getElementById("newTicketButton").addEventListener(
+                "click",
+                () => {
+                    document.getElementById("newTicketForm").reset();
+                    document.getElementById("newTicketModal").hidden = false;
+                }
+            );
+
+            document.getElementById("closeNewTicket").addEventListener(
+                "click",
+                () => {
+                    document.getElementById("newTicketModal").hidden = true;
+                }
+            );
+
+            document.getElementById("cancelNewTicket").addEventListener(
+                "click",
+                () => {
+                    document.getElementById("newTicketModal").hidden = true;
+                }
+            );
+
+            document.getElementById("newTicketForm").addEventListener(
+                "submit",
+                createTicket
+            );
+
+            /* CLOSE MODALS ON BACKDROP CLICK */
+
+            document.querySelectorAll(".modal-overlay").forEach(modal => {
+
+                modal.addEventListener("click", event => {
+
+                    if (event.target === modal) {
+
+                        if (modal.id === "ticketModal") {
+                            closeTicketModal();
+                        } else {
+                            modal.hidden = true;
+                        }
+
+                    }
+
+                });
+
+            });
+
+            /* CURRENT DATE */
+
+            document.getElementById("currentDate").textContent =
+                new Intl.DateTimeFormat("en-IN", {
+                    weekday: "short",
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }).format(new Date());
+
+            /* INITIALIZATION */
+
+            async function initialize() {
+
+                showLoader("Verifying your access...");
+
+                try {
+
+                    if (
+                        typeof requireRole !== "function" ||
+                        !requireRole("R001")
+                    ) {
+                        return;
+                    }
+
+                    const user = getCookieUser?.();
+
+                    if (user) {
+
+                        const name =
+                            user.name ||
+                            user.full_name ||
+                            user.username ||
+                            "Admin";
+
+                        document.getElementById("profileAvatar").textContent =
+                            name.charAt(0).toUpperCase();
+
+                    }
+
+                    await Promise.all([
+                        loadEmployees(),
+                        loadTickets()
+                    ]);
+
+                    hideLoader();
+
+                } catch (error) {
+
+                    console.error("Ticket Management initialization failed:", error);
+
+                    document.getElementById("loaderTitle").textContent =
+                        "Unable to load Ticket Management";
+
+                    document.getElementById("loaderMessage").textContent =
+                        error.message || "Please try again.";
+
+                    retryButton.hidden = false;
+                }
+            }
+
+            retryButton.addEventListener("click", initialize);
+
+            initialize();
+
+        });
+    </script>
+
+</body>
+</html>
