@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#191E1B">
+
+    <title>Cookie | Create Account</title>
+
+    <link rel="stylesheet" href="Signup.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body>
+
+    <main class="signup-page">
+
+        <!-- LEFT BRAND PANEL -->
+        <section class="signup-brand-panel">
+
+            <a class="brand" href="index.html">
+                <span class="brand-mark">co.</span>
+                <span class="brand-name">cookie</span>
+            </a>
+
+            <div class="brand-message">
+
+                <span class="eyebrow">HOUSE OF RUDRAKSH</span>
+
+                <h1>
+                    A better way<br>
+                    to <span>stay connected.</span>
+                </h1>
+
+                <p>
+                    Create your customer account and stay connected
+                    with your services, company and everyday updates.
+                    Everything you need, in one place.
+                </p>
+
+            </div>
+
+            <div class="brand-bottom">
+                <span class="brand-line"></span>
+                <span>People. Services. Progress.</span>
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT FORM PANEL -->
+        <section class="signup-form-panel">
+
+            <div class="signup-form-wrap">
+
+                <a class="mobile-brand" href="index.html">
+                    <span class="brand-mark">co.</span>
+                    <span class="brand-name">cookie</span>
+                </a>
+
+
+                <!-- REGISTRATION DETAILS -->
+                <div id="signupDetailsView">
+
+                    <div class="form-heading">
+
+                        <span class="eyebrow">GET STARTED</span>
+
+                        <h2>Create your account</h2>
+
+                        <p>
+                            Enter your details to register with Cookie.
+                        </p>
+
+                    </div>
+
+
+                    <form id="signupDetailsForm">
+
+                        <label for="fullName">Full name</label>
+
+                        <input
+                            id="fullName"
+                            type="text"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            maxlength="100"
+                            required
+                        >
+
+
+                        <label for="phone">Phone number</label>
+
+                        <input
+                            id="phone"
+                            type="tel"
+                            placeholder="Enter your phone number"
+                            autocomplete="tel"
+                            maxlength="15"
+                            required
+                        >
+
+
+                        <label for="email">Email address</label>
+
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your email address"
+                            autocomplete="email"
+                            maxlength="150"
+                            required
+                        >
+
+
+                        <label for="address">Address</label>
+
+                        <textarea
+                            id="address"
+                            placeholder="Enter your address"
+                            autocomplete="street-address"
+                            maxlength="500"
+                            rows="3"
+                            required
+                        ></textarea>
+
+
+                        <label for="company">Company</label>
+
+                        <select id="company" required>
+
+                            <option value="">Loading companies...</option>
+
+                        </select>
+
+                        <p class="field-hint">
+                            Select the company associated with your account.
+                        </p>
+
+
+                        <button
+                            type="submit"
+                            class="signup-button"
+                            id="requestOtpButton"
+                        >
+                            Continue <span>→</span>
+                        </button>
+
+
+                        <p class="form-note" id="signupDetailsNote" role="status">
+                            Your email will be verified before your account is created.
+                        </p>
+
+                    </form>
+
+                </div>
+
+
+                <!-- OTP AND PASSWORD VIEW -->
+                <div id="signupVerificationView" class="auth-view" hidden>
+
+                    <div class="form-heading">
+
+                        <span class="eyebrow">EMAIL VERIFICATION</span>
+
+                        <h2>Verify your email</h2>
+
+                        <p>
+                            We've sent a six-digit verification code to
+                            <strong id="verificationEmail"></strong>.
+                        </p>
+
+                    </div>
+
+
+                    <form id="signupVerificationForm">
+
+                        <label for="signupOtp">Verification code</label>
+
+                        <input
+                            id="signupOtp"
+                            type="text"
+                            inputmode="numeric"
+                            maxlength="6"
+                            placeholder="Enter 6-digit OTP"
+                            autocomplete="one-time-code"
+                            pattern="[0-9]{6}"
+                            required
+                        >
+
+
+                        <label for="signupPassword">Create password</label>
+
+                        <input
+                            id="signupPassword"
+                            type="password"
+                            placeholder="Minimum 8 characters"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+
+                        <label for="signupConfirmPassword">Confirm password</label>
+
+                        <input
+                            id="signupConfirmPassword"
+                            type="password"
+                            placeholder="Re-enter your password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+
+                        <button
+                            type="submit"
+                            class="signup-button"
+                            id="completeSignupButton"
+                        >
+                            Create account <span>→</span>
+                        </button>
+
+
+                        <p class="form-note" id="signupVerificationNote" role="status">
+                            Your verification code expires in 10 minutes.
+                        </p>
+
+                    </form>
+
+
+                    <div class="verification-actions">
+
+                        <button type="button" id="resendSignupOtp">
+                            Resend OTP
+                        </button>
+
+                        <button type="button" class="back-button" id="backToDetails">
+                            ← Edit details
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUCCESS VIEW -->
+                <div id="signupSuccessView" class="auth-view" hidden>
+
+                    <div class="success-content">
+
+                        <div class="success-mark">
+                            ✓
+                        </div>
+
+                        <span class="eyebrow">REGISTRATION COMPLETE</span>
+
+                        <h2>You're all set.</h2>
+
+                        <p>
+                            Your Cookie account has been created successfully.
+                            You can now sign in using your phone number or User ID.
+                        </p>
+
+                        <a href="login.html" class="signup-button success-login-button">
+                            Go to sign in <span>→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="signup-footer">
+
+                <span>© <span id="year"></span> Cookie</span>
+
+                <span>HOUSE OF RUDRAKSH</span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/signup.js"></script>
+
+    <script>
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>

@@ -16,6 +16,154 @@
     <link rel="stylesheet" href="My-Tickets.css">
     <link rel="stylesheet" href="Customer-Pages.css">
     <link rel="icon" type="image/png" href="/favicon.png">
+
+    <style>
+        
+.account-strip {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.account-company-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    min-width: 190px;
+    max-width: 280px;
+}
+
+.company-badge-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(229, 139, 69, 0.13);
+    color: var(--orange);
+    font-size: 19px;
+}
+
+.account-company-badge div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.account-company-badge small {
+    color: var(--secondary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+}
+
+.account-company-badge strong {
+    color: var(--ivory);
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .account-company-badge {
+        order: 3;
+        margin-left: 0;
+        width: 100%;
+        max-width: none;
+    }
+
+    .account-strip > .text-link {
+        margin-left: auto;
+    }
+}
+
+        /* =========================================
+           RECENT TICKET EMPTY STATE
+        ========================================= */
+
+        .recent-ticket-empty {
+            width: 100%;
+            min-height: 220px;
+            padding: 35px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-align: center;
+            box-sizing: border-box;
+            border: 1px dashed var(--border, #39423B);
+            border-radius: 12px;
+            background: var(--panel, #252D28);
+        }
+
+        .recent-ticket-empty .empty-ticket-icon {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: rgba(229, 139, 69, 0.12);
+            color: var(--orange, #E58B45);
+            font-size: 25px;
+        }
+
+        .recent-ticket-empty strong {
+            color: var(--ivory, #F2EBDD);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .recent-ticket-empty p {
+            max-width: 360px;
+            margin: 0;
+            color: var(--secondary, #B7B9AD);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .recent-ticket-empty a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 5px;
+            padding: 11px 18px;
+            border-radius: 8px;
+            background: var(--orange, #E58B45);
+            color: #191E1B;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .recent-ticket-empty a:hover {
+            background: var(--orange-hover, #F09A54);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .recent-ticket-empty {
+                min-height: 200px;
+                padding: 28px 16px;
+            }
+
+            .recent-ticket-empty p {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body class="is-loading" data-required-role="R003">
@@ -84,10 +232,11 @@
                         <span>Customer Portal</span>
                     </div>
                 </div>
+
                 <a href="#" class="signout-link" id="logoutButton">
-    <span>↪</span>
-    Sign out
-</a>
+                    <span>↪</span>
+                    Sign out
+                </a>
 
             </div>
 
@@ -117,7 +266,6 @@
                             <strong id="profileName">Customer</strong>
                             <span>Customer</span>
                         </div>
-                        
                     </div>
 
                 </div>
@@ -129,7 +277,6 @@
                 <div class="content-wrapper">
 
                     <!-- WELCOME -->
-
                     <section class="dashboard-welcome">
 
                         <div>
@@ -145,25 +292,31 @@
                     </section>
 
                     <!-- ACCOUNT STRIP -->
+                    
+<section class="account-strip">
 
-                    <section class="account-strip">
+    <div class="account-avatar" id="accountAvatar">CU</div>
 
-                        <div class="account-avatar" id="accountAvatar">CU</div>
+    <div class="account-strip-info">
+        <span>YOUR ACCOUNT</span>
+        <strong id="accountName">Customer</strong>
+        <small id="accountId">User ID: -</small>
+    </div>
 
-                        <div class="account-strip-info">
-                            <span>YOUR ACCOUNT</span>
-                            <strong id="accountName">Customer</strong>
-                            <small id="accountId">User ID: -</small>
-                        </div>
+    <div class="account-company-badge">
+        <span class="company-badge-icon">
+            <i class="bi bi-building"></i>
+        </span>
+        <div>
+            <small>REGISTERED COMPANY</small>
+            <strong id="accountCompany">Loading...</strong>
+        </div>
+    </div>
 
-                        <a href="customer-profile.html" class="text-link">
-                            View Account <span>→</span>
-                        </a>
+</section>
 
-                    </section>
 
                     <!-- STATISTICS -->
-
                     <section class="summary-grid">
 
                         <div class="summary-card">
@@ -205,7 +358,6 @@
                     </section>
 
                     <!-- RECENT TICKETS -->
-
                     <section class="dashboard-panel">
 
                         <div class="dashboard-panel-header">
@@ -230,7 +382,6 @@
                     </section>
 
                     <!-- QUICK ACTIONS -->
-
                     <section class="quick-actions-section">
 
                         <div class="quick-actions-heading">
@@ -272,7 +423,6 @@
                     </section>
 
                     <!-- SUPPORT FOOTER -->
-
                     <div class="support-note">
                         <div class="support-note-icon">i</div>
                         <div>
@@ -290,7 +440,6 @@
     </div>
 
     <!-- PROJECT SCRIPTS -->
-
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/session.js"></script>
@@ -438,6 +587,40 @@
             }
 
             // =========================================
+            // LOAD COMPANY NAME
+            // =========================================
+
+            async function loadCompanyName() {
+
+    const companyElement = document.getElementById("accountCompany");
+
+    try {
+
+        const response = await sendToCookieBackend("getAvailableCompanies");
+
+        if (!response.success) {
+            throw new Error("Unable to fetch companies.");
+        }
+
+        const company = (response.companies || []).find(item =>
+            String(item.company_id).trim() ===
+            String(currentUser.company_id || "").trim()
+        );
+
+        companyElement.textContent = company
+            ? company.company_name
+            : "Not available";
+
+    } catch (error) {
+
+        console.error("Company loading error:", error);
+        companyElement.textContent = "Not available";
+
+    }
+
+}
+
+            // =========================================
             // FETCH CUSTOMER TICKETS
             // =========================================
 
@@ -509,8 +692,21 @@
 
                     recentTicketList.innerHTML = `
                         <div class="recent-ticket-empty">
-                            You haven't raised any support tickets yet.
-                            <a href="My-Tickets.html?action=raise">Raise your first ticket →</a>
+                            <div class="empty-ticket-icon">
+                                <i class="bi bi-ticket-perforated"></i>
+                            </div>
+
+                            <strong>No support requests yet</strong>
+
+                            <p>
+                                You haven't raised any tickets yet.
+                                When you do, your latest support requests will appear here.
+                            </p>
+
+                            <a href="My-Tickets.html?action=raise">
+                                <span>＋</span>
+                                Raise Your First Ticket
+                            </a>
                         </div>
                     `;
 
@@ -586,6 +782,8 @@
 
                     loadCurrentUser();
 
+                    await loadCompanyName();
+
                     await loadTickets();
 
                     hideLoader();
@@ -621,4 +819,5 @@
     </script>
 
 </body>
+
 </html>

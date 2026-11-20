@@ -1,7 +1,22 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
+.signup-link {
+    margin-top: 22px;
+    text-align: center;
+    color: var(--secondary);
+    font-size: 11px;
+}
 
+.signup-link a {
+    color: var(--orange);
+    font-weight: 700;
+    margin-left: 3px;
+}
+
+.signup-link a:hover {
+    color: var(--orange-hover);
+}
 /* =========================
    COOKIE DESIGN SYSTEM
 ========================= */

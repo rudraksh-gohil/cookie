@@ -81,10 +81,11 @@
                         <span>Customer Portal</span>
                     </div>
                 </div>
+
                 <a href="#" class="signout-link" id="logoutButton">
-    <span>↪</span>
-    Sign out
-</a>
+                    <span>↪</span>
+                    Sign out
+                </a>
 
             </div>
 
@@ -222,6 +223,11 @@
                         <div class="profile-information-grid">
 
                             <div class="profile-field">
+                                <span>REGISTERED COMPANY</span>
+                                <strong id="fieldCompany">Loading...</strong>
+                            </div>
+
+                            <div class="profile-field">
                                 <span>REGISTRATION DATE</span>
                                 <strong>Not available</strong>
                             </div>
@@ -324,210 +330,250 @@
 
 
     <script>
-let currentUser = null;
 
-const pageLoader = document.getElementById("pageLoader");
-const loaderTitle = document.getElementById("loaderTitle");
-const loaderMessage = document.getElementById("loaderMessage");
-const retryLoadButton = document.getElementById("retryLoadButton");
+        let currentUser = null;
 
-
-/* =========================================
-   PAGE INITIALIZATION
-========================================= */
-
-document.addEventListener("DOMContentLoaded", async function () {
-
-    // Only R003 customers can access this page.
-    if (
-        typeof requireRole !== "function" ||
-        !requireRole("R003")
-    ) {
-        return;
-    }
-
-    retryLoadButton.addEventListener("click", initializePage);
-
-    await initializePage();
-
-});
+        const pageLoader = document.getElementById("pageLoader");
+        const loaderTitle = document.getElementById("loaderTitle");
+        const loaderMessage = document.getElementById("loaderMessage");
+        const retryLoadButton = document.getElementById("retryLoadButton");
 
 
-/* =========================================
-   LOADER
-========================================= */
+        /* =========================================
+           PAGE INITIALIZATION
+        ========================================= */
 
-function showLoader(title, message, showRetry = false) {
+        document.addEventListener("DOMContentLoaded", async function () {
 
-    document.body.classList.add("is-loading");
-
-    pageLoader.style.display = "flex";
-
-    loaderTitle.textContent = title;
-    loaderMessage.textContent = message;
-
-    retryLoadButton.hidden = !showRetry;
-
-}
-
-
-function hideLoader() {
-
-    document.body.classList.remove("is-loading");
-
-    pageLoader.style.display = "none";
-
-}
-
-
-/* =========================================
-   INITIALIZE PAGE
-========================================= */
-
-async function initializePage() {
-
-    showLoader(
-        "Loading your account",
-        "Please wait while we retrieve your account information."
-    );
-
-    try {
-
-        loadCurrentUser();
-
-// Keep the loader visible briefly, then reveal the profile.
-setTimeout(() => {
-    hideLoader();
-}, 700);
-
-// Load ticket count independently.
-loadTicketCount();
-
-    } catch (error) {
-
-        console.error("Account initialization error:", error);
-
-        showLoader(
-            "Unable to load your account",
-            error.message || "Something went wrong. Please try again.",
-            true
-        );
-
-    }
-
-}
-
-
-/* =========================================
-   LOAD LOGGED-IN CUSTOMER
-========================================= */
-
-function loadCurrentUser() {
-
-    if (typeof getCookieUser !== "function") {
-        throw new Error("Session service is unavailable.");
-    }
-
-    currentUser = getCookieUser();
-
-    if (!currentUser || !currentUser.user_id) {
-        throw new Error(
-            "Your login session could not be found. Please log in again."
-        );
-    }
-
-    const fullName = currentUser.full_name || "Customer";
-    const userId = currentUser.user_id;
-    const email = currentUser.email || "Not provided";
-    const phone = currentUser.phone || "Not provided";
-    const role = currentUser.role_name || "Customer";
-
-    const initials = getInitials(fullName);
-
-
-    // TOPBAR
-
-    document.getElementById("profileAvatar").textContent = initials;
-    document.getElementById("profileName").textContent = fullName;
-    document.getElementById("profileRole").textContent = role;
-
-
-    // PROFILE BANNER
-
-    document.getElementById("largeAvatar").textContent = initials;
-    document.getElementById("bannerName").textContent = fullName;
-    document.getElementById("bannerRole").textContent = role;
-    document.getElementById("bannerUserId").textContent = userId;
-
-
-    // PERSONAL INFORMATION
-
-    document.getElementById("fieldFullName").textContent = fullName;
-    document.getElementById("fieldUserId").textContent = userId;
-    document.getElementById("fieldEmail").textContent = email;
-    document.getElementById("fieldPhone").textContent = phone;
-    document.getElementById("fieldAccountType").textContent = role;
-
-}
-
-
-/* =========================================
-   GENERATE INITIALS
-========================================= */
-
-function getInitials(name) {
-
-    return String(name)
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(part => part.charAt(0).toUpperCase())
-        .join("");
-
-}
-
-
-/* =========================================
-   LOAD CUSTOMER TICKET COUNT
-========================================= */
-
-async function loadTicketCount() {
-
-    const countElement = document.getElementById("fieldTicketCount");
-    const sidebarCount = document.getElementById("sidebarTicketCount");
-
-    try {
-
-        const response = await sendToCookieBackend(
-            "getCustomerTickets",
-            {
-                user_id: currentUser.user_id
+            // Only R003 customers can access this page.
+            if (
+                typeof requireRole !== "function" ||
+                !requireRole("R003")
+            ) {
+                return;
             }
-        );
 
-        if (!response || !response.success) {
-            throw new Error(
-                response?.message || "Unable to retrieve your tickets."
-            );
+            retryLoadButton.addEventListener("click", initializePage);
+
+            await initializePage();
+
+        });
+
+
+        /* =========================================
+           LOADER
+        ========================================= */
+
+        function showLoader(title, message, showRetry = false) {
+
+            document.body.classList.add("is-loading");
+
+            pageLoader.style.display = "flex";
+
+            loaderTitle.textContent = title;
+            loaderMessage.textContent = message;
+
+            retryLoadButton.hidden = !showRetry;
+
         }
 
-        const tickets = response.tickets || [];
 
-        countElement.textContent = `${tickets.length} Submitted`;
-        sidebarCount.textContent = tickets.length;
+        function hideLoader() {
 
-    } catch (error) {
+            document.body.classList.remove("is-loading");
 
-        console.error("Ticket count loading error:", error);
+            pageLoader.style.display = "none";
 
-        countElement.textContent = "Unavailable";
-        sidebarCount.textContent = "—";
+        }
 
-    }
 
-}
-</script>
+        /* =========================================
+           INITIALIZE PAGE
+        ========================================= */
+
+        async function initializePage() {
+
+            showLoader(
+                "Loading your account",
+                "Please wait while we retrieve your account information."
+            );
+
+            try {
+
+                loadCurrentUser();
+
+                // Load registered company.
+                loadCompanyName();
+
+                // Keep the loader visible briefly, then reveal the profile.
+                setTimeout(() => {
+                    hideLoader();
+                }, 700);
+
+                // Load ticket count independently.
+                loadTicketCount();
+
+            } catch (error) {
+
+                console.error("Account initialization error:", error);
+
+                showLoader(
+                    "Unable to load your account",
+                    error.message || "Something went wrong. Please try again.",
+                    true
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           LOAD LOGGED-IN CUSTOMER
+        ========================================= */
+
+        function loadCurrentUser() {
+
+            if (typeof getCookieUser !== "function") {
+                throw new Error("Session service is unavailable.");
+            }
+
+            currentUser = getCookieUser();
+
+            if (!currentUser || !currentUser.user_id) {
+                throw new Error(
+                    "Your login session could not be found. Please log in again."
+                );
+            }
+
+            const fullName = currentUser.full_name || "Customer";
+            const userId = currentUser.user_id;
+            const email = currentUser.email || "Not provided";
+            const phone = currentUser.phone || "Not provided";
+            const role = currentUser.role_name || "Customer";
+
+            const initials = getInitials(fullName);
+
+
+            // TOPBAR
+
+            document.getElementById("profileAvatar").textContent = initials;
+            document.getElementById("profileName").textContent = fullName;
+            document.getElementById("profileRole").textContent = role;
+
+
+            // PROFILE BANNER
+
+            document.getElementById("largeAvatar").textContent = initials;
+            document.getElementById("bannerName").textContent = fullName;
+            document.getElementById("bannerRole").textContent = role;
+            document.getElementById("bannerUserId").textContent = userId;
+
+
+            // PERSONAL INFORMATION
+
+            document.getElementById("fieldFullName").textContent = fullName;
+            document.getElementById("fieldUserId").textContent = userId;
+            document.getElementById("fieldEmail").textContent = email;
+            document.getElementById("fieldPhone").textContent = phone;
+            document.getElementById("fieldAccountType").textContent = role;
+
+        }
+
+
+        /* =========================================
+           LOAD REGISTERED COMPANY
+        ========================================= */
+
+        async function loadCompanyName() {
+
+            const companyElement = document.getElementById("fieldCompany");
+
+            try {
+
+                const response = await sendToCookieBackend("getAvailableCompanies");
+
+                if (!response || !response.success) {
+                    throw new Error("Unable to fetch companies.");
+                }
+
+                const company = (response.companies || []).find(item =>
+                    String(item.company_id).trim() ===
+                    String(currentUser.company_id || "").trim()
+                );
+
+                companyElement.textContent = company
+                    ? company.company_name
+                    : "Not available";
+
+            } catch (error) {
+
+                console.error("Company loading error:", error);
+                companyElement.textContent = "Not available";
+
+            }
+
+        }
+
+
+        /* =========================================
+           GENERATE INITIALS
+        ========================================= */
+
+        function getInitials(name) {
+
+            return String(name)
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(part => part.charAt(0).toUpperCase())
+                .join("");
+
+        }
+
+
+        /* =========================================
+           LOAD CUSTOMER TICKET COUNT
+        ========================================= */
+
+        async function loadTicketCount() {
+
+            const countElement = document.getElementById("fieldTicketCount");
+            const sidebarCount = document.getElementById("sidebarTicketCount");
+
+            try {
+
+                const response = await sendToCookieBackend(
+                    "getCustomerTickets",
+                    {
+                        user_id: currentUser.user_id
+                    }
+                );
+
+                if (!response || !response.success) {
+                    throw new Error(
+                        response?.message || "Unable to retrieve your tickets."
+                    );
+                }
+
+                const tickets = response.tickets || [];
+
+                countElement.textContent = `${tickets.length} Submitted`;
+                sidebarCount.textContent = tickets.length;
+
+            } catch (error) {
+
+                console.error("Ticket count loading error:", error);
+
+                countElement.textContent = "Unavailable";
+                sidebarCount.textContent = "—";
+
+            }
+
+        }
+
+    </script>
 
 </body>
 </html>
