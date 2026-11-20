@@ -348,7 +348,7 @@
                                 <thead>
                                     <tr>
                                         <th>TICKET ID</th>
-                                        <th>CUSTOMER</th>
+                                        <th>CUSTOMER / COMPANY</th>
                                         <th>MOBILE NUMBER</th>
                                         <th>SUBJECT</th>
                                         <th>PRIORITY</th>
@@ -392,7 +392,7 @@
                                 <thead>
                                     <tr>
                                         <th>TICKET ID</th>
-                                        <th>CUSTOMER</th>
+                                        <th>CUSTOMER / COMPANY</th>
                                         <th>MOBILE NUMBER</th>
                                         <th>SUBJECT</th>
                                         <th>PRIORITY</th>
@@ -464,6 +464,11 @@
                             <span>CUSTOMER NAME</span>
                             <strong id="modalCustomer">--</strong>
                         </div>
+
+                        <div class="detail-field">
+    <span>REGISTERED COMPANY</span>
+    <strong id="modalCompany">--</strong>
+</div>
 
                         <div class="detail-field">
                             <span>MOBILE NUMBER</span>
@@ -788,23 +793,24 @@
 
         function normalizeTicket(ticket) {
 
-            return {
-                id: String(ticket.ticket_id || ""),
-                userId: String(ticket.user_id || ""),
-                customer: ticket.customer_name || "Customer",
-                mobile: ticket.customer_mobile || "",
-                subject: ticket.subject || "Untitled ticket",
-                category: ticket.category || "General",
-                priority: String(ticket.priority || "Low"),
-                status: normalizeStatus(ticket.status),
-                created: ticket.created_at,
-                updated: ticket.updated_at,
-                description: ticket.description || "",
-                employee: ticket.assigned_employee_name || "",
-                proof: ticket.resolution_proof_url || "",
-                resolvedAt: ticket.resolved_at || ""
-            };
-        }
+    return {
+        id: String(ticket.ticket_id || ""),
+        userId: String(ticket.user_id || ""),
+        customer: ticket.customer_name || "Customer",
+        company: ticket.company_name || "Company not registered",
+        mobile: ticket.customer_mobile || "",
+        subject: ticket.subject || "Untitled ticket",
+        category: ticket.category || "General",
+        priority: String(ticket.priority || "Low"),
+        status: normalizeStatus(ticket.status),
+        created: ticket.created_at,
+        updated: ticket.updated_at,
+        description: ticket.description || "",
+        employee: ticket.assigned_employee_name || "",
+        proof: ticket.resolution_proof_url || "",
+        resolvedAt: ticket.resolved_at || ""
+    };
+}
 
 
         // =========================================
@@ -922,12 +928,13 @@
                 return source.filter(ticket => {
 
                     const searchable = [
-                        ticket.id,
-                        ticket.customer,
-                        ticket.mobile,
-                        ticket.subject,
-                        ticket.category
-                    ].join(" ").toLowerCase();
+    ticket.id,
+    ticket.customer,
+    ticket.company,
+    ticket.mobile,
+    ticket.subject,
+    ticket.category
+].join(" ").toLowerCase();
 
                     const matchesSearch =
                         !query ||
@@ -959,10 +966,21 @@
                 </td>
 
                 <td>
-                    <div class="customer-cell">
-                        <strong>${escapeHTML(ticket.customer)}</strong>
-                    </div>
-                </td>
+    <div class="customer-cell">
+        <strong>${escapeHTML(ticket.customer)}</strong>
+        <span style="
+            display:block;
+            margin-top:5px;
+            color:var(--orange, #E58B45);
+            font-size:12px;
+            font-weight:600;
+            white-space:normal;
+        ">
+            <i class="bi bi-building"></i>
+            ${escapeHTML(ticket.company)}
+        </span>
+    </div>
+</td>
 
                 <td>
                     <span class="mobile-number">
@@ -1076,6 +1094,7 @@
             $("modalTicketSubject").textContent = ticket.subject;
 
             $("modalCustomer").textContent = ticket.customer;
+            $("modalCompany").textContent = ticket.company;
             $("modalMobile").textContent = formatMobile(ticket.mobile);
             $("modalCategory").textContent = ticket.category;
             $("modalCreated").textContent = formatDate(ticket.created);

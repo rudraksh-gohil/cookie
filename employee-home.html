@@ -19,6 +19,65 @@
             visibility: hidden;
         }
 
+        .ticket-main {
+    min-width: 0;
+}
+.ticket-main > strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.45;
+    margin-top: 5px;
+    margin-bottom: 3px;
+    color: var(--ivory, #F2EBDD);
+}
+.ticket-customer-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+    min-width: 0;
+    margin-top: 9px;
+}
+
+.ticket-customer-details > span {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+/* Customer name */
+.ticket-customer-details > span:first-child {
+    color: var(--ivory, #F2EBDD);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Company name */
+.ticket-customer-details .ticket-company {
+    color: var(--secondary, #B7B9AD);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Category */
+.ticket-customer-details > span:last-child {
+    color: var(--secondary, #B7B9AD);
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.ticket-customer-details > span i {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
         .page-loader {
             position: fixed;
             inset: 0;
@@ -674,21 +733,19 @@ let availableTickets = [];
         // =========================================
         // NORMALIZE TICKET DATA
         // =========================================
+function normalizeTicket(ticket) {
 
-        function normalizeTicket(ticket) {
-
-            return {
-                id: ticket.ticket_id || "",
-                subject: ticket.subject || "Untitled ticket",
-                customer: ticket.customer_name || ticket.user_id || "Customer",
-                category: ticket.category || "General",
-                priority: getPriority(ticket.priority),
-                status: getStatus(ticket.status),
-                updated: ticket.updated_at || ticket.created_at || ""
-            };
-        }
-
-
+    return {
+        id: ticket.ticket_id || "",
+        subject: ticket.subject || "Untitled ticket",
+        customer: ticket.customer_name || ticket.user_id || "Customer",
+        company: ticket.company_name || "Company not registered",
+        category: ticket.category || "General",
+        priority: getPriority(ticket.priority),
+        status: getStatus(ticket.status),
+        updated: ticket.updated_at || ticket.created_at || ""
+    };
+}
         // =========================================
         // RENDER RECENT TICKETS
         // =========================================
@@ -735,10 +792,21 @@ let availableTickets = [];
                     <div class="ticket-main">
                         <div class="ticket-id">${escapeHTML(ticket.id)}</div>
                         <strong>${escapeHTML(ticket.subject)}</strong>
-                        <span>
-                            ${escapeHTML(ticket.customer)}
-                            · ${escapeHTML(ticket.category)}
-                        </span>
+                        <div class="ticket-customer-details">
+    <span>
+        <i class="bi bi-person"></i>
+        ${escapeHTML(ticket.customer)}
+    </span>
+
+    <span class="ticket-company">
+        <i class="bi bi-building"></i>
+        ${escapeHTML(ticket.company)}
+    </span>
+
+    <span>
+        ${escapeHTML(ticket.category)}
+    </span>
+</div>
                     </div>
 
                     <div class="ticket-side">

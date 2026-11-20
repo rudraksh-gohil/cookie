@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +8,41 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" href="Ticket.css">
+    <style>
+.customer-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 150px;
+}
+
+.customer-cell .customer-company {
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.customer-cell strong.customer-name {
+    color: var(--ivory);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.customer-cell .ticket-subject {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+</style>
 </head>
 
 <body data-required-role="R001" class="is-loading">
@@ -226,11 +256,8 @@
                                     <path d="m16 16 4 4" />
                                 </svg>
 
-                                <input
-                                    type="search"
-                                    id="searchInput"
-                                    placeholder="Search ticket, customer, mobile number or subject..."
-                                >
+                                <input type="search" id="searchInput"
+                                    placeholder="Search ticket, customer, company, mobile number or subject...">
                             </div>
 
                             <select id="statusFilter">
@@ -310,6 +337,10 @@
                         <span>Customer</span>
                         <strong id="modalCustomer">—</strong>
                     </div>
+                    <div class="detail-item">
+    <span>Registered Company</span>
+    <strong id="modalCompany">—</strong>
+</div>
 
                     <div class="detail-item">
                         <span>Mobile number</span>
@@ -337,6 +368,7 @@
                     <span class="field-label">ISSUE DESCRIPTION</span>
                     <p id="modalDescription"></p>
                 </div>
+                <br>
 
                 <!-- EXISTING RESOLUTION PROOF -->
                 <div class="form-field proof-field">
@@ -387,7 +419,8 @@
 
                 <div class="form-field notes-field">
                     <label for="internalNote">Internal note</label>
-                    <textarea id="internalNote" rows="3" placeholder="Internal notes are not saved yet..." disabled></textarea>
+                    <textarea id="internalNote" rows="3" placeholder="Internal notes are not saved yet..."
+                        disabled></textarea>
                     <small class="field-hint">Internal notes are not connected to the backend yet.</small>
                 </div>
 
@@ -418,15 +451,8 @@
 
                 <div class="form-field">
                     <label for="newMobile">Registered customer mobile number</label>
-                    <input
-                        id="newMobile"
-                        type="tel"
-                        inputmode="tel"
-                        autocomplete="tel"
-                        placeholder="Enter registered mobile number"
-                        maxlength="15"
-                        required
-                    >
+                    <input id="newMobile" type="tel" inputmode="tel" autocomplete="tel"
+                        placeholder="Enter registered mobile number" maxlength="15" required>
                     <small class="field-hint">
                         The mobile number must belong to an existing registered customer account.
                     </small>
@@ -664,6 +690,7 @@
                         userId: ticket.user_id,
 
                         customer: ticket.customer_name || "Customer",
+                        company: ticket.company_name || "Company not registered",
                         mobile: ticket.customer_mobile || "",
 
                         subject: ticket.subject || "",
@@ -705,12 +732,13 @@
                 const filtered = tickets.filter(ticket => {
 
                     const searchableText = [
-                        ticket.id,
-                        ticket.customer,
-                        ticket.subject,
-                        ticket.employee,
-                        ticket.userId
-                    ].join(" ").toLowerCase();
+    ticket.id,
+    ticket.customer,
+    ticket.company,
+    ticket.subject,
+    ticket.employee,
+    ticket.userId
+].join(" ").toLowerCase();
 
                     const normalizedTicketMobile =
                         normalizeMobile(ticket.mobile);
@@ -742,8 +770,8 @@
                         <tr>
                             <td colspan="9" class="empty-state">
                                 ${tickets.length
-                                    ? "No tickets match your search."
-                                    : "No tickets have been created yet."}
+                            ? "No tickets match your search."
+                            : "No tickets have been created yet."}
                             </td>
                         </tr>
                     `;
@@ -760,11 +788,14 @@
                             </td>
 
                             <td>
-                                <div class="customer-cell">
-                                    <strong>${escapeHTML(ticket.customer)}</strong>
-                                    <span>${escapeHTML(ticket.subject)}</span>
-                                </div>
+                               <div class="customer-cell">
+    <span class="customer-company">${escapeHTML(ticket.company)}</span>
+    <strong class="customer-name">${escapeHTML(ticket.customer)}</strong>
+    <span class="ticket-subject">${escapeHTML(ticket.subject)}</span>
+</div>
                             </td>
+
+                            
 
                             <td class="mobile-cell">
                                 ${escapeHTML(ticket.mobile || "—")}
@@ -864,6 +895,9 @@
 
                 document.getElementById("modalCustomer").textContent =
                     ticket.customer;
+                
+                document.getElementById("modalCompany").textContent =
+    ticket.company || "Company not registered";
 
                 document.getElementById("modalMobile").textContent =
                     ticket.mobile || "—";
@@ -907,157 +941,157 @@
             /* SAVE ASSIGNMENT */
 
 
-/* SAVE ASSIGNMENT */
+            /* SAVE ASSIGNMENT */
 
 
-/* SAVE ADMIN TICKET CHANGES */
+            /* SAVE ADMIN TICKET CHANGES */
 
-async function saveTicketChanges() {
-    const ticket = tickets.find(t => t.id === selectedTicketId);
-    if (!ticket) return;
+            async function saveTicketChanges() {
+                const ticket = tickets.find(t => t.id === selectedTicketId);
+                if (!ticket) return;
 
-    const employeeId = assignEmployee.value;
-    const priority = document.getElementById("editPriority").value;
-    const status = document.getElementById("editStatus").value;
+                const employeeId = assignEmployee.value;
+                const priority = document.getElementById("editPriority").value;
+                const status = document.getElementById("editStatus").value;
 
-    const saveButton = document.getElementById("saveTicket");
-    const originalText = saveButton.textContent;
+                const saveButton = document.getElementById("saveTicket");
+                const originalText = saveButton.textContent;
 
-    try {
-        saveButton.disabled = true;
-        saveButton.textContent = "Saving changes...";
+                try {
+                    saveButton.disabled = true;
+                    saveButton.textContent = "Saving changes...";
 
-        showLoader("Updating ticket details...");
+                    showLoader("Updating ticket details...");
 
-        const result = await sendToCookieBackend("updateAdminTicket", {
-            ticket_id: ticket.id,
-            employee_id: employeeId,
-            priority: priority,
-            status: status
-        });
+                    const result = await sendToCookieBackend("updateAdminTicket", {
+                        ticket_id: ticket.id,
+                        employee_id: employeeId,
+                        priority: priority,
+                        status: status
+                    });
 
-        if (!result.success) {
-            throw new Error(
-                result.message || "Unable to update ticket."
-            );
-        }
+                    if (!result.success) {
+                        throw new Error(
+                            result.message || "Unable to update ticket."
+                        );
+                    }
 
-        // Refresh the table with the latest backend data.
-        await loadTickets();
+                    // Refresh the table with the latest backend data.
+                    await loadTickets();
 
-        // Close the modal after successful saving.
-        closeTicketModal();
+                    // Close the modal after successful saving.
+                    closeTicketModal();
 
-        hideLoader();
+                    hideLoader();
 
-        alert("Ticket updated successfully.");
+                    alert("Ticket updated successfully.");
 
-    } catch (error) {
-        console.error("Ticket update failed:", error);
+                } catch (error) {
+                    console.error("Ticket update failed:", error);
 
-        hideLoader();
+                    hideLoader();
 
-        alert(
-            error.message ||
-            "Unable to update ticket. Please try again."
-        );
+                    alert(
+                        error.message ||
+                        "Unable to update ticket. Please try again."
+                    );
 
-    } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = originalText;
-    }
-}
-
-
-/* CREATE TICKET */
-
-async function createTicket(event) {
-    event.preventDefault();
-
-    const mobile = document.getElementById("newMobile").value.trim();
-    const subject = document.getElementById("newSubject").value.trim();
-    const description = document.getElementById("newDescription").value.trim();
-    const priority = document.getElementById("newPriority").value;
-    const employeeId = newAssign.value;
-
-    const normalizedMobile = normalizeMobile(mobile);
-
-    if (!mobile || !subject || !description) {
-        alert("Please complete all required fields.");
-        return;
-    }
-
-    if (normalizedMobile.length !== 10) {
-        alert("Please enter a valid 10-digit mobile number.");
-        return;
-    }
-
-    const submitButton = document.getElementById("createTicketButton");
-    const originalText = submitButton.textContent;
-
-    try {
-        submitButton.disabled = true;
-        submitButton.textContent = "Creating...";
-
-        showLoader("Creating your ticket...");
-
-        const result = await sendToCookieBackend("createAdminTicket", {
-            mobile,
-            subject,
-            priority,
-            description,
-            category: "General"
-        });
-
-        if (!result.success) {
-            throw new Error(result.message || "Unable to create ticket.");
-        }
-
-        // Close and reset the dialog immediately after successful creation.
-        document.getElementById("newTicketForm").reset();
-        document.getElementById("newTicketModal").hidden = true;
-
-        // Assign employee if one was selected.
-        let assignmentMessage = "";
-
-        if (employeeId) {
-            const assignmentResult = await sendToCookieBackend("assignTicket", {
-                ticket_id: result.ticket_id,
-                employee_id: employeeId
-            });
-
-            if (!assignmentResult.success) {
-                assignmentMessage =
-                    "\n\nHowever, employee assignment failed: " +
-                    (assignmentResult.message || "Please assign it manually.");
+                } finally {
+                    saveButton.disabled = false;
+                    saveButton.textContent = originalText;
+                }
             }
-        }
 
-        // Refresh the ticket table while the loading overlay is visible.
-        await loadTickets();
 
-        hideLoader();
+            /* CREATE TICKET */
 
-        alert(
-            `Ticket ${result.ticket_id || ""} created successfully.` +
-            assignmentMessage
-        );
+            async function createTicket(event) {
+                event.preventDefault();
 
-    } catch (error) {
-        console.error("Ticket creation failed:", error);
+                const mobile = document.getElementById("newMobile").value.trim();
+                const subject = document.getElementById("newSubject").value.trim();
+                const description = document.getElementById("newDescription").value.trim();
+                const priority = document.getElementById("newPriority").value;
+                const employeeId = newAssign.value;
 
-        hideLoader();
+                const normalizedMobile = normalizeMobile(mobile);
 
-        alert(
-            error.message ||
-            "Unable to create ticket. Please try again."
-        );
+                if (!mobile || !subject || !description) {
+                    alert("Please complete all required fields.");
+                    return;
+                }
 
-    } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-    }
-}
+                if (normalizedMobile.length !== 10) {
+                    alert("Please enter a valid 10-digit mobile number.");
+                    return;
+                }
+
+                const submitButton = document.getElementById("createTicketButton");
+                const originalText = submitButton.textContent;
+
+                try {
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Creating...";
+
+                    showLoader("Creating your ticket...");
+
+                    const result = await sendToCookieBackend("createAdminTicket", {
+                        mobile,
+                        subject,
+                        priority,
+                        description,
+                        category: "General"
+                    });
+
+                    if (!result.success) {
+                        throw new Error(result.message || "Unable to create ticket.");
+                    }
+
+                    // Close and reset the dialog immediately after successful creation.
+                    document.getElementById("newTicketForm").reset();
+                    document.getElementById("newTicketModal").hidden = true;
+
+                    // Assign employee if one was selected.
+                    let assignmentMessage = "";
+
+                    if (employeeId) {
+                        const assignmentResult = await sendToCookieBackend("assignTicket", {
+                            ticket_id: result.ticket_id,
+                            employee_id: employeeId
+                        });
+
+                        if (!assignmentResult.success) {
+                            assignmentMessage =
+                                "\n\nHowever, employee assignment failed: " +
+                                (assignmentResult.message || "Please assign it manually.");
+                        }
+                    }
+
+                    // Refresh the ticket table while the loading overlay is visible.
+                    await loadTickets();
+
+                    hideLoader();
+
+                    alert(
+                        `Ticket ${result.ticket_id || ""} created successfully.` +
+                        assignmentMessage
+                    );
+
+                } catch (error) {
+                    console.error("Ticket creation failed:", error);
+
+                    hideLoader();
+
+                    alert(
+                        error.message ||
+                        "Unable to create ticket. Please try again."
+                    );
+
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                }
+            }
 
             /* TABLE EVENTS */
 
@@ -1215,4 +1249,5 @@ async function createTicket(event) {
     </script>
 
 </body>
+
 </html>
