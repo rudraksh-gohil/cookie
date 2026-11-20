@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +8,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="Employee-Pages.css">
     <link rel="stylesheet" href="Employee-Tickets.css">
@@ -288,37 +288,29 @@
                     </section>
 
                     <!-- TICKET DIRECTORY -->
+                    <!-- TICKET DIRECTORY -->
                     <section class="ticket-directory">
 
                         <div class="directory-header">
-
                             <div>
                                 <span class="eyebrow">YOUR WORK QUEUE</span>
-                                <h2>Assigned ticket directory</h2>
-                                <p>Only tickets assigned to your employee account are shown here.</p>
+                                <h2>Ticket directory</h2>
+                                <p>View tickets assigned to you and open tickets available for assignment.</p>
                             </div>
-
-                            <div class="directory-total">
-                                <strong id="visibleCount">00</strong>
-                                <span>tickets displayed</span>
-                            </div>
-
                         </div>
 
-                        <!-- FILTERS -->
+                        <!-- SHARED FILTERS -->
                         <div class="filter-bar">
 
                             <div class="search-box">
                                 <span class="search-icon">⌕</span>
-                                <input
-                                    type="search"
-                                    id="searchInput"
-                                    placeholder="Search ID, customer, mobile or subject..."
-                                >
+                                <input type="search" id="searchInput"
+                                    placeholder="Search ID, customer, mobile or subject...">
                             </div>
 
                             <select id="statusFilter">
                                 <option value="">All statuses</option>
+                                <option value="Open">Open</option>
                                 <option value="Pending">Pending</option>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Resolved">Resolved</option>
@@ -337,11 +329,22 @@
 
                         </div>
 
-                        <!-- TABLE -->
+                        <!-- MY ASSIGNED TICKETS -->
+                        <div class="directory-header" style="margin-top:30px;">
+                            <div>
+                                <span class="eyebrow">PERSONAL QUEUE</span>
+                                <h2>My Assigned Tickets</h2>
+                                <p>Tickets currently assigned to your employee account.</p>
+                            </div>
+
+                            <div class="directory-total">
+                                <strong id="assignedVisibleCount">00</strong>
+                                <span>tickets displayed</span>
+                            </div>
+                        </div>
+
                         <div class="table-container">
-
                             <table class="ticket-table">
-
                                 <thead>
                                     <tr>
                                         <th>TICKET ID</th>
@@ -355,24 +358,63 @@
                                     </tr>
                                 </thead>
 
-                                <tbody id="ticketTableBody"></tbody>
-
+                                <tbody id="assignedTicketTableBody"></tbody>
                             </table>
 
-                            <div class="empty-state" id="emptyState" hidden>
+                            <div class="empty-state" id="assignedEmptyState" hidden>
                                 <div class="empty-icon">⌕</div>
-                                <strong>No tickets found</strong>
-                                <p>Try changing your search or filter criteria.</p>
-                                <button type="button" class="reset-button" onclick="resetFilters()">
-                                    Clear filters
-                                </button>
+                                <strong>No assigned tickets</strong>
+                                <p>Tickets assigned to you will appear here.</p>
                             </div>
-
                         </div>
 
                         <div class="table-footer">
-                            <span id="tableFooterText">Showing 0 assigned tickets</span>
-                            <span>Employee ticket queue</span>
+                            <span id="assignedFooterText">Showing 0 assigned tickets</span>
+                            <span>Personal queue</span>
+                        </div>
+
+                        <!-- AVAILABLE OPEN TICKETS -->
+                        <div class="directory-header" style="margin-top:45px;">
+                            <div>
+                                <span class="eyebrow">SHARED QUEUE</span>
+                                <h2>Available Open Tickets</h2>
+                                <p>Unassigned open tickets visible to all employees.</p>
+                            </div>
+
+                            <div class="directory-total">
+                                <strong id="availableVisibleCount">00</strong>
+                                <span>tickets displayed</span>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="ticket-table">
+                                <thead>
+                                    <tr>
+                                        <th>TICKET ID</th>
+                                        <th>CUSTOMER</th>
+                                        <th>MOBILE NUMBER</th>
+                                        <th>SUBJECT</th>
+                                        <th>PRIORITY</th>
+                                        <th>STATUS</th>
+                                        <th>LAST UPDATED</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="availableTicketTableBody"></tbody>
+                            </table>
+
+                            <div class="empty-state" id="availableEmptyState" hidden>
+                                <div class="empty-icon">⌕</div>
+                                <strong>No available open tickets</strong>
+                                <p>New unassigned open tickets will appear here.</p>
+                            </div>
+                        </div>
+
+                        <div class="table-footer">
+                            <span id="availableFooterText">Showing 0 available tickets</span>
+                            <span>Shared queue</span>
                         </div>
 
                     </section>
@@ -495,7 +537,8 @@
                     </div>
 
                     <p class="status-hint" id="resolutionOtpDescription">
-                        Send a verification code to the customer's registered email. The customer must share this code with you to confirm resolution.
+                        Send a verification code to the customer's registered email. The customer must share this code
+                        with you to confirm resolution.
                     </p>
                     <br>
                     <button type="button" class="secondary-button" id="sendResolutionOtpButton">
@@ -505,16 +548,9 @@
 
                     <div id="resolutionOtpEntry" hidden style="margin-top:14px;">
                         <label class="field-label" for="resolutionOtpInput">CUSTOMER OTP</label>
-                        <input
-                            type="text"
-                            id="resolutionOtpInput"
-                            inputmode="numeric"
-                            autocomplete="one-time-code"
-                            maxlength="6"
-                            pattern="[0-9]{6}"
-                            placeholder="Enter 6-digit OTP"
-                            style="width:100%; margin-top:8px;"
-                        >
+                        <input type="text" id="resolutionOtpInput" inputmode="numeric" autocomplete="one-time-code"
+                            maxlength="6" pattern="[0-9]{6}" placeholder="Enter 6-digit OTP"
+                            style="width:100%; margin-top:8px;">
                         <p class="status-hint" id="resolutionOtpStatus" aria-live="polite">
                             OTP sent. Ask the customer to share the code.
                         </p>
@@ -538,19 +574,10 @@
                             <strong id="existingProofName">Resolution proof</strong>
                             <span>Previously uploaded proof</span>
 
-                            <a
-                                id="existingProofLink"
-                                class="existing-proof-link"
-                                href="#"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >Open proof</a>
+                            <a id="existingProofLink" class="existing-proof-link" href="#" target="_blank"
+                                rel="noopener noreferrer">Open proof</a>
 
-                            <button
-                                type="button"
-                                class="remove-proof-button"
-                                id="removeProofButton"
-                            >
+                            <button type="button" class="remove-proof-button" id="removeProofButton">
                                 <i class="bi bi-trash"></i>
                                 Remove proof
                             </button>
@@ -564,11 +591,8 @@
                         <strong>Upload resolution proof (optional)</strong>
                         <span>PDF, PNG or JPG · Maximum 25 MB</span>
 
-                        <input
-                            type="file"
-                            id="proofInput"
-                            accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
-                        >
+                        <input type="file" id="proofInput"
+                            accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
 
                         <span class="selected-file" id="selectedFileName">
                             No file selected
@@ -579,7 +603,7 @@
                 </section>
 
                 <!-- STATUS UPDATE -->
-                <section class="modal-section update-section">
+                <section class="modal-section update-section" id="updateStatusSection">
 
                     <div class="modal-section-heading">
                         <h3>Update ticket status</h3>
@@ -627,6 +651,8 @@
 
     <script>
 
+        let assignedTickets = [];
+        let availableTickets = [];
         let tickets = [];
         let employee = null;
         let currentUser = null;
@@ -640,7 +666,8 @@
 
         const $ = id => document.getElementById(id);
 
-        const tableBody = $("ticketTableBody");
+        const assignedTableBody = $("assignedTicketTableBody");
+        const availableTableBody = $("availableTicketTableBody");
         const searchInput = $("searchInput");
         const statusFilter = $("statusFilter");
         const priorityFilter = $("priorityFilter");
@@ -747,7 +774,8 @@
 
             const value = String(status || "").trim().toLowerCase();
 
-            if (value === "open" || value === "pending") return "Pending";
+            if (value === "open") return "Open";
+            if (value === "pending") return "Pending";
             if (value === "in progress" || value === "in-progress") return "In Progress";
             if (value === "resolved" || value === "closed") return "Resolved";
 
@@ -786,6 +814,7 @@
         async function loadTickets() {
 
             const response = await sendToCookieBackend("getEmployeeTickets");
+            console.log("EMPLOYEE TICKETS RESPONSE:", response);
 
             if (!response || !response.success) {
                 throw new Error(
@@ -799,13 +828,21 @@
                 throw new Error("Employee information was not returned.");
             }
 
-            tickets = (
-                Array.isArray(response.tickets)
-                    ? response.tickets
+            assignedTickets = (
+                Array.isArray(response.assigned_tickets)
+                    ? response.assigned_tickets
                     : []
             ).map(normalizeTicket);
-        }
 
+            availableTickets = (
+                Array.isArray(response.available_tickets)
+                    ? response.available_tickets
+                    : []
+            ).map(normalizeTicket);
+
+            // Combined list is retained for modal lookup and existing functions.
+            tickets = [...assignedTickets, ...availableTickets];
+        }
 
         // =========================================
         // EMPLOYEE DETAILS
@@ -818,7 +855,7 @@
             $("profileAvatar").textContent = getInitials(name);
 
             $("sidebarTicketCount").textContent =
-                String(tickets.length).padStart(2, "0");
+                String(assignedTickets.length).padStart(2, "0");
         }
 
 
@@ -843,12 +880,20 @@
 
         function updateSummary() {
 
-            const pending = tickets.filter(t => t.status === "Pending").length;
-            const progress = tickets.filter(t => t.status === "In Progress").length;
-            const resolved = tickets.filter(t => t.status === "Resolved").length;
+            const pending = assignedTickets.filter(
+                t => t.status === "Pending"
+            ).length;
+
+            const progress = assignedTickets.filter(
+                t => t.status === "In Progress"
+            ).length;
+
+            const resolved = assignedTickets.filter(
+                t => t.status === "Resolved"
+            ).length;
 
             $("totalCount").textContent =
-                String(tickets.length).padStart(2, "0");
+                String(assignedTickets.length).padStart(2, "0");
 
             $("pendingCount").textContent =
                 String(pending).padStart(2, "0");
@@ -859,7 +904,6 @@
             $("resolvedCount").textContent =
                 String(resolved).padStart(2, "0");
         }
-
 
         // =========================================
         // FILTER AND RENDER
@@ -873,106 +917,132 @@
             const status = statusFilter.value;
             const priority = priorityFilter.value;
 
-            const visibleTickets = tickets.filter(ticket => {
+            function filterTickets(source) {
 
-                const searchable = [
-                    ticket.id,
-                    ticket.customer,
-                    ticket.mobile,
-                    ticket.subject,
-                    ticket.category
-                ].join(" ").toLowerCase();
+                return source.filter(ticket => {
 
-                const matchesSearch =
-                    !query ||
-                    searchable.includes(query) ||
-                    searchable.replace(/\s+/g, "").includes(normalizedQuery);
+                    const searchable = [
+                        ticket.id,
+                        ticket.customer,
+                        ticket.mobile,
+                        ticket.subject,
+                        ticket.category
+                    ].join(" ").toLowerCase();
 
-                const matchesStatus =
-                    !status || ticket.status === status;
+                    const matchesSearch =
+                        !query ||
+                        searchable.includes(query) ||
+                        searchable.replace(/\s+/g, "").includes(normalizedQuery);
 
-                const matchesPriority =
-                    !priority ||
-                    ticket.priority.toLowerCase() === priority.toLowerCase();
+                    const matchesStatus =
+                        !status || ticket.status === status;
 
-                return matchesSearch && matchesStatus && matchesPriority;
-            });
+                    const matchesPriority =
+                        !priority ||
+                        ticket.priority.toLowerCase() === priority.toLowerCase();
 
-            tableBody.innerHTML = "";
+                    return matchesSearch && matchesStatus && matchesPriority;
+                });
+            }
 
-            visibleTickets.forEach(ticket => {
+            function renderTable(source, body, emptyState) {
 
-                const row = document.createElement("tr");
+                body.innerHTML = "";
 
-                row.innerHTML = `
-                    <td>
-                        <span class="table-ticket-id">${escapeHTML(ticket.id)}</span>
-                    </td>
+                source.forEach(ticket => {
 
-                    <td>
-                        <div class="customer-cell">
-                            <strong>${escapeHTML(ticket.customer)}</strong>
-                        </div>
-                    </td>
+                    const row = document.createElement("tr");
 
-                    <td>
-                        <span class="mobile-number">
-                            ${escapeHTML(formatMobile(ticket.mobile))}
-                        </span>
-                    </td>
+                    row.innerHTML = `
+                <td>
+                    <span class="table-ticket-id">${escapeHTML(ticket.id)}</span>
+                </td>
 
-                    <td>
-                        <div class="subject-cell">
-                            <strong>${escapeHTML(ticket.subject)}</strong>
-                            <span>${escapeHTML(ticket.category)}</span>
-                        </div>
-                    </td>
+                <td>
+                    <div class="customer-cell">
+                        <strong>${escapeHTML(ticket.customer)}</strong>
+                    </div>
+                </td>
 
-                    <td>
-                        <span class="priority-badge ${escapeHTML(ticket.priority.toLowerCase())}">
-                            ${escapeHTML(ticket.priority)}
-                        </span>
-                    </td>
+                <td>
+                    <span class="mobile-number">
+                        ${escapeHTML(formatMobile(ticket.mobile))}
+                    </span>
+                </td>
 
-                    <td>
-                        <span class="status-badge ${getStatusClass(ticket.status)}">
-                            ${escapeHTML(ticket.status)}
-                        </span>
-                    </td>
+                <td>
+                    <div class="subject-cell">
+                        <strong>${escapeHTML(ticket.subject)}</strong>
+                        <span>${escapeHTML(ticket.category)}</span>
+                    </div>
+                </td>
 
-                    <td>
-                        <span class="updated-cell">
-                            ${escapeHTML(formatDateTime(ticket.updated))}
-                        </span>
-                    </td>
+                <td>
+                    <span class="priority-badge ${escapeHTML(ticket.priority.toLowerCase())}">
+                        ${escapeHTML(ticket.priority)}
+                    </span>
+                </td>
 
-                    <td>
-                        <button
-                            type="button"
-                            class="view-button"
-                            data-ticket-id="${escapeHTML(ticket.id)}"
-                        >
-                            View →
-                        </button>
-                    </td>
-                `;
+                <td>
+                    <span class="status-badge ${getStatusClass(ticket.status)}">
+                        ${escapeHTML(ticket.status)}
+                    </span>
+                </td>
 
-                tableBody.appendChild(row);
-            });
+                <td>
+                    <span class="updated-cell">
+                        ${escapeHTML(formatDateTime(ticket.updated))}
+                    </span>
+                </td>
 
-            $("visibleCount").textContent =
-                String(visibleTickets.length).padStart(2, "0");
+                <td>
+                    <button
+                        type="button"
+                        class="view-button"
+                        data-ticket-id="${escapeHTML(ticket.id)}"
+                    >
+                        View →
+                    </button>
+                </td>
+            `;
 
-            $("tableFooterText").textContent =
-                `Showing ${visibleTickets.length} of ${tickets.length} assigned tickets`;
+                    body.appendChild(row);
+                });
 
-            $("emptyState").hidden = visibleTickets.length !== 0;
+                emptyState.hidden = source.length !== 0;
+            }
+
+            const visibleAssigned = filterTickets(assignedTickets);
+            const visibleAvailable = filterTickets(availableTickets);
+
+            renderTable(
+                visibleAssigned,
+                assignedTableBody,
+                $("assignedEmptyState")
+            );
+
+            renderTable(
+                visibleAvailable,
+                availableTableBody,
+                $("availableEmptyState")
+            );
+
+            $("assignedVisibleCount").textContent =
+                String(visibleAssigned.length).padStart(2, "0");
+
+            $("availableVisibleCount").textContent =
+                String(visibleAvailable.length).padStart(2, "0");
+
+            $("assignedFooterText").textContent =
+                `Showing ${visibleAssigned.length} of ${assignedTickets.length} assigned tickets`;
+
+            $("availableFooterText").textContent =
+                `Showing ${visibleAvailable.length} of ${availableTickets.length} available tickets`;
         }
-
-
         // =========================================
         // OPEN TICKET MODAL
         // =========================================
+
 
         function openTicket(ticketId) {
 
@@ -980,15 +1050,27 @@
 
             if (!ticket) return;
 
+            const isAssignedToMe = assignedTickets.some(
+                t => t.id === ticketId
+            );
+
+            const isAvailableTicket = availableTickets.some(
+                t => t.id === ticketId
+            );
+
             activeTicketId = ticketId;
             removeExistingProof = false;
             resolutionOtpSent = false;
+
             $("resolutionOtpInput").value = "";
             $("resolutionOtpEntry").hidden = true;
             $("resolutionOtpSection").hidden = true;
-            $("resolutionOtpStatus").textContent = "OTP sent. Ask the customer to share the code.";
+            $("resolutionOtpStatus").textContent =
+                "OTP sent. Ask the customer to share the code.";
+
             $("sendResolutionOtpButton").disabled = false;
-            $("sendResolutionOtpButton").innerHTML = '<i class="bi bi-envelope"></i> Send Customer OTP';
+            $("sendResolutionOtpButton").innerHTML =
+                '<i class="bi bi-envelope"></i> Send Customer OTP';
 
             $("modalTicketId").textContent = ticket.id;
             $("modalTicketSubject").textContent = ticket.subject;
@@ -1005,7 +1087,10 @@
             $("modalStatus").textContent = ticket.status;
 
             $("modalAssignedEmployee").textContent =
-                ticket.employee || currentUser.full_name || "Assigned employee";
+                ticket.employee ||
+                (isAvailableTicket
+                    ? "Available – Unassigned"
+                    : currentUser.full_name);
 
             $("modalUpdated").textContent =
                 formatDateTime(ticket.updated);
@@ -1019,7 +1104,8 @@
 
                 $("existingProof").hidden = false;
 
-                $("existingProofName").textContent = "Previously uploaded resolution proof";
+                $("existingProofName").textContent =
+                    "Previously uploaded resolution proof";
 
                 $("existingProofLink").href = ticket.proof;
 
@@ -1031,7 +1117,27 @@
 
             $("removeProofButton").disabled = false;
 
+            // Both assigned and available tickets can be updated.
+            const canUpdateTicket = isAssignedToMe || isAvailableTicket;
+
+            $("resolutionOtpSection").hidden =
+                !canUpdateTicket ||
+                $("statusUpdate").value !== "Resolved";
+
+            $("proofUploadArea").hidden = !canUpdateTicket;
+            $("removeProofButton").hidden = !canUpdateTicket;
+
+            $("updateStatusSection").hidden = !canUpdateTicket;
+            $("saveTicket").hidden = !canUpdateTicket;
+
+            $("sendResolutionOtpButton").hidden =
+                !canUpdateTicket ||
+                $("statusUpdate").value !== "Resolved";
+
             updateProofRequirement();
+
+            $("saveTicket").innerHTML =
+                'Save Changes <span>→</span>';
 
             modal.classList.add("active");
             document.body.classList.add("modal-open");
@@ -1058,6 +1164,13 @@
 
             proofInput.value = "";
             $("selectedFileName").textContent = "No file selected";
+
+            $("proofUploadArea").hidden = false;
+            $("removeProofButton").hidden = false;
+            $("updateStatusSection").hidden = false;
+            $("saveTicket").hidden = false;
+            $("sendResolutionOtpButton").hidden = false;
+            $("saveTicket").innerHTML = 'Save Changes <span>→</span>';
         }
 
 
@@ -1196,29 +1309,41 @@
         // STATUS REQUIREMENTS
         // =========================================
 
+
         function updateProofRequirement() {
 
             const newStatus = $("statusUpdate").value;
+
             const ticket = tickets.find(t => t.id === activeTicketId);
             const hasNewProof = proofInput.files.length > 0;
 
-            // Proof is optional for every status, including Resolved.
+            // Proof is optional for every status.
             $("proofUploadArea").classList.remove("proof-required");
 
-            // Customer OTP is required only when resolving a ticket.
-            $("resolutionOtpSection").hidden = newStatus !== "Resolved";
+            // OTP is required only when resolving.
+            const needsOtp = newStatus === "Resolved";
+
+            $("resolutionOtpSection").hidden = !needsOtp;
+            $("sendResolutionOtpButton").hidden = !needsOtp;
 
             if (newStatus === "Resolved") {
+
                 $("statusHint").textContent = resolutionOtpSent
                     ? "Enter the OTP shared by the customer. Resolution proof is optional."
                     : "Send a verification OTP to the customer's registered email before resolving this ticket. Resolution proof is optional.";
+
             } else if (removeExistingProof) {
+
                 $("statusHint").textContent =
                     "The existing proof will be removed from the ticket and moved to Google Drive Trash when you save.";
+
             } else if (hasNewProof) {
+
                 $("statusHint").textContent =
                     "The selected file will replace the existing resolution proof when you save.";
+
             } else {
+
                 $("statusHint").textContent =
                     "Update the ticket status as work progresses. Resolution proof is optional.";
             }
@@ -1289,132 +1414,146 @@
         // SAVE TICKET TO BACKEND
         // =========================================
 
-        async function saveTicketChanges() {
+       
+async function saveTicketChanges() {
 
-            if (isSaving) return;
+    if (isSaving) return;
 
-            const ticket = tickets.find(t => t.id === activeTicketId);
+    const ticket = tickets.find(t => t.id === activeTicketId);
 
-            if (!ticket) {
-                alert("Ticket not found. Please close and reopen it.");
-                return;
-            }
+    if (!ticket) {
+        alert("Ticket not found. Please close and reopen it.");
+        return;
+    }
 
-            const newStatus = $("statusUpdate").value;
-            const selectedFile = proofInput.files[0];
+    const isAvailableTicket = availableTickets.some(
+        t => t.id === activeTicketId
+    );
 
-            const resolutionOtp = $("resolutionOtpInput").value.trim();
+    const newStatus = $("statusUpdate").value;
+    const selectedFile = proofInput.files[0];
+    const resolutionOtp = $("resolutionOtpInput").value.trim();
 
-            if (newStatus === "Resolved" && !/^\d{6}$/.test(resolutionOtp)) {
-                alert("Send the customer an OTP and enter the six-digit code before resolving this ticket.");
-                $("resolutionOtpSection").hidden = false;
-                $("resolutionOtpInput").focus();
-                return;
-            }
+    if (!newStatus) {
+        alert("Please select a ticket status.");
+        return;
+    }
 
-            if (selectedFile && selectedFile.size > MAX_PROOF_SIZE) {
-                alert("The selected file exceeds the 25 MB upload limit.");
-                return;
-            }
+    if (newStatus === "Resolved" && !/^\d{6}$/.test(resolutionOtp)) {
+        alert("Send the customer an OTP and enter the six-digit code before resolving this ticket.");
+        $("resolutionOtpSection").hidden = false;
+        $("resolutionOtpInput").focus();
+        return;
+    }
 
-            const saveButton = $("saveTicket");
-            const removeButton = $("removeProofButton");
-            const originalButtonHTML = saveButton.innerHTML;
+    if (selectedFile && selectedFile.size > MAX_PROOF_SIZE) {
+        alert("The selected file exceeds the 25 MB upload limit.");
+        return;
+    }
 
-            isSaving = true;
-            saveButton.disabled = true;
-            saveButton.textContent = "Saving...";
-            removeButton.disabled = true;
+    const saveButton = $("saveTicket");
+    const removeButton = $("removeProofButton");
+    const originalButtonHTML = saveButton.innerHTML;
 
-            try {
+    isSaving = true;
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+    removeButton.disabled = true;
 
-                const payload = {
-                    ticket_id: ticket.id,
-                    status: newStatus,
-                    remove_proof: removeExistingProof ? "true" : "false"
-                };
+    try {
 
-                if (newStatus === "Resolved") {
-                    payload.resolution_otp = resolutionOtp;
-                }
+        const payload = {
+            ticket_id: ticket.id,
+            status: newStatus,
+            remove_proof: removeExistingProof ? "true" : "false"
+        };
 
-                if (selectedFile) {
-
-                    $("statusHint").textContent =
-                        "Preparing your proof file for upload...";
-
-                    payload.proof_base64 = await fileToBase64(selectedFile);
-                    payload.proof_file_name = selectedFile.name;
-                    payload.proof_mime_type = selectedFile.type;
-                }
-
-                $("statusHint").textContent =
-                    "Saving ticket changes. Please wait...";
-
-                const response = await sendToCookieBackend(
-                    "updateEmployeeTicket",
-                    payload
-                );
-
-                if (!response || !response.success) {
-                    throw new Error(
-                        response?.message || "Unable to save ticket changes."
-                    );
-                }
-
-                // Reload the latest ticket information.
-                await loadTickets();
-
-                renderEmployeeDetails();
-                updateSummary();
-                renderTickets();
-
-                // Close modal after successful save.
-                modal.classList.remove("active");
-                document.body.classList.remove("modal-open");
-
-                activeTicketId = null;
-                removeExistingProof = false;
-                resolutionOtpSent = false;
-                $("resolutionOtpInput").value = "";
-                $("resolutionOtpEntry").hidden = true;
-                $("resolutionOtpSection").hidden = true;
-
-                proofInput.value = "";
-
-                $("selectedFileName").textContent = "No file selected";
-                $("existingProof").hidden = true;
-
-                if (response.old_proof_deleted === false) {
-                    alert(
-                        "Ticket updated."
-                    );
-                } else {
-                    alert("Ticket updated successfully.");
-                }
-
-            } catch (error) {
-
-                console.error("Ticket update error:", error);
-
-                alert(
-                    error.message ||
-                    "Something went wrong while updating the ticket."
-                );
-
-                $("statusHint").textContent =
-                    error.message || "Unable to save changes. Please try again.";
-
-            } finally {
-
-                isSaving = false;
-
-                saveButton.disabled = false;
-                saveButton.innerHTML = originalButtonHTML;
-
-                removeButton.disabled = false;
-            }
+        if (newStatus === "Resolved") {
+            payload.resolution_otp = resolutionOtp;
         }
+
+        if (selectedFile) {
+
+            $("statusHint").textContent =
+                "Preparing your proof file for upload...";
+
+            payload.proof_base64 = await fileToBase64(selectedFile);
+            payload.proof_file_name = selectedFile.name;
+            payload.proof_mime_type = selectedFile.type;
+        }
+
+        $("statusHint").textContent =
+            "Saving ticket changes. Please wait...";
+
+        const response = await sendToCookieBackend(
+            "updateEmployeeTicket",
+            payload
+        );
+
+        if (!response || !response.success) {
+            throw new Error(
+                response?.message || "Unable to save ticket changes."
+            );
+        }
+
+        await loadTickets();
+
+        renderEmployeeDetails();
+        updateSummary();
+        renderTickets();
+
+        modal.classList.remove("active");
+        document.body.classList.remove("modal-open");
+
+        activeTicketId = null;
+        removeExistingProof = false;
+        resolutionOtpSent = false;
+
+        $("resolutionOtpInput").value = "";
+        $("resolutionOtpEntry").hidden = true;
+        $("resolutionOtpSection").hidden = true;
+
+        proofInput.value = "";
+
+        $("selectedFileName").textContent = "No file selected";
+        $("existingProof").hidden = true;
+
+        if (response.old_proof_deleted === false) {
+            alert(
+                isAvailableTicket
+                    ? "Ticket updated and assigned to you. However, the old proof could not be deleted."
+                    : "Ticket updated. However, the old proof could not be deleted."
+            );
+        } else {
+            alert(
+                isAvailableTicket
+                    ? "Ticket updated and assigned to you successfully."
+                    : "Ticket updated successfully."
+            );
+        }
+
+    } catch (error) {
+
+        console.error("Ticket update error:", error);
+
+        alert(
+            error.message ||
+            "Something went wrong while updating the ticket."
+        );
+
+        $("statusHint").textContent =
+            error.message || "Unable to save changes. Please try again.";
+
+    } finally {
+
+        isSaving = false;
+
+        saveButton.disabled = false;
+        saveButton.innerHTML = originalButtonHTML;
+
+        removeButton.disabled = false;
+    }
+}
 
         $("saveTicket").addEventListener("click", saveTicketChanges);
 
@@ -1440,17 +1579,20 @@
 
 
         // =========================================
-        // TABLE ACTION
+        // TABLE ACTIONS
         // =========================================
 
-        tableBody.addEventListener("click", event => {
+        function handleTicketTableClick(event) {
 
             const button = event.target.closest("[data-ticket-id]");
 
             if (!button) return;
 
             openTicket(button.dataset.ticketId);
-        });
+        }
+
+        assignedTableBody.addEventListener("click", handleTicketTableClick);
+        availableTableBody.addEventListener("click", handleTicketTableClick);
 
 
         // =========================================
@@ -1566,4 +1708,5 @@
     </script>
 
 </body>
+
 </html>

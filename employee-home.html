@@ -208,7 +208,7 @@
                         <div>
                             <div class="eyebrow">YOUR WORKSPACE</div>
                             <h1>Good morning, <span id="employeeName">Employee</span>.</h1>
-                            <p>Here's what's happening with your assigned support tickets today.</p>
+                            <p>Here's what's happening with your assigned and available support tickets today.</p>
                         </div>
 
                         <a href="employee-tickets.html" class="primary-button">
@@ -306,6 +306,19 @@
                                 <strong class="stat-value" id="resolvedCount">00</strong>
                                 <span class="stat-caption">Successfully resolved</span>
                             </article>
+
+
+<article class="stat-card">
+    <div class="stat-top">
+        <span class="stat-label">AVAILABLE OPEN</span>
+        <div class="stat-icon blue-icon">
+            <i class="bi bi-inbox"></i>
+        </div>
+    </div>
+    <strong class="stat-value" id="availableCount">00</strong>
+    <span class="stat-caption">Open tickets available for employees</span>
+</article>
+
 
                         </div>
 
@@ -461,8 +474,9 @@
     <script>
 
         let currentUser = null;
-        let employee = null;
-        let tickets = [];
+let employee = null;
+let assignedTickets = [];
+let availableTickets = [];
 
         const $ = id => document.getElementById(id);
 
@@ -632,26 +646,30 @@
 
         async function loadEmployeeTickets() {
 
-            const response = await sendToCookieBackend(
-                "getEmployeeTickets"
-            );
+    const response = await sendToCookieBackend(
+        "getEmployeeTickets"
+    );
 
-            if (!response || !response.success) {
-                throw new Error(
-                    response?.message || "Unable to load assigned tickets."
-                );
-            }
+    if (!response || !response.success) {
+        throw new Error(
+            response?.message || "Unable to load assigned tickets."
+        );
+    }
 
-            employee = response.employee || null;
-            tickets = Array.isArray(response.tickets)
-                ? response.tickets
-                : [];
+    employee = response.employee || null;
 
-            if (!employee) {
-                throw new Error("Employee profile was not returned by the backend.");
-            }
-        }
+    assignedTickets = Array.isArray(response.assigned_tickets)
+        ? response.assigned_tickets
+        : [];
 
+    availableTickets = Array.isArray(response.available_tickets)
+        ? response.available_tickets
+        : [];
+
+    if (!employee) {
+        throw new Error("Employee profile was not returned by the backend.");
+    }
+}
 
         // =========================================
         // NORMALIZE TICKET DATA
@@ -681,7 +699,7 @@
 
             container.innerHTML = "";
 
-            const recentTickets = [...tickets]
+            const recentTickets = [...assignedTickets]
                 .sort((a, b) => {
                     const dateA = new Date(a.updated_at || a.created_at || 0).getTime();
                     const dateB = new Date(b.updated_at || b.created_at || 0).getTime();
@@ -745,59 +763,61 @@
 
         function updateStats() {
 
-            const normalized = tickets.map(normalizeTicket);
+    const normalized = assignedTickets.map(normalizeTicket);
 
-            const assigned = normalized.length;
+    const assigned = normalized.length;
 
-            const pending = normalized.filter(t =>
-                t.status.label === "Pending"
-            ).length;
+    const pending = normalized.filter(t =>
+        t.status.label === "Pending"
+    ).length;
 
-            const progress = normalized.filter(t =>
-                t.status.label === "In Progress"
-            ).length;
+    const progress = normalized.filter(t =>
+        t.status.label === "In Progress"
+    ).length;
 
-            const resolved = normalized.filter(t =>
-                t.status.label === "Resolved"
-            ).length;
+    const resolved = normalized.filter(t =>
+        t.status.label === "Resolved"
+    ).length;
 
-            const high = normalized.filter(t =>
-                t.priority === "High"
-            ).length;
+    const high = normalized.filter(t =>
+        t.priority === "High"
+    ).length;
 
-            const medium = normalized.filter(t =>
-                t.priority === "Medium"
-            ).length;
+    const medium = normalized.filter(t =>
+        t.priority === "Medium"
+    ).length;
 
-            const low = normalized.filter(t =>
-                t.priority === "Low"
-            ).length;
+    const low = normalized.filter(t =>
+        t.priority === "Low"
+    ).length;
 
-            $("assignedCount").textContent =
-                String(assigned).padStart(2, "0");
+    $("assignedCount").textContent =
+        String(assigned).padStart(2, "0");
+    
+        $("availableCount").textContent =
+    String(availableTickets.length).padStart(2, "0");
 
-            $("pendingCount").textContent =
-                String(pending).padStart(2, "0");
+    $("pendingCount").textContent =
+        String(pending).padStart(2, "0");
 
-            $("progressCount").textContent =
-                String(progress).padStart(2, "0");
+    $("progressCount").textContent =
+        String(progress).padStart(2, "0");
 
-            $("resolvedCount").textContent =
-                String(resolved).padStart(2, "0");
+    $("resolvedCount").textContent =
+        String(resolved).padStart(2, "0");
 
-            $("highPriorityCount").textContent =
-                String(high).padStart(2, "0");
+    $("highPriorityCount").textContent =
+        String(high).padStart(2, "0");
 
-            $("mediumPriorityCount").textContent =
-                String(medium).padStart(2, "0");
+    $("mediumPriorityCount").textContent =
+        String(medium).padStart(2, "0");
 
-            $("lowPriorityCount").textContent =
-                String(low).padStart(2, "0");
+    $("lowPriorityCount").textContent =
+        String(low).padStart(2, "0");
 
-            $("sidebarTicketCount").textContent =
-                String(assigned).padStart(2, "0");
-        }
-
+    $("sidebarTicketCount").textContent =
+        String(assigned).padStart(2, "0");
+}
 
         // =========================================
         // INITIALIZE PAGE
