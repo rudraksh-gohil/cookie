@@ -458,6 +458,7 @@
                         <h3>Customer information</h3>
                     </div>
 
+
                     <div class="detail-grid">
 
                         <div class="detail-field">
@@ -466,13 +467,33 @@
                         </div>
 
                         <div class="detail-field">
-    <span>REGISTERED COMPANY</span>
-    <strong id="modalCompany">--</strong>
-</div>
-
-                        <div class="detail-field">
                             <span>MOBILE NUMBER</span>
                             <strong id="modalMobile">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>CUSTOMER ADDRESS</span>
+                            <strong id="modalCustomerAddress">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>COMPANY / ACCOUNT TYPE</span>
+                            <strong id="modalCompany">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>COMPANY ADDRESS</span>
+                            <strong id="modalCompanyAddress">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>COMPANY POC NAME</span>
+                            <strong id="modalCompanyPocName">--</strong>
+                        </div>
+
+                        <div class="detail-field">
+                            <span>COMPANY POC NUMBER</span>
+                            <strong id="modalCompanyPocNumber">--</strong>
                         </div>
 
                         <div class="detail-field">
@@ -486,6 +507,7 @@
                         </div>
 
                     </div>
+
 
                 </section>
 
@@ -792,25 +814,55 @@
         }
 
         function normalizeTicket(ticket) {
+function normalizeTicket(ticket) {
 
     return {
         id: String(ticket.ticket_id || ""),
         userId: String(ticket.user_id || ""),
+
         customer: ticket.customer_name || "Customer",
-        company: ticket.company_name || "Company not registered",
+        customerAddress: ticket.customer_address || "",
+
+        company: ticket.company_name || "End Customer",
+        companyAddress: ticket.company_address || "",
+        companyPocName: ticket.company_poc_name || "",
+        companyPocNumber: ticket.company_poc_number || "",
+
         mobile: ticket.customer_mobile || "",
         subject: ticket.subject || "Untitled ticket",
         category: ticket.category || "General",
         priority: String(ticket.priority || "Low"),
         status: normalizeStatus(ticket.status),
+
         created: ticket.created_at,
         updated: ticket.updated_at,
+
         description: ticket.description || "",
         employee: ticket.assigned_employee_name || "",
         proof: ticket.resolution_proof_url || "",
         resolvedAt: ticket.resolved_at || ""
     };
 }
+
+
+            return {
+                id: String(ticket.ticket_id || ""),
+                userId: String(ticket.user_id || ""),
+                customer: ticket.customer_name || "Customer",
+                company: ticket.company_name || "Company not registered",
+                mobile: ticket.customer_mobile || "",
+                subject: ticket.subject || "Untitled ticket",
+                category: ticket.category || "General",
+                priority: String(ticket.priority || "Low"),
+                status: normalizeStatus(ticket.status),
+                created: ticket.created_at,
+                updated: ticket.updated_at,
+                description: ticket.description || "",
+                employee: ticket.assigned_employee_name || "",
+                proof: ticket.resolution_proof_url || "",
+                resolvedAt: ticket.resolved_at || ""
+            };
+        }
 
 
         // =========================================
@@ -928,13 +980,13 @@
                 return source.filter(ticket => {
 
                     const searchable = [
-    ticket.id,
-    ticket.customer,
-    ticket.company,
-    ticket.mobile,
-    ticket.subject,
-    ticket.category
-].join(" ").toLowerCase();
+                        ticket.id,
+                        ticket.customer,
+                        ticket.company,
+                        ticket.mobile,
+                        ticket.subject,
+                        ticket.category
+                    ].join(" ").toLowerCase();
 
                     const matchesSearch =
                         !query ||
@@ -1093,11 +1145,30 @@
             $("modalTicketId").textContent = ticket.id;
             $("modalTicketSubject").textContent = ticket.subject;
 
-            $("modalCustomer").textContent = ticket.customer;
-            $("modalCompany").textContent = ticket.company;
-            $("modalMobile").textContent = formatMobile(ticket.mobile);
-            $("modalCategory").textContent = ticket.category;
-            $("modalCreated").textContent = formatDate(ticket.created);
+            
+$("modalCustomer").textContent = ticket.customer;
+
+$("modalMobile").textContent =
+    formatMobile(ticket.mobile);
+
+$("modalCustomerAddress").textContent =
+    ticket.customerAddress || "—";
+
+$("modalCompany").textContent =
+    ticket.company || "End Customer";
+
+$("modalCompanyAddress").textContent =
+    ticket.companyAddress || "—";
+
+$("modalCompanyPocName").textContent =
+    ticket.companyPocName || "—";
+
+$("modalCompanyPocNumber").textContent =
+    ticket.companyPocNumber || "—";
+
+$("modalCategory").textContent = ticket.category;
+$("modalCreated").textContent = formatDate(ticket.created);
+
 
             $("modalDescription").textContent =
                 ticket.description || "No description provided.";
@@ -1433,146 +1504,146 @@
         // SAVE TICKET TO BACKEND
         // =========================================
 
-       
-async function saveTicketChanges() {
 
-    if (isSaving) return;
+        async function saveTicketChanges() {
 
-    const ticket = tickets.find(t => t.id === activeTicketId);
+            if (isSaving) return;
 
-    if (!ticket) {
-        alert("Ticket not found. Please close and reopen it.");
-        return;
-    }
+            const ticket = tickets.find(t => t.id === activeTicketId);
 
-    const isAvailableTicket = availableTickets.some(
-        t => t.id === activeTicketId
-    );
+            if (!ticket) {
+                alert("Ticket not found. Please close and reopen it.");
+                return;
+            }
 
-    const newStatus = $("statusUpdate").value;
-    const selectedFile = proofInput.files[0];
-    const resolutionOtp = $("resolutionOtpInput").value.trim();
-
-    if (!newStatus) {
-        alert("Please select a ticket status.");
-        return;
-    }
-
-    if (newStatus === "Resolved" && !/^\d{6}$/.test(resolutionOtp)) {
-        alert("Send the customer an OTP and enter the six-digit code before resolving this ticket.");
-        $("resolutionOtpSection").hidden = false;
-        $("resolutionOtpInput").focus();
-        return;
-    }
-
-    if (selectedFile && selectedFile.size > MAX_PROOF_SIZE) {
-        alert("The selected file exceeds the 25 MB upload limit.");
-        return;
-    }
-
-    const saveButton = $("saveTicket");
-    const removeButton = $("removeProofButton");
-    const originalButtonHTML = saveButton.innerHTML;
-
-    isSaving = true;
-    saveButton.disabled = true;
-    saveButton.textContent = "Saving...";
-    removeButton.disabled = true;
-
-    try {
-
-        const payload = {
-            ticket_id: ticket.id,
-            status: newStatus,
-            remove_proof: removeExistingProof ? "true" : "false"
-        };
-
-        if (newStatus === "Resolved") {
-            payload.resolution_otp = resolutionOtp;
-        }
-
-        if (selectedFile) {
-
-            $("statusHint").textContent =
-                "Preparing your proof file for upload...";
-
-            payload.proof_base64 = await fileToBase64(selectedFile);
-            payload.proof_file_name = selectedFile.name;
-            payload.proof_mime_type = selectedFile.type;
-        }
-
-        $("statusHint").textContent =
-            "Saving ticket changes. Please wait...";
-
-        const response = await sendToCookieBackend(
-            "updateEmployeeTicket",
-            payload
-        );
-
-        if (!response || !response.success) {
-            throw new Error(
-                response?.message || "Unable to save ticket changes."
+            const isAvailableTicket = availableTickets.some(
+                t => t.id === activeTicketId
             );
+
+            const newStatus = $("statusUpdate").value;
+            const selectedFile = proofInput.files[0];
+            const resolutionOtp = $("resolutionOtpInput").value.trim();
+
+            if (!newStatus) {
+                alert("Please select a ticket status.");
+                return;
+            }
+
+            if (newStatus === "Resolved" && !/^\d{6}$/.test(resolutionOtp)) {
+                alert("Send the customer an OTP and enter the six-digit code before resolving this ticket.");
+                $("resolutionOtpSection").hidden = false;
+                $("resolutionOtpInput").focus();
+                return;
+            }
+
+            if (selectedFile && selectedFile.size > MAX_PROOF_SIZE) {
+                alert("The selected file exceeds the 25 MB upload limit.");
+                return;
+            }
+
+            const saveButton = $("saveTicket");
+            const removeButton = $("removeProofButton");
+            const originalButtonHTML = saveButton.innerHTML;
+
+            isSaving = true;
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+            removeButton.disabled = true;
+
+            try {
+
+                const payload = {
+                    ticket_id: ticket.id,
+                    status: newStatus,
+                    remove_proof: removeExistingProof ? "true" : "false"
+                };
+
+                if (newStatus === "Resolved") {
+                    payload.resolution_otp = resolutionOtp;
+                }
+
+                if (selectedFile) {
+
+                    $("statusHint").textContent =
+                        "Preparing your proof file for upload...";
+
+                    payload.proof_base64 = await fileToBase64(selectedFile);
+                    payload.proof_file_name = selectedFile.name;
+                    payload.proof_mime_type = selectedFile.type;
+                }
+
+                $("statusHint").textContent =
+                    "Saving ticket changes. Please wait...";
+
+                const response = await sendToCookieBackend(
+                    "updateEmployeeTicket",
+                    payload
+                );
+
+                if (!response || !response.success) {
+                    throw new Error(
+                        response?.message || "Unable to save ticket changes."
+                    );
+                }
+
+                await loadTickets();
+
+                renderEmployeeDetails();
+                updateSummary();
+                renderTickets();
+
+                modal.classList.remove("active");
+                document.body.classList.remove("modal-open");
+
+                activeTicketId = null;
+                removeExistingProof = false;
+                resolutionOtpSent = false;
+
+                $("resolutionOtpInput").value = "";
+                $("resolutionOtpEntry").hidden = true;
+                $("resolutionOtpSection").hidden = true;
+
+                proofInput.value = "";
+
+                $("selectedFileName").textContent = "No file selected";
+                $("existingProof").hidden = true;
+
+                if (response.old_proof_deleted === false) {
+                    alert(
+                        isAvailableTicket
+                            ? "Ticket updated and assigned to you. However, the old proof could not be deleted."
+                            : "Ticket updated. However, the old proof could not be deleted."
+                    );
+                } else {
+                    alert(
+                        isAvailableTicket
+                            ? "Ticket updated and assigned to you successfully."
+                            : "Ticket updated successfully."
+                    );
+                }
+
+            } catch (error) {
+
+                console.error("Ticket update error:", error);
+
+                alert(
+                    error.message ||
+                    "Something went wrong while updating the ticket."
+                );
+
+                $("statusHint").textContent =
+                    error.message || "Unable to save changes. Please try again.";
+
+            } finally {
+
+                isSaving = false;
+
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalButtonHTML;
+
+                removeButton.disabled = false;
+            }
         }
-
-        await loadTickets();
-
-        renderEmployeeDetails();
-        updateSummary();
-        renderTickets();
-
-        modal.classList.remove("active");
-        document.body.classList.remove("modal-open");
-
-        activeTicketId = null;
-        removeExistingProof = false;
-        resolutionOtpSent = false;
-
-        $("resolutionOtpInput").value = "";
-        $("resolutionOtpEntry").hidden = true;
-        $("resolutionOtpSection").hidden = true;
-
-        proofInput.value = "";
-
-        $("selectedFileName").textContent = "No file selected";
-        $("existingProof").hidden = true;
-
-        if (response.old_proof_deleted === false) {
-            alert(
-                isAvailableTicket
-                    ? "Ticket updated and assigned to you. However, the old proof could not be deleted."
-                    : "Ticket updated. However, the old proof could not be deleted."
-            );
-        } else {
-            alert(
-                isAvailableTicket
-                    ? "Ticket updated and assigned to you successfully."
-                    : "Ticket updated successfully."
-            );
-        }
-
-    } catch (error) {
-
-        console.error("Ticket update error:", error);
-
-        alert(
-            error.message ||
-            "Something went wrong while updating the ticket."
-        );
-
-        $("statusHint").textContent =
-            error.message || "Unable to save changes. Please try again.";
-
-    } finally {
-
-        isSaving = false;
-
-        saveButton.disabled = false;
-        saveButton.innerHTML = originalButtonHTML;
-
-        removeButton.disabled = false;
-    }
-}
 
         $("saveTicket").addEventListener("click", saveTicketChanges);
 

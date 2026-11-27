@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,36 +14,87 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" href="Ticket.css">
+
     <style>
-.customer-cell {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-    min-width: 150px;
-}
+        .customer-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            min-width: 150px;
+        }
 
-.customer-cell .customer-company {
-    color: var(--orange);
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1.4;
-}
+        .customer-cell .customer-company {
+            color: var(--orange);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
 
-.customer-cell strong.customer-name {
-    color: var(--ivory);
-    font-size: 11px;
-    font-weight: 600;
-    line-height: 1.4;
-}
+        .customer-cell strong.customer-name {
+            color: var(--ivory);
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
 
-.customer-cell .ticket-subject {
-    color: var(--muted);
-    font-size: 9px;
-    font-weight: 500;
-    line-height: 1.4;
-}
-</style>
+        .customer-cell .ticket-subject {
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .page-intro-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .add-company-button {
+            white-space: nowrap;
+        }
+
+        .company-form-message {
+            display: none;
+            padding: 11px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        .company-form-message.error {
+            display: block;
+            color: #ffb4a9;
+            background: rgba(220, 70, 55, 0.12);
+            border: 1px solid rgba(220, 70, 55, 0.25);
+        }
+
+        .company-form-message.success {
+            display: block;
+            color: #9de0bd;
+            background: rgba(33, 134, 106, 0.12);
+            border: 1px solid rgba(33, 134, 106, 0.25);
+        }
+
+        @media (max-width: 600px) {
+            .page-intro {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .page-intro-actions {
+                width: 100%;
+            }
+
+            .page-intro-actions button {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 
 <body data-required-role="R001" class="is-loading">
@@ -189,9 +241,15 @@
                             <p>Track issues, manage priorities and assign tickets to your team.</p>
                         </div>
 
-                        <button class="primary-button" id="newTicketButton" type="button">
-                            <span>＋</span> New ticket
-                        </button>
+                        <div class="page-intro-actions">
+                            <button class="secondary-button add-company-button" id="addCompanyButton" type="button">
+                                <i class="bi bi-building-add"></i> Add Company
+                            </button>
+
+                            <button class="primary-button" id="newTicketButton" type="button">
+                                <span>＋</span> New ticket
+                            </button>
+                        </div>
                     </div>
 
                     <!-- SUMMARY -->
@@ -333,34 +391,57 @@
 
                 <div class="detail-grid">
 
-                    <div class="detail-item">
-                        <span>Customer</span>
-                        <strong id="modalCustomer">—</strong>
-                    </div>
-                    <div class="detail-item">
-    <span>Registered Company</span>
+                    
+<div class="detail-item">
+    <span>Customer</span>
+    <strong id="modalCustomer">—</strong>
+</div>
+
+<div class="detail-item">
+    <span>Mobile number</span>
+    <strong id="modalMobile">—</strong>
+</div>
+
+<div class="detail-item">
+    <span>Customer address</span>
+    <strong id="modalCustomerAddress">—</strong>
+</div>
+
+<div class="detail-item">
+    <span>Company / Account Type</span>
     <strong id="modalCompany">—</strong>
 </div>
 
-                    <div class="detail-item">
-                        <span>Mobile number</span>
-                        <strong id="modalMobile">—</strong>
-                    </div>
+<div class="detail-item">
+    <span>Company address</span>
+    <strong id="modalCompanyAddress">—</strong>
+</div>
 
-                    <div class="detail-item">
-                        <span>Opened on</span>
-                        <strong id="modalDate">—</strong>
-                    </div>
+<div class="detail-item">
+    <span>Company POC name</span>
+    <strong id="modalCompanyPocName">—</strong>
+</div>
 
-                    <div class="detail-item">
-                        <span>Priority</span>
-                        <strong id="modalPriority">—</strong>
-                    </div>
+<div class="detail-item">
+    <span>Company POC number</span>
+    <strong id="modalCompanyPocNumber">—</strong>
+</div>
 
-                    <div class="detail-item">
-                        <span>Current status</span>
-                        <strong id="modalStatus">—</strong>
-                    </div>
+<div class="detail-item">
+    <span>Opened on</span>
+    <strong id="modalDate">—</strong>
+</div>
+
+<div class="detail-item">
+    <span>Priority</span>
+    <strong id="modalPriority">—</strong>
+</div>
+
+<div class="detail-item">
+    <span>Current status</span>
+    <strong id="modalStatus">—</strong>
+</div>
+
 
                 </div>
 
@@ -370,12 +451,10 @@
                 </div>
                 <br>
 
-                <!-- EXISTING RESOLUTION PROOF -->
+                <!-- RESOLUTION PROOF -->
                 <div class="form-field proof-field">
 
-                    <label>
-                        Resolution proof
-                    </label>
+                    <label>Resolution proof</label>
 
                     <p class="field-hint">
                         Resolution proof is uploaded by the assigned employee from their ticket workspace.
@@ -492,6 +571,63 @@
                 <div class="modal-footer">
                     <button type="button" class="secondary-button" id="cancelNewTicket">Cancel</button>
                     <button type="submit" class="primary-button" id="createTicketButton">Create ticket</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD COMPANY MODAL -->
+    <div class="modal-overlay" id="addCompanyModal" hidden>
+        <div class="ticket-modal">
+
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">COMPANY DIRECTORY</span>
+                    <h2>Register a company</h2>
+                    <p class="field-hint">Add a company to the registered company directory.</p>
+                </div>
+
+                <button type="button" class="close-button" id="closeCompanyModal">×</button>
+            </div>
+
+            <form id="addCompanyForm" class="modal-body">
+
+                <div class="form-field">
+                    <label for="companyName">Company name</label>
+                    <input id="companyName" type="text" placeholder="Enter registered company name"
+                        maxlength="150" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="companyAddress">Company address</label>
+                    <textarea id="companyAddress" rows="3" placeholder="Enter complete company address"
+                        maxlength="500" required></textarea>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+                        <label for="companyPocName">Point of contact name</label>
+                        <input id="companyPocName" type="text" placeholder="Enter POC name"
+                            maxlength="100" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="companyPocNumber">Point of contact number</label>
+                        <input id="companyPocNumber" type="tel" inputmode="tel"
+                            placeholder="Enter POC mobile number" maxlength="15" required>
+                    </div>
+
+                </div>
+
+                <div id="companyFormMessage" class="company-form-message" role="status"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="secondary-button" id="cancelCompanyModal">Cancel</button>
+                    <button type="submit" class="primary-button" id="saveCompanyButton">
+                        Register company
+                    </button>
                 </div>
 
             </form>
@@ -690,8 +826,12 @@
                         userId: ticket.user_id,
 
                         customer: ticket.customer_name || "Customer",
-                        company: ticket.company_name || "Company not registered",
-                        mobile: ticket.customer_mobile || "",
+customerAddress: ticket.customer_address || "",
+company: ticket.company_name || "End Customer",
+companyAddress: ticket.company_address || "",
+companyPocName: ticket.company_poc_name || "",
+companyPocNumber: ticket.company_poc_number || "",
+mobile: ticket.customer_mobile || "",
 
                         subject: ticket.subject || "",
                         category: ticket.category || "General",
@@ -732,13 +872,13 @@
                 const filtered = tickets.filter(ticket => {
 
                     const searchableText = [
-    ticket.id,
-    ticket.customer,
-    ticket.company,
-    ticket.subject,
-    ticket.employee,
-    ticket.userId
-].join(" ").toLowerCase();
+                        ticket.id,
+                        ticket.customer,
+                        ticket.company,
+                        ticket.subject,
+                        ticket.employee,
+                        ticket.userId
+                    ].join(" ").toLowerCase();
 
                     const normalizedTicketMobile =
                         normalizeMobile(ticket.mobile);
@@ -788,14 +928,12 @@
                             </td>
 
                             <td>
-                               <div class="customer-cell">
-    <span class="customer-company">${escapeHTML(ticket.company)}</span>
-    <strong class="customer-name">${escapeHTML(ticket.customer)}</strong>
-    <span class="ticket-subject">${escapeHTML(ticket.subject)}</span>
-</div>
+                                <div class="customer-cell">
+                                    <span class="customer-company">${escapeHTML(ticket.company)}</span>
+                                    <strong class="customer-name">${escapeHTML(ticket.customer)}</strong>
+                                    <span class="ticket-subject">${escapeHTML(ticket.subject)}</span>
+                                </div>
                             </td>
-
-                            
 
                             <td class="mobile-cell">
                                 ${escapeHTML(ticket.mobile || "—")}
@@ -896,8 +1034,23 @@
                 document.getElementById("modalCustomer").textContent =
                     ticket.customer;
                 
+                document.getElementById("modalCustomerAddress").textContent =
+    ticket.customerAddress || "—";
+
+document.getElementById("modalCompany").textContent =
+    ticket.company || "End Customer";
+
+document.getElementById("modalCompanyAddress").textContent =
+    ticket.companyAddress || "—";
+
+document.getElementById("modalCompanyPocName").textContent =
+    ticket.companyPocName || "—";
+
+document.getElementById("modalCompanyPocNumber").textContent =
+    ticket.companyPocNumber || "—";
+
                 document.getElementById("modalCompany").textContent =
-    ticket.company || "Company not registered";
+                    ticket.company || "End Customer";
 
                 document.getElementById("modalMobile").textContent =
                     ticket.mobile || "—";
@@ -938,15 +1091,10 @@
                 selectedTicketId = null;
             }
 
-            /* SAVE ASSIGNMENT */
-
-
-            /* SAVE ASSIGNMENT */
-
-
             /* SAVE ADMIN TICKET CHANGES */
 
             async function saveTicketChanges() {
+
                 const ticket = tickets.find(t => t.id === selectedTicketId);
                 if (!ticket) return;
 
@@ -976,10 +1124,8 @@
                         );
                     }
 
-                    // Refresh the table with the latest backend data.
                     await loadTickets();
 
-                    // Close the modal after successful saving.
                     closeTicketModal();
 
                     hideLoader();
@@ -1002,6 +1148,84 @@
                 }
             }
 
+            /* ADD COMPANY */
+
+            function closeCompanyModal() {
+                document.getElementById("addCompanyModal").hidden = true;
+                document.getElementById("companyFormMessage").className =
+                    "company-form-message";
+                document.getElementById("companyFormMessage").textContent = "";
+            }
+
+            function showCompanyMessage(message, type) {
+                const messageBox = document.getElementById("companyFormMessage");
+
+                messageBox.textContent = message;
+                messageBox.className = `company-form-message ${type}`;
+            }
+
+            async function registerCompany(event) {
+                event.preventDefault();
+
+                const companyName = document.getElementById("companyName").value.trim();
+                const companyAddress = document.getElementById("companyAddress").value.trim();
+                const pocName = document.getElementById("companyPocName").value.trim();
+                const pocNumber = document.getElementById("companyPocNumber").value.trim();
+
+                if (!companyName || !companyAddress || !pocName || !pocNumber) {
+                    showCompanyMessage("Please complete all company details.", "error");
+                    return;
+                }
+
+                const normalizedNumber = normalizeMobile(pocNumber);
+
+                if (normalizedNumber.length < 10 || normalizedNumber.length > 15) {
+                    showCompanyMessage("Please enter a valid contact number.", "error");
+                    return;
+                }
+
+                const saveButton = document.getElementById("saveCompanyButton");
+                const originalText = saveButton.textContent;
+
+                try {
+                    saveButton.disabled = true;
+                    saveButton.textContent = "Registering...";
+
+                    const result = await sendToCookieBackend("addCompany", {
+                        company_name: companyName,
+                        company_address: companyAddress,
+                        company_poc_name: pocName,
+                        company_poc_number: pocNumber
+                    });
+
+                    if (!result.success) {
+                        throw new Error(
+                            result.message || "Unable to register company."
+                        );
+                    }
+
+                    document.getElementById("addCompanyForm").reset();
+
+                    closeCompanyModal();
+
+                    alert(
+                        result.message ||
+                        "Company registered successfully."
+                    );
+
+                } catch (error) {
+                    console.error("Company registration failed:", error);
+
+                    showCompanyMessage(
+                        error.message || "Unable to register company. Please try again.",
+                        "error"
+                    );
+
+                } finally {
+                    saveButton.disabled = false;
+                    saveButton.textContent = originalText;
+                }
+            }
 
             /* CREATE TICKET */
 
@@ -1047,11 +1271,9 @@
                         throw new Error(result.message || "Unable to create ticket.");
                     }
 
-                    // Close and reset the dialog immediately after successful creation.
                     document.getElementById("newTicketForm").reset();
                     document.getElementById("newTicketModal").hidden = true;
 
-                    // Assign employee if one was selected.
                     let assignmentMessage = "";
 
                     if (employeeId) {
@@ -1067,7 +1289,6 @@
                         }
                     }
 
-                    // Refresh the ticket table while the loading overlay is visible.
                     await loadTickets();
 
                     hideLoader();
@@ -1108,10 +1329,8 @@
             /* FILTER EVENTS */
 
             [searchInput, statusFilter, priorityFilter].forEach(element => {
-
                 element.addEventListener("input", renderTickets);
                 element.addEventListener("change", renderTickets);
-
             });
 
             /* SAVE AND CLOSE DETAILS */
@@ -1160,6 +1379,36 @@
                 createTicket
             );
 
+            /* ADD COMPANY EVENTS */
+
+            document.getElementById("addCompanyButton").addEventListener(
+                "click",
+                () => {
+                    document.getElementById("addCompanyForm").reset();
+
+                    const messageBox = document.getElementById("companyFormMessage");
+                    messageBox.className = "company-form-message";
+                    messageBox.textContent = "";
+
+                    document.getElementById("addCompanyModal").hidden = false;
+                }
+            );
+
+            document.getElementById("closeCompanyModal").addEventListener(
+                "click",
+                closeCompanyModal
+            );
+
+            document.getElementById("cancelCompanyModal").addEventListener(
+                "click",
+                closeCompanyModal
+            );
+
+            document.getElementById("addCompanyForm").addEventListener(
+                "submit",
+                registerCompany
+            );
+
             /* CLOSE MODALS ON BACKDROP CLICK */
 
             document.querySelectorAll(".modal-overlay").forEach(modal => {
@@ -1170,6 +1419,8 @@
 
                         if (modal.id === "ticketModal") {
                             closeTicketModal();
+                        } else if (modal.id === "addCompanyModal") {
+                            closeCompanyModal();
                         } else {
                             modal.hidden = true;
                         }

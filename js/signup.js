@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const phone = document.getElementById("phone");
     const email = document.getElementById("email");
     const address = document.getElementById("address");
+    const accountType = document.getElementById("accountType");
+    const companyField = document.getElementById("companyField");
     const company = document.getElementById("company");
 
     // Verification
@@ -36,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentEmail = "";
 
-
     // =========================
     // VIEW MANAGEMENT
     // =========================
@@ -47,12 +48,36 @@ document.addEventListener("DOMContentLoaded", () => {
         successView.hidden = view !== "success";
     }
 
-
     function setButtonLoading(button, loading, normalText, loadingText) {
         button.disabled = loading;
         button.innerHTML = loading ? loadingText : normalText;
     }
 
+    // =========================
+    // ACCOUNT TYPE MANAGEMENT
+    // =========================
+
+    function updateCompanyVisibility() {
+
+        const isCompanyEmployee =
+            accountType.value === "Company Employee";
+
+        companyField.hidden = !isCompanyEmployee;
+        company.required = isCompanyEmployee;
+
+        if (!isCompanyEmployee) {
+            company.value = "";
+        }
+    }
+
+    accountType.addEventListener("change", () => {
+        updateCompanyVisibility();
+
+        detailsNote.textContent =
+            accountType.value === "Company Employee"
+                ? "Select the company associated with your account."
+                : "Your email will be verified before your account is created.";
+    });
 
     // =========================
     // LOAD COMPANIES
@@ -79,8 +104,10 @@ document.addEventListener("DOMContentLoaded", () => {
             company.innerHTML =
                 '<option value="">Select your company</option>';
 
-            if (!Array.isArray(response.companies) ||
-                response.companies.length === 0) {
+            if (
+                !Array.isArray(response.companies) ||
+                response.companies.length === 0
+            ) {
 
                 company.innerHTML =
                     '<option value="">No companies available</option>';
@@ -115,12 +142,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 '<option value="">Unable to load companies</option>';
 
             detailsNote.textContent =
-                "Unable to load companies. Please refresh and try again.";
+                "Unable to load companies. Company Employee registration may be unavailable.";
 
         }
 
     }
-
 
     // =========================
     // REQUEST SIGNUP OTP
@@ -130,15 +156,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.preventDefault();
 
+        updateCompanyVisibility();
+
+        const selectedAccountType = accountType.value;
+
+        if (
+            !["Company Employee", "End Customer"].includes(selectedAccountType)
+        ) {
+            detailsNote.textContent =
+                "Please select your account type.";
+
+            return;
+        }
+
         const signupData = {
             full_name: fullName.value.trim(),
             phone: phone.value.trim(),
             email: email.value.trim().toLowerCase(),
             address: address.value.trim(),
-            company_id: company.value
+            account_type: selectedAccountType,
+            company_id:
+                selectedAccountType === "Company Employee"
+                    ? company.value
+                    : ""
         };
 
-        if (!signupData.company_id) {
+        if (
+            selectedAccountType === "Company Employee" &&
+            !signupData.company_id
+        ) {
             detailsNote.textContent =
                 "Please select your company.";
 
@@ -146,6 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signupData.email)) {
+
             detailsNote.textContent =
                 "Please enter a valid email address.";
 
@@ -210,7 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     });
-
 
     // =========================
     // COMPLETE SIGNUP
@@ -299,7 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
     // =========================
     // RESEND OTP
     // =========================
@@ -313,6 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
+            const selectedAccountType = accountType.value;
+
             const response = await sendToCookieBackend(
                 "requestCustomerSignupOtp",
                 {
@@ -320,7 +367,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     phone: phone.value.trim(),
                     email: currentEmail,
                     address: address.value.trim(),
-                    company_id: company.value
+                    account_type: selectedAccountType,
+                    company_id:
+                        selectedAccountType === "Company Employee"
+                            ? company.value
+                            : ""
                 }
             );
 
@@ -349,7 +400,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
     // =========================
     // EDIT DETAILS
     // =========================
@@ -361,8 +411,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
+    // =========================
+    // OTP INPUT RESTRICTION
+    // =========================
 
-    // Restrict OTP to six digits.
     signupOtp.addEventListener("input", () => {
 
         signupOtp.value = signupOtp.value
@@ -371,9 +423,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
+    // =========================
     // INITIALISE
+    // =========================
+
     showView("details");
+    updateCompanyVisibility();
     loadCompanies();
 
 });
